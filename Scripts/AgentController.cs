@@ -34,8 +34,6 @@ public class AgentController  : DanceAgentInterface
     public PlayerControllerBase player;
     public PhyscisPairDanceFollower follower;
 
-    GameState gameState;
-    
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -43,9 +41,6 @@ public class AgentController  : DanceAgentInterface
         stateController = GetComponent<AnimStateController>();
         state = AgentState.IDLE;
         mirror = GetComponent<RuntimeMirroring>();
-    }
-    public void Start(){
-        gameState = GameState.GetInstance();
     }
 
     // Update is called once per frame
