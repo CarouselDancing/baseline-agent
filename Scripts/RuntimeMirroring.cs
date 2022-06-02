@@ -282,7 +282,7 @@ public class RuntimeMirroring : PhysicsPoseProvider
         }
     }
     public void ApplyFootGroundingV2(){
-        if (groundFeet || footTip != null) return;
+        if (!groundFeet || footTip != null) return;
         float deltaToZero = footTip.position.y+footTipOffset;
         if (deltaToZero == 0) return;
         foreach (var m in jointMap)
