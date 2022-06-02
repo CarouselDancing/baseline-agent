@@ -81,8 +81,9 @@ public class RagDollPDController : RagDollPDControllerBase
             UpdateMotor(m, targetNormalizedRotation);
         }
         if(activateExternalForce)ApplyExternalForceOnRoot();
-        if(!IsMirroring){
-            animationSrc.GetComponent<AnimStateController>().applyRootMotion = false;
+        if(!IsMirroring && animationSrc!= null){
+            var stateController = animationSrc.GetComponent<AnimStateController>();
+            if(stateController!= null)stateController.applyRootMotion = false;
             animationSrc.GetComponent<Animator>().applyRootMotion = false;
             SetReferenceRootTransform();
         }

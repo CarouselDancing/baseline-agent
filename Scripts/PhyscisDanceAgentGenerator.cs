@@ -21,7 +21,7 @@ public enum GeneratorMode{
 public class PhyscisDanceAgentGenerator : MonoBehaviour
 {
 
-    FigureGeneratorSettings settings;
+    public FigureGeneratorSettings settings;
 
 
     public GameObject CharacterPrefab;
@@ -45,19 +45,20 @@ public class PhyscisDanceAgentGenerator : MonoBehaviour
     public int version = 2;
 
     public AnimatorOverrideController animationController;
-    ConfigurableJoint stabilizerJoint;
-    ArticulationBody rootArticulationBody;
-    Rigidbody rootRigidBody;
+    protected ConfigurableJoint stabilizerJoint;
+    protected  ArticulationBody rootArticulationBody;
+    protected  Rigidbody rootRigidBody;
 
     public GeneratorMode mode;
 
     public bool hideReference;
 
+    public List<string> IgnoreList;
 
     void Awake()
     {
 
-        if(runOnAwake)Generate();
+        if(runOnAwake && character != null)Generate();
     }
 
     public void StartGenerate()
@@ -72,9 +73,9 @@ public class PhyscisDanceAgentGenerator : MonoBehaviour
     }
 
 
-    public void Generate()
+    virtual public void Generate()
     {
-        settings = GetComponent<FigureGeneratorSettings>();
+       if(settings == null) settings = GetComponent<FigureGeneratorSettings>();
      
 
         var originalPos = transform.position;
@@ -117,7 +118,7 @@ public class PhyscisDanceAgentGenerator : MonoBehaviour
         var abGenerator = o.AddComponent<ArticulationBodyFigureGenerator>();
         abGenerator.width = settings.width;
         abGenerator.mat = settings.mat;
-        abGenerator.IgnoreList = new List<string>();
+        abGenerator.IgnoreList = IgnoreList;
         abGenerator.leftFoot = settings.leftFoot;
         abGenerator.rightFoot = settings.rightFoot;
         abGenerator.headPrefab = settings.headPrefab;
@@ -130,7 +131,8 @@ public class PhyscisDanceAgentGenerator : MonoBehaviour
         abGenerator.version = version;
         abGenerator.figureType = settings.figureType;
         abGenerator.disableLimits = settings.disableLimits;
-        var root = o.transform.Find(settings.rootName);
+        Transform root = null;
+        GeneratorUtils.FindChild(o.transform, settings.rootName, out root);
         abGenerator.root = root;
         abGenerator.referenceBodies = new List<ArticulationBodyFigureGenerator.RefBodyMapping>();
         foreach (var r in settings.referenceBodies)
@@ -156,7 +158,7 @@ public class PhyscisDanceAgentGenerator : MonoBehaviour
         var rbGenerator = o.AddComponent<RigidBodyFigureGenerator>();
         rbGenerator.width = settings.width;
         rbGenerator.mat = settings.mat;
-        rbGenerator.IgnoreList = new List<string>();
+        rbGenerator.IgnoreList = IgnoreList;
         rbGenerator.leftFoot = settings.leftFoot;
         rbGenerator.rightFoot = settings.rightFoot;
         rbGenerator.headPrefab = settings.headPrefab;
@@ -165,12 +167,13 @@ public class PhyscisDanceAgentGenerator : MonoBehaviour
         rbGenerator.lengthScaleFactor = settings.lengthScaleFactor;
         rbGenerator.headOffset = settings.headOffset;
         rbGenerator.createColliderAsChild = settings.createColliderAsChild;
-        rbGenerator.root = o.transform.Find(settings.rootName);
+        Transform root = null;
+        GeneratorUtils.FindChild(o.transform, settings.rootName, out root);
+        rbGenerator.root = root;
         rbGenerator.version = version;
         rbGenerator.figureType = settings.figureType;
         rbGenerator.isKinematic = isKinematic;
         rbGenerator.referenceBodies = new List<RigidBodyFigureGenerator.RefBodyMapping>();
-        var root = o.transform.Find(settings.rootName);
         foreach (var r in settings.referenceBodies)
         {
             var _r = new RigidBodyFigureGenerator.RefBodyMapping { name = r.name, refName = r.refName };
