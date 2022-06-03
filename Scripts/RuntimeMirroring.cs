@@ -136,7 +136,7 @@ public class RuntimeMirroring : PhysicsPoseProvider
         }
         else
         {
-            MirrorPoseLocal();
+           MirrorPoseLocal();
         }
     }
     public void MirrorPoseGlobal()

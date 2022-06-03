@@ -68,8 +68,8 @@ public class AgentController  : DanceAgentInterface
                 if ( distanceToTarget > minStartDistance && !controller.IsMirroring) state = AgentState.WALK;
                 break;
             case AgentState.WALK:
-                 if (distanceToTarget < minStopDistance) {state = AgentState.IDLE;
-                    if(controller!= null && !controller.active) controller.Activate();
+                 if (distanceToTarget < minStopDistance) {
+                     state = AgentState.IDLE;
                 }
                 break;
             case AgentState.DANCE:
@@ -84,6 +84,7 @@ public class AgentController  : DanceAgentInterface
     public void Act(){
           switch (state){
             case AgentState.IDLE:
+                 if(controller!= null && !controller.active) controller.Activate();
                 break;
             case AgentState.WALK:
                 if(stateController.isDancing)ToggleDancing();
@@ -94,6 +95,7 @@ public class AgentController  : DanceAgentInterface
                 if(!stateController.isDancing)ToggleDancing();
                 break;
             case AgentState.PAIR_DANCE:
+                 if(controller!= null && !controller.active) controller.Activate();
                 break;
         }
         

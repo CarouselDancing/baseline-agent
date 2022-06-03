@@ -81,7 +81,7 @@ public class RagDollPDController : RagDollPDControllerBase
             UpdateMotor(m, targetNormalizedRotation);
         }
         if(activateExternalForce)ApplyExternalForceOnRoot();
-        if(!IsMirroring && animationSrc!= null){
+        if(animationSrc!= null){
             var stateController = animationSrc.GetComponent<AnimStateController>();
             if(stateController!= null)stateController.applyRootMotion = false;
             animationSrc.GetComponent<Animator>().applyRootMotion = false;
@@ -344,6 +344,8 @@ public class RagDollPDController : RagDollPDControllerBase
         {
           DeactivateBody(m);
         }
+        var stateController = animationSrc.GetComponent<AnimStateController>();
+        if(stateController!= null)stateController.applyRootMotion = true;
         if(!IsMirroring) SetReferenceRootTransform();
     }
 
@@ -353,6 +355,7 @@ public class RagDollPDController : RagDollPDControllerBase
         {
             ActivateBody(m);
         }
+        
          if(!IsMirroring)animationSrc.CopyStatesTo(this.gameObject, false);
     }
 
