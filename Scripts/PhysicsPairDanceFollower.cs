@@ -8,7 +8,7 @@ namespace Carousel{
 namespace BaselineAgent{
     
 
-public class PhyscisPairDanceFollower : PairDanceFollower
+public class PhysicsPairDanceFollower : PairDanceFollower
 {
 
     public enum FollowMode{

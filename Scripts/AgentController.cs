@@ -32,7 +32,7 @@ public class AgentController  : DanceAgentInterface
     public RagDollPDController controller;
     public RuntimeMirroring mirror;
     public PlayerControllerBase player;
-    public PhyscisPairDanceFollower follower;
+    public PhysicsPairDanceFollower follower;
 
     void Awake()
     {

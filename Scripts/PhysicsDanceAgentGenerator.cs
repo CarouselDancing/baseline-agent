@@ -18,7 +18,7 @@ public enum GeneratorMode{
 
 
 [RequireComponent(typeof(FigureGeneratorSettings))]
-public class PhyscisDanceAgentGenerator : MonoBehaviour
+public class PhysicsDanceAgentGenerator : MonoBehaviour
 {
 
     public FigureGeneratorSettings settings;
@@ -238,28 +238,10 @@ public class PhyscisDanceAgentGenerator : MonoBehaviour
         }
         if(CreateFollowerScript && createMirror){
 
-            var follower =  character.AddComponent<PhyscisPairDanceFollower>();
+            var follower =  character.AddComponent<PhysicsPairDanceFollower>();
             follower.mirror = animationSource.GetComponent<RuntimeMirroring>();
             follower.root = rootArticulationBody;
-            //follower.joint = stabilizerJoint;
-            follower.mode = PhyscisPairDanceFollower.FollowMode.JOINT;
-            // danceAgent.follower = follower;
-            /*var danceAgent = gameObject.AddComponent<PhyscisDanceAgent>();
-            danceAgent.mirror = animationSource.GetComponent<RuntimeMirroring>();
-            danceAgent.pdController = pdController;
-           // danceAgent.referencePose = referencePose.transform;
-            var follower =  gameObject.AddComponent<PhyscisPairDanceFollower>();
-            follower.reference = referencePose.transform;
-            follower.mirror = animationSource.GetComponent<RuntimeMirroring>();
-            follower.root = rootArticulationBody;
-            //follower.joint = stabilizerJoint;
-            follower.mode = PhyscisPairDanceFollower.FollowMode.JOINT;
-            danceAgent.follower = follower;
-            var agentInteraction = GameObject.Instantiate(agentInteractionPrefab);
-            agentInteraction.transform.parent = character.transform;
-            agentInteraction.transform.localPosition = Vector3.zero;
-            var zone = agentInteraction.GetComponent<AgentInteraction>();
-            zone.agent = danceAgent;*/
+            follower.mode = PhysicsPairDanceFollower.FollowMode.JOINT;
         }
         
     }    
