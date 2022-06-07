@@ -90,25 +90,6 @@ public class PlayerInteractionZone : ObjectCollectionZone
         }
     }
 
-
-
-    /*
-     void  OnTriggerEnter (Collider other){
-        var zone = other.GetComponent<AgentInteractionZone>();
-        if (agentZone!=null && IsLeading)return;
-        SetCurrentAgentZone(zone);
-    }
-
-    void  OnTriggerExit (Collider other){
-        var zone = other.GetComponent<AgentInteractionZone>();
-        if (agentZone!=null && IsLeading)return;
-        if (agentZone != null && agentZone.deactivateOnLeave) {
-            DeactivateAgent(zone);
-        }else{
-            RemoveAgentZone();
-        }
-    }*/
-
 }
 
 }

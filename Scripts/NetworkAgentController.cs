@@ -8,7 +8,7 @@ namespace Carousel{
     
 namespace BaselineAgent{
 
-public class NetworkAgentController  : NetworkAgentInterface
+public class NetworkAgentController  : NetworkBehaviour
 {
 
     public NavMeshAgent navMeshAgent;
@@ -19,9 +19,9 @@ public class NetworkAgentController  : NetworkAgentInterface
     public float minStartDistance = 10f;//0.5f;
     public bool initiated = false;
     public float distanceToTarget;
-    override public bool IsFollowing{  get { return target != null; }}  
+    public bool IsFollowing{  get { return target != null; }}  
 
-    override public bool IsMirroring{  get { return mirror != null && mirror.active; }}  
+    public bool IsMirroring{  get { return mirror != null && mirror.active; }}  
 
     public AgentState state;
     public RagDollPDController controller;
@@ -110,47 +110,51 @@ public class NetworkAgentController  : NetworkAgentInterface
         transform.rotation = Quaternion.Slerp(transform.rotation, deltaQ*transform.rotation, Time.deltaTime);
     }
 
-    public bool IsPlayerDancing(){
+    bool IsPlayerDancing(){
 
         if (player == null) return false;
         return player.IsDancing;
     }
 
-    override public void ToggleDancing(){
+    public void ToggleDancing(){
+        Debug.Log("toggle dancing");
         stateController.ToggleDancing();
    
     }
 
     
-    override public void Activate(PlayerInteractionZone playerInteraction)
+    public void Activate(PlayerInteractionZone playerInteraction)
     {   
         this.player = playerInteraction.player;
         initiated = true;
         Reset();
     }
-    override public void Deactivate()
+
+        
+
+    public void Deactivate()
     {
       
         initiated = false;
-    }
+    }  
 
-    override public void LockToLeader(Transform t){
+    public void LockToLeader(Transform t){
         target = t;
     }
 
 
-    override public void UnlockLeader(){
+    public void UnlockLeader(){
 
        target = null;
        Reset();
     }
 
-   override  public void Reset(){
+   public void Reset(){
        
        
     }
 
-    override public void ActivatePairDance(){
+    public void ActivatePairDance(){
        //start mirror and stop animator
        if(mirror!=null && !mirror.active && follower!=null && player !=null){
            mirror.src = player.transform;
@@ -165,7 +169,7 @@ public class NetworkAgentController  : NetworkAgentInterface
        
     }
     
-    override public void DeactivatePairDance(){
+    public void DeactivatePairDance(){
         //stop mirror and start animator
         
        if(mirror!=null && mirror.active && follower!=null){

@@ -12,7 +12,7 @@ namespace BaselineAgent{
 public class AgentInteraction : CollectableObject
 {
 
-    public DanceAgentInterface agent;
+    public NetworkAgentController agent;
 
     public bool deactivateOnLeave = false; 
 /*

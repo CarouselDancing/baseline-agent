@@ -38,6 +38,10 @@ public class PlayerInteractionZoneEditor : Editor
         {
             controller.DeactivatePairDance();
         }
+         if (GUILayout.Button("ToggleDancing"))
+        {
+            controller.ToggleDancing();
+        }
 
 
     }
