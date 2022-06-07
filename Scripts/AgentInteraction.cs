@@ -14,7 +14,7 @@ public class AgentInteraction : CollectableObject
 
     public DanceAgentInterface agent;
 
-    public bool deactivateOnLeave = true; 
+    public bool deactivateOnLeave = false; 
 /*
     void  OnTriggerEnter (Collider other){
         if (agent == null) return;
@@ -35,33 +35,33 @@ public class AgentInteraction : CollectableObject
     }
     */
 
-    public void ActivateAgent(PlayerInteractionZone player){
+    virtual public void ActivateAgent(PlayerInteractionZone player){
         agent?.Activate(player);
     }
 
 
-    public void DeactivateAgent(){
+    virtual public void DeactivateAgent(){
         agent?.Deactivate();
     }
 
   
-    public void ActivateFollower(Transform leader){
+    virtual public void ActivateFollower(Transform leader){
         agent?.LockToLeader(leader);
 
     }
-    public void DeactivateFollower(){
+    virtual public void DeactivateFollower(){
         agent?.UnlockLeader();
     }
 
-    public void ToggleDancing(){
+    virtual public void ToggleDancing(){
         agent?.ToggleDancing();
 
     }
-    public void ActivatePairDance(){
+    virtual public void ActivatePairDance(){
         agent?.ActivatePairDance();
     }
 
-    public void DeactivatePairDance(){
+    virtual public void DeactivatePairDance(){
         agent?.DeactivatePairDance();
     }
 
