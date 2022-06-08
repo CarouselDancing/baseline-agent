@@ -16,9 +16,9 @@ public enum AgentState{
 public class AgentController  : DanceAgentInterface
 {
 
-    NavMeshAgent navMeshAgent;
-    Animator animator;
-    AnimStateController stateController;
+    public NavMeshAgent navMeshAgent;
+    public Animator animator;
+    public AnimStateController stateController;
     public Transform target;
     public float minStopDistance = 0.1f;
     public float minStartDistance = 10f;//0.5f;
@@ -46,6 +46,7 @@ public class AgentController  : DanceAgentInterface
     // Update is called once per frame
     void Update()
     {
+        if(stateController == null) return;
         UpdateDistanceToTarget();
         UpdateState();
         Act();
