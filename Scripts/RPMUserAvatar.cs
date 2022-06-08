@@ -11,6 +11,8 @@ namespace Carousel{
 public class RPMUserAvatar : RPMAvatarManager
 {
    
+    public FigureGeneratorSettings settings;
+    public int figureVersion;
     public GameObject PlayerInteractionZonePrefab;
     public GameObject PartnerTargetPrefab;
     public RoomConfig roomConfig;
@@ -31,6 +33,7 @@ public class RPMUserAvatar : RPMAvatarManager
         var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig);
         var config = ikRigBuilder.Build(avatar);
         SetupRig(config, avatar);
+        CreateRigidBodyFigure(avatar, config.Root, settings.modelLayer);
         var root = config.Root;
         var pli = Instantiate(PlayerInteractionZonePrefab);
         pli.transform.parent = root;
@@ -77,6 +80,48 @@ public class RPMUserAvatar : RPMAvatarManager
         var y =  UnityEngine.Random.Range(-180, 180);
         return Quaternion.Euler(0,y,0);
     }
+
+    
+     Rigidbody CreateRigidBodyFigure(GameObject o, Transform root, string layer, bool isKinematic=true, bool hide=false)
+    {
+        var rbGenerator = o.AddComponent<RigidBodyFigureGenerator>();
+        rbGenerator.width = settings.width;
+        rbGenerator.mat = settings.mat;
+        rbGenerator.IgnoreList = new List<string>();
+        rbGenerator.leftFoot = settings.leftFoot;
+        rbGenerator.rightFoot = settings.rightFoot;
+        rbGenerator.headPrefab = settings.headPrefab;
+        rbGenerator.reference = settings.reference;
+        rbGenerator.footOffset = settings.footOffset;
+        rbGenerator.lengthScaleFactor = settings.lengthScaleFactor;
+        rbGenerator.headOffset = settings.headOffset;
+        rbGenerator.createColliderAsChild = settings.createColliderAsChild;
+        rbGenerator.root = root;
+        rbGenerator.IgnoreList = new List<string>();
+        rbGenerator.version = figureVersion;
+        rbGenerator.figureType = settings.figureType;
+        rbGenerator.isKinematic = isKinematic;
+        rbGenerator.referenceBodies = new List<RigidBodyFigureGenerator.RefBodyMapping>();
+
+        foreach (var r in settings.referenceBodies)
+        {
+            var _r = new RigidBodyFigureGenerator.RefBodyMapping { name = r.name, refName = r.refName };
+            rbGenerator.referenceBodies.Add(_r);
+        }
+        rbGenerator.endEffectors = new List<string>();
+        foreach (var n in settings.endEffectors)
+        {
+            rbGenerator.endEffectors.Add(n);
+        }
+        
+        //animTarget.AddComponent<CharacterController>();
+        rbGenerator.DestroyWhenDone = true;
+        rbGenerator.verbose = false;
+        rbGenerator.Generate();
+        if (layer != "") GeneratorUtils.SetLayerRecursively(o.transform, LayerMask.NameToLayer(layer));
+         return root.GetComponent<Rigidbody>();
+    }
+
 
 }
 
