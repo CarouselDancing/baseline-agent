@@ -73,7 +73,7 @@ MonoBehaviour:
   settings: {fileID: -3040986160783487964}
   figureVersion: 0
   roomConfig: {fileID: 0}
-  generator: {fileID: 0}
+  generator: {fileID: 3141507884253300468, guid: db7974e48edccd94b81a308beffc11ea, type: 3}
 --- !u!114 &6134176247903083179
 MonoBehaviour:
   m_ObjectHideFlags: 0
