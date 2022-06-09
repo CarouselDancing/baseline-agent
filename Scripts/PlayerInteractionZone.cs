@@ -89,6 +89,11 @@ public class PlayerInteractionZone : ObjectCollectionZone
             IsPairDancing = false;
         }
     }
+    public void RemoveAgent(){
+        if(agent != null) {
+            DestroyImmediate(agent.gameObject);
+        }
+    }
 
 }
 

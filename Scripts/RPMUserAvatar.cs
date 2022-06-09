@@ -182,6 +182,14 @@ public class RPMUserAvatar : RPMAvatarManager
         interactionZone.DeactivatePairDance();
         
     }
+    public void RemoveAgent(){
+        CmdRemoveAgent();
+    }
+    [Command]
+    void CmdRemoveAgent(){
+        interactionZone.RemoveAgent();
+        
+    }
 
 }
 

@@ -46,6 +46,10 @@ public class RPMUserAvatarEditor : Editor
         {
             controller.ToggleAgentDancing();
         }
+        if (GUILayout.Button("Remove Agent"))
+        {
+            controller.RemoveAgent();
+        }
 
     }
 
