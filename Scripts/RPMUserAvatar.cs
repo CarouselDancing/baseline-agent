@@ -6,6 +6,8 @@ using UnityEngine;
 using Mirror;
 using ReadyPlayerMe;
 using Carousel.FigureGenerator;
+using Valve.VR;
+using UnityEngine.Events;
 
 
 namespace Carousel{
@@ -22,6 +24,7 @@ public class RPMUserAvatar : RPMAvatarManager
     public GameObject generator;
     public Vector3 interactionZoneOffset;
     public PlayerInteractionZone interactionZone;
+    public float grabberTriggerRadius = 0.1f;
 
     override public void Start()
     {
@@ -49,7 +52,24 @@ public class RPMUserAvatar : RPMAvatarManager
         controller.root = root;
         interactionZone.player = controller;
         interactionZone.partnerTarget = pt.transform;
+        AddGrabber(config.LeftHand.gameObject, SteamVR_Input_Sources.LeftHand);
+        AddGrabber(config.RightHand.gameObject, SteamVR_Input_Sources.RightHand);
+
         Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
+    }
+
+    void AddGrabber(GameObject o, SteamVR_Input_Sources inputSource){
+        var grabber = o.AddComponent<RBGrabber>();
+        grabber.grabberRadius = grabberTriggerRadius;
+        grabber.grabber = o.transform.parent.GetComponent<Rigidbody>();
+        var button = o.AddComponent<SteamVRButtonController>();
+        button.action = SteamVR_Actions.default_GrabGrip;
+        button.inputSource = inputSource;
+        button.OnPress.AddListener(grabber.GrabObject);
+        button.OnRelease.AddListener(grabber.ReleaseObject);
+        var sphereCollider = o.AddComponent<SphereCollider>();
+        sphereCollider.isTrigger = true;
+
     }
     
     public void SpawnAgent()
@@ -65,6 +85,7 @@ public class RPMUserAvatar : RPMAvatarManager
         Debug.Log("CreateDancer2");
         CmdSpawnAgent(avatarURL, position, rotation);
     }
+
 
     [Command]
     void CmdSpawnAgent(string avatarURL, Vector3 position, Quaternion rotation)
@@ -125,7 +146,7 @@ public class RPMUserAvatar : RPMAvatarManager
          return root.GetComponent<Rigidbody>();
     }
 
-    
+
     public void ActivateAgent(){
         CmdActivateAgent();
     }
