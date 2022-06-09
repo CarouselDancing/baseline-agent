@@ -90,10 +90,12 @@ public class AgentController  : DanceAgentInterface
             case AgentState.WALK:
                 if(stateController.isDancing)ToggleDancing();
                 navMeshAgent.SetDestination(target.position);
+                stateController.applyRootMotion = false;
                 if(controller!= null && controller.active ) controller.Deactivate();
                 break;
             case AgentState.DANCE:
                 if(!stateController.isDancing)ToggleDancing();
+                stateController.applyRootMotion = true;
                 break;
             case AgentState.PAIR_DANCE:
                  if(controller!= null && !controller.active) controller.Activate();
