@@ -91,7 +91,7 @@ public class PlayerInteractionZone : ObjectCollectionZone
     }
     public void RemoveAgent(){
         if(agent != null) {
-            DestroyImmediate(agent.gameObject);
+            DestroyImmediate(agent.agent.gameObject);
         }
     }
 
