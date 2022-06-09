@@ -18,7 +18,6 @@ public class RPMUserAvatarEditor : Editor
         {
             controller.SpawnAgent();
         }   
-        /*
         if (GUILayout.Button("ActivateAgent"))
         {
             controller.ActivateAgent();
@@ -46,7 +45,7 @@ public class RPMUserAvatarEditor : Editor
         if (GUILayout.Button("ToggleAgentDance"))
         {
             controller.ToggleAgentDancing();
-        }*/
+        }
 
     }
 

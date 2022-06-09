@@ -125,6 +125,63 @@ public class RPMUserAvatar : RPMAvatarManager
          return root.GetComponent<Rigidbody>();
     }
 
+    
+    public void ActivateAgent(){
+        CmdActivateAgent();
+    }
+    [Command]
+    void CmdActivateAgent(){
+        interactionZone.ActivateAgent();
+    }
+    public void DeactivateAgent(){
+        CmdDeactivateAgent();
+    }
+    [Command]
+    void CmdDeactivateAgent(){
+        interactionZone.DeactivateAgent();
+    }
+    public void ActivateFollower(){
+        CmdActivateFollower();
+    }
+
+    [Command]
+    void CmdActivateFollower(){
+        interactionZone.ActivateFollower();
+    }
+    public void DeactivateFollower(){
+        CmdActivateFollower();
+    }
+
+    [Command]
+    void CmdDeactivateFollower(){
+        interactionZone.DeactivateFollower();
+        
+    } 
+    public void ToggleAgentDancing(){
+        CmdToggleAgentDancing();
+    }
+
+    [Command]
+    void CmdToggleAgentDancing(){
+        interactionZone.ToggleDancing();
+        
+    }
+    public void ActivatePairDance(){
+        CmdActivatePairDance();
+    }
+    [Command]
+    void CmdActivatePairDance(){
+        interactionZone.ActivatePairDance();
+        
+    }
+    public void DeactivatePairDance(){
+        CmdDeactivatePairDance();
+    }
+    [Command]
+    void CmdDeactivatePairDance(){
+        interactionZone.DeactivatePairDance();
+        
+    }
 
 }
 
