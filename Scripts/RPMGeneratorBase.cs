@@ -11,6 +11,9 @@ namespace Carousel{
 
 abstract public class RPMGeneratorBase : NetworkBehaviour
 {
+    [SyncVar(hook = nameof(OnAvatarURLChanged))]
+    public string syncAvatarURL;
+
     public string AvatarURL = "";
     public GameObject go;
     public AnimatorOverrideController animationController;
@@ -19,38 +22,6 @@ abstract public class RPMGeneratorBase : NetworkBehaviour
     public NetworkAvatar networkAvatar;
 
     public bool IsOwner => isLocalPlayer;
-
-
-
-    virtual public void Update()
-    {
-
-        if (!initiated && !processing && !IsOwner && AvatarURL != "")
-        {
-            processing = true;
-            SetupAvatarControllerFromRPM(AvatarURL);
-        }
-        else if (initiated && IsOwner && AvatarURL != "")
-        { //TODO replace with server side avatarmanagement
-            UpdateSyncvars(AvatarURL);
-        }
-    }
-
-
-    [Command]
-    public void UpdateSyncvars(string newurl)
-    {
-        AvatarURL = newurl;
-        ChangeClientAvatar(newurl);
-    }
-
-    [ClientRpc]
-    public void ChangeClientAvatar(string newurl)
-    {
-        AvatarURL = newurl;
-    }
-
-
 
     public void SetupAvatarControllerFromRPM(string url)
     {
@@ -81,6 +52,14 @@ abstract public class RPMGeneratorBase : NetworkBehaviour
     }
 
     abstract public void OnRPMAvatarLoaded(GameObject avatar, AvatarMetaData metaData = null);
-
+    
+    
+    void OnAvatarURLChanged(string _, string newValue)
+    {
+        Debug.Log("OnAvatarURLChanged");
+        if(!initiated  && !processing && newValue != "") {
+            SetupAvatarControllerFromRPM(newValue);
+        }
+    }
 }
 }

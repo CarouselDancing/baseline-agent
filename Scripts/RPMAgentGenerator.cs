@@ -43,16 +43,19 @@ public class RPMAgentGenerator : RPMGeneratorBase
         if (AvatarURL != "")
         {
             processing = true;
-            if(isServer)SetClientAvatar(AvatarURL); // will only go there in the server
+            //if(isServer)SetClientAvatar(AvatarURL); // will only go there in the server
             SetupAvatarControllerFromRPM(AvatarURL);
+            if(isServer)syncAvatarURL = AvatarURL;
         }
         else
         {
-            GetAvatarURL();
-            Debug.Log("Error: avatar url is emtpy");
+            //GetAvatarURL();
+           Debug.Log("Error: avatar url is emtpy");
         }
 
     }
+
+
     override public void OnRPMAvatarLoaded(GameObject avatar, AvatarMetaData metaData = null)
     {
         if (initiated) {
@@ -135,17 +138,8 @@ public class RPMAgentGenerator : RPMGeneratorBase
         aic.agent = ac;
     }
     
-    [ClientRpc]
-    void SetClientAvatar(string newurl)
-    {
-        AvatarURL = newurl;
-    }
 
-    [Command]
-    void GetAvatarURL()
-    {
-        Debug.Log("get avatar url"); 
-        SetClientAvatar(AvatarURL);
-    }
+
+
 }
 }

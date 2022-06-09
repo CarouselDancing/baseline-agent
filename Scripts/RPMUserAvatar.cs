@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Mirror;
 using ReadyPlayerMe;
 using Carousel.FigureGenerator;
+
+
 namespace Carousel{
     namespace BaselineAgent{
 
@@ -49,7 +52,7 @@ public class RPMUserAvatar : RPMAvatarManager
         Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
     }
     
-    public void CreateDancer()
+    public void SpawnAgent()
     {
         Debug.Log("CreateDancer1");
         if (roomConfig == null || roomConfig.AvatarURLs.Count == 0 || roomConfig.StartZones.Count == 0 || roomConfig.AvatarURLs.Count == 0 || roomConfig.AnimationOverriders.Count==0)  return;

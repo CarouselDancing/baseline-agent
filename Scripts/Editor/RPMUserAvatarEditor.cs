@@ -16,7 +16,7 @@ public class RPMUserAvatarEditor : Editor
 
         if (GUILayout.Button("Generate"))
         {
-            controller.CreateDancer();
+            controller.SpawnAgent();
         }   
         /*
         if (GUILayout.Button("ActivateAgent"))
