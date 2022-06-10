@@ -64,6 +64,7 @@ public class RPMUserAvatar : RPMAvatarManager
         var grabber = o.AddComponent<RBGrabber>();
         grabber.grabberRadius = grabberTriggerRadius;
         grabber.grabber = o.transform.parent.GetComponent<Rigidbody>();
+        grabber.side = side;
         /*
         var button = o.AddComponent<SteamVRButtonController>();
         button.action = SteamVR_Actions.default_GrabGrip;
