@@ -54,13 +54,13 @@ public class RPMUserAvatar : RPMAvatarManager
         interactionZone.player = controller;
         interactionZone.partnerTarget = pt.transform;
         OnFinished?.Invoke();
-        AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);//
-        AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);//SteamVR_Input_Sources.RightHand
+        AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);
+        AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);
 
         Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
     }
 
-    void AddGrabber(GameObject o, RBGrabber.Side side){
+    void AddGrabberOld(GameObject o, RBGrabber.Side side){
         var grabber = o.AddComponent<RBGrabber>();
         grabber.grabberRadius = grabberTriggerRadius;
         grabber.grabber = o.transform.parent.GetComponent<Rigidbody>();
@@ -74,7 +74,19 @@ public class RPMUserAvatar : RPMAvatarManager
         */
         var sphereCollider = o.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-
+    }
+    
+    void AddGrabber(GameObject o, RBGrabber.Side side){
+        var triggerObject = new GameObject(o.name+"trigger");
+        triggerObject.transform.position = o.transform.position;
+        triggerObject.transform.rotation = o.transform.rotation;
+        triggerObject.transform.parent = o.transform;
+        var grabber = triggerObject.AddComponent<RBGrabber>();
+        grabber.grabberRadius = grabberTriggerRadius;
+        grabber.grabber = o.transform.GetComponent<Rigidbody>();//hand rigid body
+        grabber.side = side;
+        var triggerCollider = triggerObject.AddComponent<SphereCollider>();
+        triggerCollider.isTrigger = true;
     }
     
     public void SpawnAgent()

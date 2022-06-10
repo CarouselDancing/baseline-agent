@@ -15,7 +15,7 @@ public class RBGrabber : MonoBehaviour
     }
     public Side side;
     public Rigidbody grabber;
-    public Rigidbody grabbableObject;
+    public ArticulationBody grabbableObject;
     public ConfigurableJoint joint;
     LineRenderer lineRenderer;
     public float width = 0.1f;
@@ -37,12 +37,12 @@ public class RBGrabber : MonoBehaviour
 
     }
 
-    public void SetGrabbableObject(Rigidbody rb){
-        if(rb != grabber){
-            grabbableObject = rb;
-            Debug.Log("grab "+ name+ " " + rb.name);
+    public void SetGrabbableObject(ArticulationBody ab){
+        if(ab != grabber){
+            grabbableObject = ab;
+            Debug.Log("grab "+ name+ " " + ab.name);
         }else{
-            Debug.Log("ignore grab "+ name+ " " + rb.name);
+            Debug.Log("ignore grab "+ name+ " " + ab.name);
         }
         
         //TODO check exact trigger press here
@@ -54,15 +54,15 @@ public class RBGrabber : MonoBehaviour
 
     
      void  OnTriggerEnter (Collider other){
-        var rb = other.GetComponent<Rigidbody>();
-        if(rb != null) {
-            SetGrabbableObject(rb);
+        var ab = other.GetComponent<ArticulationBody>();
+        if(ab != null) {
+            SetGrabbableObject(ab);
         }
     }
 
     void  OnTriggerExit (Collider other){
-        var rb = other.GetComponent<Rigidbody>();
-        if(rb == grabbableObject) {
+        var ab = other.GetComponent<ArticulationBody>();
+        if(ab == grabbableObject) {
             grabbableObject = null;
         }
     }
@@ -71,7 +71,7 @@ public class RBGrabber : MonoBehaviour
         Debug.Log("GrabObject");
         if (grabbableObject == null) return;
         CreateJoint();
-        joint.connectedBody = grabber;
+        joint.connectedArticulationBody = grabbableObject;
         lineRenderer.enabled = true;
         
     } 
@@ -84,7 +84,7 @@ public class RBGrabber : MonoBehaviour
     {
         if(!lineRenderer.enabled || joint == null ) return;
         positions[0] = transform.position;
-        positions[1] = joint.connectedBody.transform.position;
+        positions[1] = joint.connectedArticulationBody.transform.position;
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
         lineRenderer.positionCount = positions.Count;
@@ -92,7 +92,7 @@ public class RBGrabber : MonoBehaviour
     }
 
       public void CreateJoint(){
-        joint = grabbableObject.gameObject.AddComponent<ConfigurableJoint>();
+        joint = grabber.gameObject.AddComponent<ConfigurableJoint>();
         joint.xMotion = ConfigurableJointMotion.Locked;
         joint.yMotion = ConfigurableJointMotion.Locked;
         joint.zMotion = ConfigurableJointMotion.Locked;
