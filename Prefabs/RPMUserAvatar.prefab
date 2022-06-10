@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1117380497844330438}
   - component: {fileID: 6134176247903083179}
   - component: {fileID: -3040986160783487964}
+  - component: {fileID: 2548320742715012015}
   m_Layer: 0
   m_Name: RPMUserAvatar
   m_TagString: Untagged
@@ -83,6 +84,11 @@ MonoBehaviour:
     type: 3}
   interactionZoneOffset: {x: 0, y: -2, z: 1}
   interactionZone: {fileID: 0}
+  grabberTriggerRadius: 0.1
+  config: {fileID: 0}
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6134176247903083179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,3 +188,20 @@ MonoBehaviour:
   referenceLayer: 
   figureType: 0
   disableLimits: 0
+--- !u!114 &2548320742715012015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7845951327085506187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73bd1ead9b9e47b499093c2c3ebb11d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  userAvatar: {fileID: 1117380497844330438}
+  leftGrabber: {fileID: 0}
+  rightGrabber: {fileID: 0}

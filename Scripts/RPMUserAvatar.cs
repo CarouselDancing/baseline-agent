@@ -26,6 +26,8 @@ public class RPMUserAvatar : RPMAvatarManager
     public float grabberTriggerRadius = 0.1f;
     public CharacterRigConfig config;
     public UnityEvent OnFinished;
+    public RBGrabber leftGrabber;
+    public RBGrabber rightGrabber;
 
     override public void Start()
     {
@@ -54,29 +56,13 @@ public class RPMUserAvatar : RPMAvatarManager
         interactionZone.player = controller;
         interactionZone.partnerTarget = pt.transform;
         OnFinished?.Invoke();
-        AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);
-        AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);
+        leftGrabber = AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);
+        rightGrabber = AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);
 
         Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
     }
-
-    void AddGrabberOld(GameObject o, RBGrabber.Side side){
-        var grabber = o.AddComponent<RBGrabber>();
-        grabber.grabberRadius = grabberTriggerRadius;
-        grabber.grabber = o.transform.parent.GetComponent<Rigidbody>();
-        grabber.side = side;
-        /*
-        var button = o.AddComponent<SteamVRButtonController>();
-        button.action = SteamVR_Actions.default_GrabGrip;
-        button.inputSource = inputSource;
-        button.OnPress.AddListener(grabber.GrabObject);
-        button.OnRelease.AddListener(grabber.ReleaseObject);
-        */
-        var sphereCollider = o.AddComponent<SphereCollider>();
-        sphereCollider.isTrigger = true;
-    }
     
-    void AddGrabber(GameObject o, RBGrabber.Side side){
+    RBGrabber AddGrabber(GameObject o, RBGrabber.Side side){
         var triggerObject = new GameObject(o.name+"trigger");
         triggerObject.transform.position = o.transform.position;
         triggerObject.transform.rotation = o.transform.rotation;
@@ -87,6 +73,7 @@ public class RPMUserAvatar : RPMAvatarManager
         grabber.side = side;
         var triggerCollider = triggerObject.AddComponent<SphereCollider>();
         triggerCollider.isTrigger = true;
+        return grabber;
     }
     
     public void SpawnAgent()
