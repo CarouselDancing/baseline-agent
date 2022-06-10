@@ -6,8 +6,14 @@ namespace Carousel{
 namespace BaselineAgent{
 
 
+
 public class RBGrabber : MonoBehaviour
-{
+ {
+     public enum Side{
+        LEFT,
+        RIGHT
+    }
+    public Side side;
     public Rigidbody grabber;
     public Rigidbody grabbableObject;
     public ConfigurableJoint joint;

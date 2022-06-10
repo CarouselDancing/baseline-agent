@@ -6,7 +6,6 @@ using UnityEngine;
 using Mirror;
 using ReadyPlayerMe;
 using Carousel.FigureGenerator;
-using Valve.VR;
 using UnityEngine.Events;
 
 
@@ -25,6 +24,8 @@ public class RPMUserAvatar : RPMAvatarManager
     public Vector3 interactionZoneOffset;
     public PlayerInteractionZone interactionZone;
     public float grabberTriggerRadius = 0.1f;
+    public CharacterRigConfig config;
+    public UnityEvent OnFinished;
 
     override public void Start()
     {
@@ -37,7 +38,7 @@ public class RPMUserAvatar : RPMAvatarManager
     {
         bool activateFootRig = GlobalGameState.GetInstance().config.activateFootTrackers;
         var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig);
-        var config = ikRigBuilder.Build(avatar);
+        config = ikRigBuilder.Build(avatar);
         SetupRig(config, avatar);
         CreateRigidBodyFigure(avatar, config.Root, settings.modelLayer);
         var root = config.Root;
@@ -52,21 +53,24 @@ public class RPMUserAvatar : RPMAvatarManager
         controller.root = root;
         interactionZone.player = controller;
         interactionZone.partnerTarget = pt.transform;
-        AddGrabber(config.LeftHand.gameObject, SteamVR_Input_Sources.LeftHand);
-        AddGrabber(config.RightHand.gameObject, SteamVR_Input_Sources.RightHand);
+        OnFinished?.Invoke();
+        AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);//
+        AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);//SteamVR_Input_Sources.RightHand
 
         Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
     }
 
-    void AddGrabber(GameObject o, SteamVR_Input_Sources inputSource){
+    void AddGrabber(GameObject o, RBGrabber.Side side){
         var grabber = o.AddComponent<RBGrabber>();
         grabber.grabberRadius = grabberTriggerRadius;
         grabber.grabber = o.transform.parent.GetComponent<Rigidbody>();
+        /*
         var button = o.AddComponent<SteamVRButtonController>();
         button.action = SteamVR_Actions.default_GrabGrip;
         button.inputSource = inputSource;
         button.OnPress.AddListener(grabber.GrabObject);
         button.OnRelease.AddListener(grabber.ReleaseObject);
+        */
         var sphereCollider = o.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
 
