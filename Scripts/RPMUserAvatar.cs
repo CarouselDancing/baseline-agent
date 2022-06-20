@@ -38,7 +38,8 @@ public class RPMUserAvatar : RPMAvatarManager
    
     override public void OnRPMAvatarLoaded(GameObject avatar, AvatarMetaData metaData=null)
     {
-        bool activateFootRig = GlobalGameState.GetInstance().config.activateFootTrackers;
+        MirrorGameManager.ShowMessage("OnRPMAvatarLoaded");
+        bool activateFootRig = GlobalAgentGameState.GetInstance().config.activateFootTrackers;
         var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig);
         config = ikRigBuilder.Build(avatar);
         SetupRig(config, avatar);
@@ -58,7 +59,7 @@ public class RPMUserAvatar : RPMAvatarManager
         OnFinished?.Invoke();
         leftGrabber = AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);
         rightGrabber = AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);
-
+        if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
         Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
     }
     
@@ -151,6 +152,17 @@ public class RPMUserAvatar : RPMAvatarManager
     }
 
 
+
+    public void SetHeight(){
+        var trackerConfig = Camera.main.GetComponent<VRRigConfig>();
+        if(trackerConfig== null)return;
+        float avatarHeight = config.Head.position.y - config.ToeTip.position.y;
+        float yOffset = avatarHeight - Camera.main.transform.position.y;
+        var p = trackerConfig.origin.position;
+        p.y += yOffset;
+        trackerConfig.origin.position = p;
+      
+   }
     public void ActivateAgent(){
         CmdActivateAgent();
     }

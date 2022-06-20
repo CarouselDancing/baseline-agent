@@ -10,25 +10,35 @@ using System.Linq;
 namespace Carousel{
      namespace BaselineAgent{
 
-    public class GlobalAgentGameState : GlobalGameState{
+    public class GlobalAgentGameState {
+        public ClientConfig config;
+        public RoomConfig roomConfig;
+        protected static GlobalAgentGameState instance;
 
-    public RoomConfig roomConfig;
-
-     private GlobalAgentGameState()
-    {
-        Load();
-        roomConfig =  (RoomConfig)GameObject.FindObjectsOfTypeAll(typeof(RoomConfig)).FirstOrDefault();
-    }
-        
-    public static GlobalAgentGameState GetInstance()
-    {
-        if (instance == null)
+        private GlobalAgentGameState()
         {
-            instance = new GlobalAgentGameState();
+            Load();
+            roomConfig =  (RoomConfig)GameObject.FindObjectsOfTypeAll(typeof(RoomConfig)).FirstOrDefault();
         }
-        return (GlobalAgentGameState)instance;
+            
+
+        protected void Load()
+        {
+            var configText = Resources.Load<TextAsset>("config").text;
+            config = JsonUtility.FromJson<ClientConfig>(configText);
+            Debug.Log(config.ToString());
+
+        }
+
+        public static GlobalAgentGameState GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new GlobalAgentGameState();
+            }
+            return instance;
+        }
     }
-}
 
      }
 }
