@@ -26,6 +26,8 @@ abstract public class RPMGeneratorBase : NetworkBehaviour
     public void SetupAvatarControllerFromRPM(string url)
     {
         AvatarLoader avatarLoader = new AvatarLoader();
+        
+        
         Debug.Log($"Started loading avatar. [{Time.timeSinceLevelLoad:F2}]");
         processing = true;
         avatarLoader.LoadAvatar(url, OnAvatarImported, OnRPMAvatarLoaded);
@@ -33,6 +35,7 @@ abstract public class RPMGeneratorBase : NetworkBehaviour
 
     public void OnAvatarImported(GameObject avatar)
     {
+      
         go = avatar;
         avatar.transform.parent = transform;
         Debug.Log($"Avatar imported. [{Time.timeSinceLevelLoad:F2}]");

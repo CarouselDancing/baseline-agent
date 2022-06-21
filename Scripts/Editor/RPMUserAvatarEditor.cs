@@ -50,6 +50,11 @@ public class RPMUserAvatarEditor : Editor
         {
             controller.RemoveAgent();
         }
+        if (GUILayout.Button("Set Height"))
+        {
+            controller.SetHeight();
+        }
+
 
     }
 

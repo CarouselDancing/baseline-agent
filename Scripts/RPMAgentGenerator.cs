@@ -126,8 +126,8 @@ public class RPMAgentGenerator : RPMGeneratorBase
     }
     void ConfigureClientAgentController(GameObject go){
         var ac = GetComponent<NetworkAgentController>();
-        var parent = go.transform.FindChild(armatureName);
-        parent = parent.FindChild(rootName);
+        var parent = go.transform.Find(armatureName);
+        parent = parent.Find(rootName);
         AddNetworkAgentInteraction(parent, ac);
     }
 
