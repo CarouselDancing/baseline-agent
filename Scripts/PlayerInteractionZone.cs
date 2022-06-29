@@ -74,6 +74,7 @@ public class PlayerInteractionZone : ObjectCollectionZone
     }
 
     public void ActivateFollower(){
+        if(agent == null)ActivateAgent();
         if(agent != null && !IsLeading) {
             agent.ActivateFollower(partnerTarget);
             IsLeading = true;
