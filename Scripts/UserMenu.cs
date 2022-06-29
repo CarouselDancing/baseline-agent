@@ -23,52 +23,57 @@ public class UserMenu : MonoBehaviour
    }
 
    public void SpawnAgent(){
-       Debug.Log("spawn agent");
+        MirrorGameManager.ShowMessage("Spawn Agent");
        _userAvatar?.SpawnAgent();
    }   
    
    public void ActivateAgent(){
-       Debug.Log("ActivateAgent");
+        MirrorGameManager.ShowMessage("ActivateAgent");
        _userAvatar?.ActivateAgent();
    } 
    
    public void DeactivateAgent(){
-       Debug.Log("ActivateAgent");
+        MirrorGameManager.ShowMessage("DeactivateAgent");
        _userAvatar?.DeactivateAgent();
-   } 
+   }   
+   
+   public void ToggleFollower(){
+        MirrorGameManager.ShowMessage("ToggleFollower");
+       _userAvatar?.ToggleFollower();
+   }    
 
    public void ActivateFollower(){
-       Debug.Log("ActivateFollower");
+        MirrorGameManager.ShowMessage("ActivateFollower");
        _userAvatar?.ActivateFollower();
    }    
 
    public void DeactivateFollower(){
-       Debug.Log("DeactivateFollower");
+        MirrorGameManager.ShowMessage("DeactivateFollower");
        _userAvatar?.DeactivateFollower();
    } 
 
    public void ActivatePairDance(){
-       Debug.Log("ActivatePairDance");
+        MirrorGameManager.ShowMessage("ActivatePairDance");
        _userAvatar?.ActivatePairDance();
    } 
 
    public void DeactivatePairDance(){
-       Debug.Log("ActivatePairDance");
+        MirrorGameManager.ShowMessage("DeactivatePairDance");
        _userAvatar?.DeactivatePairDance();
    } 
 
    public void ToggleAgentDancing(){
-       Debug.Log("ToggleAgentDancing");
+        MirrorGameManager.ShowMessage("ToggleAgentDancing");
        _userAvatar?.ToggleAgentDancing();
    } 
    public void RemoveAgent(){
-       Debug.Log("RemoveAgent");
+        MirrorGameManager.ShowMessage("RemoveAgent");
        _userAvatar?.RemoveAgent();
    }
 
 
    public void SetHeight(){
-       Debug.Log("SetHeight");
+        MirrorGameManager.ShowMessage("SetHeight");
        _userAvatar?.SetHeight();
       
    }

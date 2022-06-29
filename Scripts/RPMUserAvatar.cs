@@ -155,14 +155,26 @@ public class RPMUserAvatar : RPMAvatarManager
 
     public void SetHeight(){
         var trackerConfig = Camera.main.GetComponent<VRRigConfig>();
-        if(trackerConfig== null)return;
+        if(trackerConfig== null){
+            MirrorGameManager.ShowMessage("SetHeight failed");
+            return;
+
+        }
         float avatarHeight = config.Head.position.y - config.ToeTip.position.y;
         float yOffset = avatarHeight - Camera.main.transform.position.y;
         var p = trackerConfig.origin.position;
         p.y += yOffset;
         trackerConfig.origin.position = p;
+        MirrorGameManager.ShowMessage("SetHeight "+yOffset.ToString());
       
    }
+    public void ToggleFollower(){
+        CmdToggleFollower();
+    }
+    [Command]
+    void CmdToggleFollower(){
+        interactionZone.ToggleFollower();
+    }
     public void ActivateAgent(){
         CmdActivateAgent();
     }

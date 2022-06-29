@@ -46,7 +46,9 @@ public class PlayerInteractionZone : ObjectCollectionZone
         
         agent = (AgentInteraction) collection.Where(c => c is AgentInteraction).FirstOrDefault();
         ResetGrabbers();
-       if(agent != null) agent.ActivateAgent(this);
+       if(agent != null) {
+        agent.ActivateAgent(this);
+       }
     }
 
     public void DeactivateAgent(){
@@ -78,12 +80,17 @@ public class PlayerInteractionZone : ObjectCollectionZone
         }
     }
 
-       public void DeactivateFollower(){
+    public void DeactivateFollower(){
         if(agent != null) {
             agent.DeactivateFollower();
             IsLeading = false;
         }
     }
+    public void ToggleFollower(){
+        if(IsLeading){
+            DeactivateFollower();
+        }else{
+            ActivateFollower();
         }
     }
 
