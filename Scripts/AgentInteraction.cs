@@ -65,6 +65,10 @@ public class AgentInteraction : CollectableObject
         agent?.DeactivatePairDance();
     }
 
-}
+    public void SetHighlightMode(bool active){
+        agent?.SetHighlightMode(active);
+    }
+
+    }  
 }
 }

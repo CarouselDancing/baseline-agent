@@ -28,6 +28,7 @@ public class NetworkAgentController  : NetworkBehaviour
     public RuntimeMirroring mirror;
     public PlayerControllerBase player;
     public PhysicsPairDanceFollower follower;
+    public BlinkingHighlightGroupController highlight;
 
     void Start()
     {
@@ -134,7 +135,6 @@ public class NetworkAgentController  : NetworkBehaviour
 
     public void Deactivate()
     {
-      
         initiated = false;
     }  
 
@@ -149,10 +149,15 @@ public class NetworkAgentController  : NetworkBehaviour
        Reset();
     }
 
-   public void Reset(){
+    public void Reset(){
        
        
     }
+
+    public void SetHighlightMode(bool active){
+        highlight?.SetMode(active);
+    }
+
 
     public void ActivatePairDance(){
        //start mirror and stop animator

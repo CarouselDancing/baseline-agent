@@ -39,11 +39,12 @@ public class MirrorGameManager : MonoBehaviour
         var configText = Resources.Load<TextAsset>("config").text;
        // string configText = File.ReadAllText(configFile);
         config = JsonUtility.FromJson<ClientConfig>(configText);
-        debugMessage.Show("stloadad"+configText);
+        debugMessage.Show("loaded config "+configText);
 
     }
 
     public static void ShowMessage(string message){
+        Debug.Log("debug: "+message);
         if(Instance != null && Instance.debugMessage != null){
             Instance.debugMessage.Show(message);
         }

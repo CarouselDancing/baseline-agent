@@ -16,6 +16,22 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public PlayerControllerBase player;
     public Transform partnerTarget;
 
+    override public void  OnTriggerEnter (Collider other){
+        var a= other.GetComponent<AgentInteraction>();
+        if(a != null && !collection.Contains(a)) {
+            a.SetHighlightMode(true);
+            collection.Add(a);
+        }
+    }
+
+    override public void OnTriggerExit (Collider other){
+        var a = other.GetComponent<AgentInteraction>();
+        if(collection.Contains(a)) {
+            a.SetHighlightMode(false);
+            collection.Remove(a);
+        }
+    }
+
     // public List<ABGrabber> grabbers;
     /*public void SetCurrentAgentZone(AgentInteractionZone az){
         if(agentZone != az)DeactivateAgent(agentZone);
@@ -66,6 +82,8 @@ public class PlayerInteractionZone : ObjectCollectionZone
         if(agent != null) {
             agent.DeactivateFollower();
             IsLeading = false;
+        }
+    }
         }
     }
 
