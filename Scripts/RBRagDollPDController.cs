@@ -33,7 +33,7 @@ public class RBRagDollPDController : RagDollPDControllerBase
             OnEpisodeBegin();
             return;
         }
-        if(!active)return;
+        if(mode == PDControllerMode.OFF)return;
         
         GetMocapTargets();
     

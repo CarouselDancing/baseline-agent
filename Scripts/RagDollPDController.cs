@@ -10,16 +10,14 @@ namespace Carousel{
     
 namespace BaselineAgent{
 
+public enum BodyType{
+    ROOT,
+    LOWER,
+    UPPER
+}
 
 public class RagDollPDController : RagDollPDControllerBase
 {
-
-    [Serializable]
-    public class BodyMap{
-        public Transform src;
-        public Transform dst;
-    }
-
 
     List<Rigidbody> _mocapBodyParts;
     List<ArticulationBody> _mocapBodyPartsA;
@@ -27,13 +25,14 @@ public class RagDollPDController : RagDollPDControllerBase
     RagDoll003 _ragDollSettings;
     List<ArticulationBody> _bodies;
     List<ArticulationBody> _motors;
+    Dictionary<string, BodyType> bodyTypes;
 
     public int numActionDims;
 
     public bool _hasLazyInitialized;
     public float[] _mocapTargets;
     public bool activateExternalForce;
-    public  ArticulationBody root;
+    public ArticulationBody root;
     public float kp = 500f;//0.001f; // proportional gain
     public float rkp = 5;//0.001f; // proportional gain
     public float kd = 10f; // differential gain
@@ -42,11 +41,15 @@ public class RagDollPDController : RagDollPDControllerBase
     public Vector3 rootForce;
     public Vector3 rootTorque;
     public Transform targetRoot;
-    public List<BodyMap> bodyMap;
 
     public int solverIterations = 255;
     
     public bool IsMirroring;
+
+    public bool alignReferenceRoot = true;
+
+    ConfigurableJoint rootJoint;
+    public bool createRootJoint = false;
 
      
     void FixedUpdate()
@@ -56,13 +59,22 @@ public class RagDollPDController : RagDollPDControllerBase
             OnEpisodeBegin();
             return;
         }
-        if(!active){
-             foreach (var m in bodyMap){
-                m.dst.transform.position = m.src.position;
-                m.dst.transform.rotation = m.src.rotation;
-             }
-            return;
+        switch (mode){
+            case PDControllerMode.OFF:
+                CopyBodyStates();
+                break;
+            case PDControllerMode.FULL:
+                ApplyPDTargets();
+                break;
+            case PDControllerMode.UPPER_BODY:
+                CopyLowerBodyStates();
+                ApplyUpperBodyPDTargets();
+                break;
         };
+    }
+
+
+    public void ApplyPDTargets(){
         var vectorAction = GetMocapTargets();
     
         int i = 0;
@@ -81,13 +93,12 @@ public class RagDollPDController : RagDollPDControllerBase
             UpdateMotor(m, targetNormalizedRotation);
         }
         if(activateExternalForce)ApplyExternalForceOnRoot();
-        if(animationSrc!= null){
+        if(animationSrc!= null && alignReferenceRoot){
             var stateController = animationSrc.GetComponent<AnimStateController>();
             if(stateController!= null)stateController.applyRootMotion = false;
             animationSrc.GetComponent<Animator>().applyRootMotion = false;
             SetReferenceRootTransform();
         }
-       
     }
 
     public void ApplyExternalForceOnRoot(){
@@ -116,52 +127,68 @@ public class RagDollPDController : RagDollPDControllerBase
 
     }
 
+    public void CopyLowerBodyStates(){
+        foreach (var m in bodyMap){
+            switch (bodyTypes[m.dst.name]){
+                case BodyType.ROOT:
+                   //  root.TeleportRoot( m.src.position, m.src.rotation);
+                    m.dst.transform.position = m.src.position;
+                    m.dst.transform.rotation = m.src.rotation;
+                    break;
+                case BodyType.LOWER:
+                    m.dst.transform.position = m.src.position;
+                    m.dst.transform.rotation = m.src.rotation;
+                    break;
+            }
+        }
+    }
 
-   public override void OnEpisodeBegin()
+
+    public void ApplyUpperBodyPDTargets(){
+        var vectorAction = GetMocapTargets();
+    
+        int i = 0;
+        foreach (var m in _motors)
+        {
+            if (m.isRoot)
+                continue;
+            Vector3 targetNormalizedRotation = Vector3.zero;
+            if (m.twistLock == ArticulationDofLock.LimitedMotion)
+                targetNormalizedRotation.x = vectorAction[i++];
+            if (m.swingYLock == ArticulationDofLock.LimitedMotion)
+                targetNormalizedRotation.y = vectorAction[i++];
+            if (m.swingZLock == ArticulationDofLock.LimitedMotion)
+                targetNormalizedRotation.z = vectorAction[i++];
+  
+            if (bodyTypes[m.name] != BodyType.UPPER)
+                continue;
+            UpdateMotor(m, targetNormalizedRotation);
+        }
+    }
+
+    override public void OnEpisodeBegin()
     {
 
         if (!_hasLazyInitialized && animationSrc != null)
         {
-         
-            _mocapBodyParts = animationSrc.GetComponentsInChildren<Rigidbody>().ToList();
-            _mocapBodyPartsA = animationSrc.GetComponentsInChildren<ArticulationBody>().ToList();
-    
-            _bodyParts = GetComponentsInChildren<ArticulationBody>().ToList();
-            _ragDollSettings = GetComponent<RagDoll003>();
-
-            root = GetComponentsInChildren<ArticulationBody>().Where(x => x.isRoot).FirstOrDefault();
-
-             if (_mocapBodyParts.Count > 0) {
-                Rigidbody mocapBody = _mocapBodyParts.First(x => x.name == animationSrc.rootName);
-                targetRoot = mocapBody.transform;
+            Initialize();
+            if (mode != PDControllerMode.FULL){
+               deactivateBodies();
             }
-            else
-            {
-                ArticulationBody mocapBody = _mocapBodyPartsA.First(x => x.name ==animationSrc.rootName);
-                targetRoot = mocapBody.transform;
+            if (mode == PDControllerMode.UPPER_BODY){
+                activateUpperBodies();
             }
-            _bodies =  GetComponentsInChildren<ArticulationBody>().ToList();
-
-            bodyMap = new List<BodyMap>();
-            bodyMap.Add(new BodyMap(){dst= root.transform, src = targetRoot.transform});
-            foreach (var b in _bodies){
-                var src = animationSrc.GetComponentsInChildren<Transform>().First(x => x.name == b.name);
-                bodyMap.Add(new BodyMap(){dst= b.transform, src = src});
+            if (createRootJoint){
+                foreach (var m in bodyMap){
+                    if (bodyTypes[m.dst.name] == BodyType.ROOT){
+                        CreateJoint(m.src.gameObject);
+                        break;
+                    }
+                }
             }
-            _motors = _bodies
-                .Where(x => x.jointType == ArticulationJointType.SphericalJoint)
-                .Where(x => !x.isRoot)
-                .Distinct()
-                .ToList();
-            var individualMotors = new List<float>();
-            numActionDims = 0;
-           
-            _mocapTargets = null;
-            _hasLazyInitialized = true;
-            animationSrc.ResetToIdle();
-            animationSrc.CopyStatesTo(this.gameObject, false);
         }
         OnReset?.Invoke();
+        
 
 #if UNITY_EDITOR
         if (DebugPauseOnReset)
@@ -169,6 +196,76 @@ public class RagDollPDController : RagDollPDControllerBase
             UnityEditor.EditorApplication.isPaused = true;
         }
 #endif	      
+    }
+
+    public void CreateJoint(GameObject other){
+        rootJoint = other.AddComponent<ConfigurableJoint>();
+        rootJoint.angularXMotion = ConfigurableJointMotion.Locked;
+        rootJoint.angularYMotion = ConfigurableJointMotion.Locked;
+        rootJoint.angularZMotion = ConfigurableJointMotion.Locked;
+        rootJoint.xMotion = ConfigurableJointMotion.Locked;
+        rootJoint.yMotion = ConfigurableJointMotion.Locked;
+        rootJoint.zMotion = ConfigurableJointMotion.Locked;
+        rootJoint.connectedArticulationBody = root;
+
+    }
+    public void RemoveJoint(){
+        if(rootJoint != null)DestroyImmediate(rootJoint);
+        rootJoint = null;
+
+    }
+
+    void Initialize(){
+        _mocapBodyParts = animationSrc.GetComponentsInChildren<Rigidbody>().ToList();
+        _mocapBodyPartsA = animationSrc.GetComponentsInChildren<ArticulationBody>().ToList();
+
+        _bodyParts = GetComponentsInChildren<ArticulationBody>().ToList();
+        _ragDollSettings = GetComponent<RagDoll003>();
+
+        root = GetComponentsInChildren<ArticulationBody>().Where(x => x.isRoot).FirstOrDefault();
+
+            if (_mocapBodyParts.Count > 0) {
+            Rigidbody mocapBody = _mocapBodyParts.First(x => x.name == animationSrc.rootName);
+            targetRoot = mocapBody.transform;
+        }
+        else
+        {
+            ArticulationBody mocapBody = _mocapBodyPartsA.First(x => x.name ==animationSrc.rootName);
+            targetRoot = mocapBody.transform;
+        }
+        _bodies =  GetComponentsInChildren<ArticulationBody>().ToList();
+
+        bodyTypes = new Dictionary<string, BodyType>();
+        
+        foreach(var m in _bodies){
+            BodyType bt = BodyType.LOWER;
+            if(m.isRoot){
+                bt = BodyType.ROOT;
+            }else if(upperBodyNames.Contains(m.name)){
+                bt = BodyType.UPPER;
+            }
+            bodyTypes[m.name] = bt;
+        }
+        bodyMap = new List<BodyMap>();
+        bodyMap.Add(new BodyMap(){dst= root.transform, src = targetRoot.transform});
+        foreach (var b in _bodies){
+            var src = animationSrc.GetComponentsInChildren<Transform>().First(x => x.name == b.name);
+            bodyMap.Add(new BodyMap(){dst= b.transform, src = src});
+        }
+        _motors = _bodies
+            .Where(x => x.jointType == ArticulationJointType.SphericalJoint)
+            .Where(x => !x.isRoot)
+            .Distinct()
+            .ToList();
+
+        
+        var individualMotors = new List<float>();
+        numActionDims = 0;
+        
+        _mocapTargets = null;
+        _hasLazyInitialized = true;
+        animationSrc.ResetToIdle();
+        animationSrc.CopyStatesTo(this.gameObject, false);
     }
 
     float[] GetMocapTargets()
@@ -339,27 +436,50 @@ public class RagDollPDController : RagDollPDControllerBase
     }
 
     public void Deactivate(){
-        active = false;
-        foreach (var m in _bodies)
-        {
-          DeactivateBody(m);
-        }
+        mode = PDControllerMode.OFF;
+        if(!_hasLazyInitialized) return;
+        deactivateBodies();
         var stateController = animationSrc.GetComponent<AnimStateController>();
         if(stateController!= null)stateController.applyRootMotion = true;
         if(!IsMirroring) SetReferenceRootTransform();
     }
 
      public void Activate(){
-        active = true;
+        mode = PDControllerMode.FULL;
+        if(!_hasLazyInitialized) return;
+        activateBodies();
+        if(!IsMirroring)animationSrc.CopyStatesTo(this.gameObject, false);
+    }
+
+     public void ActivateUpperBody(){
+        mode = PDControllerMode.UPPER_BODY;
+        if(!_hasLazyInitialized) return;
+        activateUpperBodies();
+        if(!IsMirroring)animationSrc.CopyStatesTo(this.gameObject, false);
+    }
+
+     void activateBodies(){
         foreach (var m in _bodies)
         {
             ActivateBody(m);
         }
-        
-         if(!IsMirroring)animationSrc.CopyStatesTo(this.gameObject, false);
-    }
+     }
+     void deactivateBodies(){
+        foreach (var m in _bodies)
+        {
+            DeactivateBody(m);
+        }
+     }
 
+     void activateUpperBodies(){
+       foreach (var m in _bodies)
+        {
+            if(bodyTypes[m.name] == BodyType.UPPER || m.isRoot)
+                ActivateBody(m);
+        }
+     }
     void SetReferenceRootTransform(){
+        if(!alignReferenceRoot) return;
         var delta =root.transform.position - targetRoot.position;
         delta.y = 0;
         var deltaQ = Quaternion.Inverse(targetRoot.rotation)*root.transform.rotation;

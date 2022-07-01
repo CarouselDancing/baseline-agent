@@ -131,6 +131,7 @@ public class PhysicsDanceAgentGenerator : MonoBehaviour
         abGenerator.version = version;
         abGenerator.figureType = settings.figureType;
         abGenerator.disableLimits = settings.disableLimits;
+        abGenerator.solverIterations = settings.solverIterations;
         Transform root = null;
         GeneratorUtils.FindChild(o.transform, settings.rootName, out root);
         abGenerator.root = root;
@@ -227,10 +228,12 @@ public class PhysicsDanceAgentGenerator : MonoBehaviour
 
 
         RagDollPDControllerBase pdController;
-        if (mode == GeneratorMode.ArticulationBody || mode == GeneratorMode.Prefab)
+        if (mode == GeneratorMode.ArticulationBody || mode == GeneratorMode.Prefab){
             pdController = character.AddComponent<RagDollPDController>();
-        else
+            pdController.upperBodyNames = settings.upperBodyNames;
+        }else{
             pdController = character.AddComponent<RBRagDollPDController>();
+        }
         pdController.DebugPauseOnReset = DebugPauseOnReset;
         if (createAnimationSource) { 
            pdController.animationSrc = animationSource.GetComponent<PhysicsPoseProvider>();
