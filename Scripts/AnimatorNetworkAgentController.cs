@@ -2,62 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Mirror;
 
 namespace Carousel{
     
 namespace BaselineAgent{
 
-public enum AgentState{
-    IDLE,
-    WALK,
-    DANCE,
-    PAIR_DANCE
-}
-public class AgentController  : DanceAgentInterface
+public class AnimatorNetworkAgentController  : NetworkAgentController
 {
 
     public NavMeshAgent navMeshAgent;
     public Animator animator;
     public AnimStateController stateController;
-    public Transform target;
-    public float minStopDistance = 0.1f;
-    public float minStartDistance = 10f;//0.5f;
-    public bool initiated = false;
-    public float distanceToTarget;
-    override public bool IsFollowing{  get { return target != null; }}  
 
-    override public bool IsMirroring{  get { return mirror != null && mirror.active; }}  
 
-    public AgentState state;
-    public RagDollPDController controller;
-    public RuntimeMirroring mirror;
-    public PlayerControllerBase player;
-    public PhysicsPairDanceFollower follower;
-
-    void Awake()
+    void Start()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
-        stateController = GetComponent<AnimStateController>();
+        if(navMeshAgent == null){
+            navMeshAgent = GetComponent<NavMeshAgent>();
+            animator = GetComponent<Animator>();
+            stateController = GetComponent<AnimStateController>();
+            mirror = GetComponent<RuntimeMirroring>();
+        }
         state = AgentState.IDLE;
-        mirror = GetComponent<RuntimeMirroring>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(stateController == null) return;
+         if(!isServer || stateController == null )return;
         UpdateDistanceToTarget();
         UpdateState();
         Act();
     }
-    
-    public void UpdateDistanceToTarget(){
-        distanceToTarget = 0;
-        if (target == null) return;
-        var delta = target.position - transform.position;
-        distanceToTarget = delta.magnitude;
-    }
+ 
 
 
     void UpdateState(){
@@ -66,7 +44,7 @@ public class AgentController  : DanceAgentInterface
         if(IsMirroring) state = AgentState.PAIR_DANCE;
         switch (state){
             case AgentState.IDLE:
-                if ( distanceToTarget > minStartDistance && !controller.IsMirroring) state = AgentState.WALK;
+                if ( distanceToTarget > minStartDistance && !pdController.IsMirroring) state = AgentState.WALK;
                 break;
             case AgentState.WALK:
                  if (distanceToTarget < minStopDistance) {
@@ -74,7 +52,7 @@ public class AgentController  : DanceAgentInterface
                 }
                 break;
             case AgentState.DANCE:
-                if ( distanceToTarget > minStartDistance && !controller.IsMirroring) state = AgentState.WALK;
+                if ( distanceToTarget > minStartDistance && !pdController.IsMirroring) state = AgentState.WALK;
                 break;
             case AgentState.PAIR_DANCE:
                 if(!IsMirroring) state = AgentState.IDLE;
@@ -85,20 +63,18 @@ public class AgentController  : DanceAgentInterface
     public void Act(){
           switch (state){
             case AgentState.IDLE:
-                 if(controller!= null && !controller.IsActive) controller.Activate();
+                 if(pdController!= null && !pdController.IsActive) pdController.Activate();
                 break;
             case AgentState.WALK:
                 if(stateController.isDancing)ToggleDancing();
                 navMeshAgent.SetDestination(target.position);
-                stateController.applyRootMotion = false;
-                if(controller!= null && controller.IsActive ) controller.Deactivate();
+                if(pdController!= null && pdController.IsActive ) pdController.Deactivate();
                 break;
             case AgentState.DANCE:
                 if(!stateController.isDancing)ToggleDancing();
-                stateController.applyRootMotion = true;
                 break;
             case AgentState.PAIR_DANCE:
-                 if(controller!= null && !controller.IsActive) controller.Activate();
+                 if(pdController!= null && !pdController.IsActive) pdController.Activate();
                 break;
         }
         
@@ -115,60 +91,53 @@ public class AgentController  : DanceAgentInterface
         transform.rotation = Quaternion.Slerp(transform.rotation, deltaQ*transform.rotation, Time.deltaTime);
     }
 
-    public bool IsPlayerDancing(){
+    bool IsPlayerDancing(){
 
         if (player == null) return false;
         return player.IsDancing;
     }
 
-/*
-    public void FollowTarget(){
-        if (target == null) return;
-        var delta = target.position - transform.position;
-        distanceToTarget = delta.magnitude;
-        if ( distanceToTarget > minStartDistance){
-            ToggleDancing();
-            navMeshAgent.SetDestination(target.position);
-         }else if(!stateController.isDancing) {
-             ToggleDancing();
-         }
-        var deltaQ = Quaternion.Inverse(transform.rotation) *target.rotation;
-        transform.rotation = Quaternion.Slerp(transform.rotation, deltaQ*transform.rotation, Time.deltaTime);
-    }*/
-
     override public void ToggleDancing(){
+        Debug.Log("toggle dancing");
         stateController.ToggleDancing();
    
     }
 
     
-    override public void Activate(PlayerInteractionZone playerInteraction)
+    public void Activate(PlayerInteractionZone playerInteraction)
     {   
         this.player = playerInteraction.player;
         initiated = true;
         Reset();
     }
-    override public void Deactivate()
-    {
-      
-        initiated = false;
-    }
 
-    override public void LockToLeader(Transform t){
+        
+
+    public void Deactivate()
+    {
+        initiated = false;
+    }  
+
+    public void LockToLeader(Transform t){
         target = t;
     }
 
 
-    override public void UnlockLeader(){
+    public void UnlockLeader(){
 
        target = null;
        Reset();
     }
 
-   override  public void Reset(){
+    public void Reset(){
        
        
     }
+
+    public void SetHighlightMode(bool active){
+        highlight?.SetMode(active);
+    }
+
 
     override public void ActivatePairDance(){
        //start mirror and stop animator
@@ -177,8 +146,9 @@ public class AgentController  : DanceAgentInterface
            mirror.active = true;
            mirror.initialized = false;
            animator.enabled = false;
-           controller.IsMirroring = true;
+           pdController.IsMirroring = true;
            mirror.translationMode = RuntimeMirroring.TranslationMode.EXTERNAL;
+            Debug.Log("ActivatePairDance");
            follower.ActivatePairDance(player);
            
        } 
@@ -187,12 +157,12 @@ public class AgentController  : DanceAgentInterface
     
     override public void DeactivatePairDance(){
         //stop mirror and start animator
-        
        if(mirror!=null && mirror.active && follower!=null){
            mirror.active = false;
            mirror.initialized = false;
            animator.enabled = true;
-           controller.IsMirroring = false;
+           pdController.IsMirroring = false;
+            Debug.Log("DeactivatePairDance");
            follower.DeactivatePairDance();
        } 
     }
