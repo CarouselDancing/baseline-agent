@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3141507884253300471}
   - component: {fileID: 2691831550001618384}
   - component: {fileID: 1407865044821170804}
-  - component: {fileID: 4215812150444007486}
+  - component: {fileID: 7816967940972942058}
   m_Layer: 0
   m_Name: RPMAgentGenerator
   m_TagString: Untagged
@@ -31,6 +31,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 17.039015, y: 1.9926281, z: -2.1014502}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -121,6 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  syncAvatarURL: 
   AvatarURL: 
   go: {fileID: 0}
   animationController: {fileID: 22100000, guid: 9aee9c9f814b3c84990681c720b293f3, type: 2}
@@ -154,6 +156,8 @@ MonoBehaviour:
     translationMode: 1
   minStopDistance: 0.1
   minStartDistance: 2
+  armatureName: Armature
+  rootName: Hips
 --- !u!114 &2691831550001618384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,7 +198,7 @@ MonoBehaviour:
   initialized: 0
   armatureName: Armature
   useRootRotation: 1
---- !u!114 &4215812150444007486
+--- !u!114 &7816967940972942058
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -203,7 +207,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3141507884253300468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ed6cf405e2af514692145d4ffde0a96, type: 3}
+  m_Script: {fileID: 11500000, guid: b07338f3d3ff22946877fe4ff2b262c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
@@ -218,3 +222,7 @@ MonoBehaviour:
   mirror: {fileID: 0}
   player: {fileID: 0}
   follower: {fileID: 0}
+  highlight: {fileID: 0}
+  navMeshAgent: {fileID: 0}
+  animator: {fileID: 0}
+  stateController: {fileID: 0}

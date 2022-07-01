@@ -10,6 +10,8 @@ using Mirror;
 
 
 namespace Carousel{
+namespace BaselineAgent{
+    
 public class RPMAgentGenerator : RPMGeneratorBase
 {
 
@@ -70,33 +72,7 @@ public class RPMAgentGenerator : RPMGeneratorBase
         Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
         initiated = true;
         if (isServer){
-            var prefab = GameObject.Instantiate(avatar);
-            var agentGenerator = gameObject.AddComponent<PhysicsDanceAgentGenerator>();
-            agentGenerator.runOnAwake = false;
-            agentGenerator.character = avatar;
-            agentGenerator.CharacterPrefab = prefab;
-            agentGenerator.settings = settings;
-            agentGenerator.animationController = animationController;
-            agentGenerator.IgnoreList = IgnoreList;
-            agentGenerator.useAvatarModel = useAvatarModel;
-            agentGenerator.createAnimationSource = createAnimationSource;
-            agentGenerator.createMirror = createMirror;
-            agentGenerator.createReferencePose = createReferencePose;
-            agentGenerator.createStabilizerJoint = createStabilizerJoint;
-            agentGenerator.CreateFollowerScript = CreateFollowerScript;
-            agentGenerator.stabilizerJointPrefab = stabilizerJointPrefab;
-            agentGenerator.hideReference = hideReference;
-            agentGenerator.mirrorSettings = mirrorSettings;
-            agentGenerator.Generate();
-
-            PhysicsPoseProvider poseProvider = GetComponentInChildren<PhysicsPoseProvider>();
-            poseProvider.armatureName = armatureName;
-
-            NetworkAgentController ac = ConfigureServerAgentController(poseProvider.gameObject);
-            ac.controller = GetComponentInChildren<RagDollPDController>();
-            ac.follower = GetComponentInChildren<PhysicsPairDanceFollower>();
-            //AddAgentInteraction(go, ac);
-            DestroyImmediate(prefab);
+            CreateServerAgentController(avatar);
         }else{
             ConfigureClientAgentController(avatar);
         }
@@ -105,12 +81,41 @@ public class RPMAgentGenerator : RPMGeneratorBase
         if(anim != null) networkAgent.Init(anim);
     }
 
+    virtual public void CreateServerAgentController(GameObject avatar){
+        var prefab = GameObject.Instantiate(avatar);
+        var agentGenerator = gameObject.AddComponent<PhysicsDanceAgentGenerator>();
+        agentGenerator.runOnAwake = false;
+        agentGenerator.character = avatar;
+        agentGenerator.CharacterPrefab = prefab;
+        agentGenerator.settings = settings;
+        agentGenerator.animationController = animationController;
+        agentGenerator.IgnoreList = IgnoreList;
+        agentGenerator.useAvatarModel = useAvatarModel;
+        agentGenerator.createAnimationSource = createAnimationSource;
+        agentGenerator.createMirror = createMirror;
+        agentGenerator.createReferencePose = createReferencePose;
+        agentGenerator.createStabilizerJoint = createStabilizerJoint;
+        agentGenerator.CreateFollowerScript = CreateFollowerScript;
+        agentGenerator.stabilizerJointPrefab = stabilizerJointPrefab;
+        agentGenerator.hideReference = hideReference;
+        agentGenerator.mirrorSettings = mirrorSettings;
+        agentGenerator.Generate();
 
-    NetworkAgentController ConfigureServerAgentController(GameObject go){
+        PhysicsPoseProvider poseProvider = GetComponentInChildren<PhysicsPoseProvider>();
+        poseProvider.armatureName = armatureName;
+
+        NetworkAgentController ac = ConfigureServerAgentController(poseProvider.gameObject);
+        
+        //AddAgentInteraction(go, ac);
+        DestroyImmediate(prefab);
+    }
+
+
+    virtual public NetworkAgentController ConfigureServerAgentController(GameObject go){
         //var anim = go.GetComponent<Animator>();
         //anim.runtimeAnimatorController = mainController;
         //go.name = "dancer"+dancers.Count.ToString();
-        var ac = GetComponent<NetworkAgentController>();
+        var ac = GetComponent<AnimatorNetworkAgentController>();
         ac.navMeshAgent = go.AddComponent<NavMeshAgent>();
         ac.navMeshAgent.radius = 0.2f;
         ac.animator = go.GetComponent<Animator>();
@@ -121,6 +126,8 @@ public class RPMAgentGenerator : RPMGeneratorBase
         ac.minStartDistance = minStartDistance;
         ac.minStopDistance = minStopDistance;
         ac.ToggleDancing();
+        ac.pdController = GetComponentInChildren<RagDollPDController>();
+        ac.follower = GetComponentInChildren<PhysicsPairDanceFollower>();
         AddNetworkAgentInteraction(go.transform, ac);
         return ac;
     }
@@ -132,11 +139,12 @@ public class RPMAgentGenerator : RPMGeneratorBase
         AddNetworkAgentInteraction(parent, ac);
     }
 
-    void AddNetworkAgentInteraction(Transform parent, NetworkAgentController ac){
+    public void AddNetworkAgentInteraction(Transform parent, NetworkAgentController ac){
         var io = GameObject.Instantiate(agentInteractionPrefab, parent);
         io.transform.localPosition = Vector3.zero;
         var aic = io.AddComponent<AgentInteraction>();
         aic.agent = ac;
     }
+}
 }
 }
