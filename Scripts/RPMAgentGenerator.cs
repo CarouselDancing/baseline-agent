@@ -104,14 +104,14 @@ public class RPMAgentGenerator : RPMGeneratorBase
         PhysicsPoseProvider poseProvider = GetComponentInChildren<PhysicsPoseProvider>();
         poseProvider.armatureName = armatureName;
 
-        NetworkAgentController ac = ConfigureServerAgentController(poseProvider.gameObject);
+        NetworkAgentController ac = ConfigurePoseProvider(poseProvider.gameObject);
         
         //AddAgentInteraction(go, ac);
         DestroyImmediate(prefab);
     }
 
 
-    virtual public NetworkAgentController ConfigureServerAgentController(GameObject go){
+    virtual public NetworkAgentController ConfigurePoseProvider(GameObject go){
         //var anim = go.GetComponent<Animator>();
         //anim.runtimeAnimatorController = mainController;
         //go.name = "dancer"+dancers.Count.ToString();
