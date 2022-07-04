@@ -172,6 +172,14 @@ public class RagDollPDController : RagDollPDControllerBase
         if (!_hasLazyInitialized && animationSrc != null)
         {
             Initialize();
+            	
+            animationSrc.ResetToIdle();
+            if(createRootJoint){
+                CopyBodyStates();
+            }else{
+                animationSrc.CopyStatesTo(this.gameObject, false);
+            }
+
             if (mode != PDControllerMode.FULL){
                deactivateBodies();
             }
@@ -268,8 +276,6 @@ public class RagDollPDController : RagDollPDControllerBase
         
         _mocapTargets = null;
         _hasLazyInitialized = true;
-        animationSrc.ResetToIdle();
-        animationSrc.CopyStatesTo(this.gameObject, false);
     }
 
     float[] GetMocapTargets()
@@ -452,14 +458,22 @@ public class RagDollPDController : RagDollPDControllerBase
         mode = PDControllerMode.FULL;
         if(!_hasLazyInitialized) return;
         activateBodies();
-        if(!IsMirroring)animationSrc.CopyStatesTo(this.gameObject, false);
+        if(rootJoint != null) {
+            rootJoint.connectedArticulationBody = root;
+        }else if(!IsMirroring){
+            animationSrc.CopyStatesTo(this.gameObject, false);
+        }
     }
 
      public void ActivateUpperBody(){
         mode = PDControllerMode.UPPER_BODY;
         if(!_hasLazyInitialized) return;
         activateUpperBodies();
-        if(!IsMirroring)animationSrc.CopyStatesTo(this.gameObject, false);
+        if(rootJoint != null) {
+            rootJoint.connectedArticulationBody = root;
+        }else if(!IsMirroring){
+            animationSrc.CopyStatesTo(this.gameObject, false);
+        }
     }
 
      void activateBodies(){
