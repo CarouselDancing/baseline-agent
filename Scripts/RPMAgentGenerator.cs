@@ -95,7 +95,7 @@ public class RPMAgentGenerator : RPMGeneratorBase
         agentGenerator.createMirror = createMirror;
         agentGenerator.createReferencePose = createReferencePose;
         agentGenerator.createStabilizerJoint = createStabilizerJoint;
-        agentGenerator.CreateFollowerScript = CreateFollowerScript;
+        agentGenerator.createFollowerScript = CreateFollowerScript;
         agentGenerator.stabilizerJointPrefab = stabilizerJointPrefab;
         agentGenerator.hideReference = hideReference;
         agentGenerator.mirrorSettings = mirrorSettings;

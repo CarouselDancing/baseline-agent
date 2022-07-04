@@ -28,7 +28,7 @@ public class MirrorSettings
 
 
 
-public class RuntimeMirroring : PhysicsPoseProvider
+public class RuntimeMirroring : MonoBehaviour
 {
     public enum MirrorMode
     {
@@ -73,8 +73,18 @@ public class RuntimeMirroring : PhysicsPoseProvider
     public float footTipOffset =0;
     public Vector3 externalPosition;
     public bool initialized;
-  
-  
+    
+
+    public string rootName;
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        UpdatePose();
+      
+    }
+
+
     public void SetTransforms()
     {
         mirrorMatrix.m00 = mirrorVector.x;
@@ -114,9 +124,7 @@ public class RuntimeMirroring : PhysicsPoseProvider
 
     }
 
-
-
-    override public void UpdatePose(){
+    public void UpdatePose(){
         if(!initialized && active)SetTransforms();
         MirrorPose();
     }
@@ -357,7 +365,7 @@ public class RuntimeMirroring : PhysicsPoseProvider
     }
 
 
-    override public void ResetToIdle(){
+    public void ResetToIdle(){
 
             rootPosSet = false;
             MirrorPose();
