@@ -1,0 +1,465 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3141507884253300468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3141507884253300489}
+  - component: {fileID: 3141507884253300470}
+  - component: {fileID: 6127051739409072689}
+  - component: {fileID: 2691831550001618384}
+  - component: {fileID: 1407865044821170804}
+  - component: {fileID: -2117493834711139991}
+  m_Layer: 0
+  m_Name: MMRPMAgentGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3141507884253300489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3141507884253300468}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 17.039015, y: 1.9926281, z: -2.1014502}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3141507884253300470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3141507884253300468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc2369828f70bd34b94075ff1cd19cf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootName: Hips
+  headName: Head
+  width: 0.04
+  mat: {fileID: 2100000, guid: 889152b92b03deb45a83e37cacff3327, type: 2}
+  tansluscentMat: {fileID: 2100000, guid: 34188905abc69aa4fb6f5beb35f7d365, type: 2}
+  leftFoot: {fileID: 4265222953134221812, guid: d7e74826b97900f4c9aee54919671488, type: 3}
+  rightFoot: {fileID: 6601363404923112111, guid: b9991eb4882c22d4ba9471772b7c66ee, type: 3}
+  headPrefab: {fileID: 370539650439615074, guid: 29c2d32eeeff4d24496b3856ee173586, type: 3}
+  reference: {fileID: 5918097597002162060, guid: 48864c1e2797cb442b2f0810282fad59, type: 3}
+  footOffset: -0.1
+  lengthScaleFactor: 0.8
+  headOffset: 0.1
+  referenceBodies:
+  - name: Hips
+    refName: butt
+  - name: Spine
+    refName: lower_waist
+  - name: Spine1
+    refName: upper_waist
+  - name: Spine2
+    refName: torso
+  - name: Head
+    refName: head
+  - name: LeftUpLeg
+    refName: left_thigh
+  - name: LeftLeg
+    refName: left_shin
+  - name: LeftFoot
+    refName: left_left_foot
+  - name: RightUpLeg
+    refName: right_thigh
+  - name: RightLeg
+    refName: right_shin
+  - name: RightFoot
+    refName: right_right_foot
+  - name: LeftArm
+    refName: left_upper_arm
+  - name: RightArm
+    refName: right_upper_arm
+  - name: RightForeArm
+    refName: right_larm
+  - name: LeftForeArm
+    refName: left_larm
+  createColliderAsChild: 0
+  endEffectors:
+  - LeftHand
+  - RightHand
+  alignAnchorRotation: 1
+  MusclePowers: []
+  HumanoidMusclePowers: []
+  ignoreList:
+  - name: 
+    ignoreList: []
+  MotorScale: 1
+  Stiffness: 100
+  Damping: 100
+  modelLayer: marathon
+  referenceLayer: reference
+  figureType: 2
+  disableLimits: 0
+  upperBodyNames:
+  - lower_waist
+  - upper_waist
+  - torso
+  - head
+  - left_upper_arm
+  - right_upper_arm
+  - right_larm
+  - left_larm
+  solverIterations: 1000
+--- !u!114 &6127051739409072689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3141507884253300468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4eaa97f25fff8e4f9fadc15697937ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  syncAvatarURL: 
+  AvatarURL: 
+  go: {fileID: 0}
+  animationController: {fileID: 0}
+  initiated: 0
+  processing: 0
+  networkAvatar: {fileID: 0}
+  animationOverriders: []
+  runOnStart: 1
+  settings: {fileID: 3141507884253300470}
+  figureVersion: 0
+  IgnoreList: []
+  useAvatarModel: 1
+  createAnimationSource: 1
+  createMirror: 1
+  createReferencePose: 0
+  createStabilizerJoint: 0
+  CreateFollowerScript: 1
+  stabilizerJointPrefab: {fileID: 41755481902903899, guid: 10b5193901ecbcb428e002ebf3f63517, type: 3}
+  agentInteractionPrefab: {fileID: 7516485150346812101, guid: 915e541938235214391d105cab184461, type: 3}
+  hideReference: 1
+  mirrorSettings:
+    mirrorVector: {x: 1, y: 1, z: -1}
+    mirrorRootOffset: {x: 0, y: 0, z: 1}
+    jointMap: []
+    mode: 2
+    groundFeet: 0
+    footTipName: RightFoot
+    translationMode: 1
+  minStopDistance: 0.1
+  minStartDistance: 2
+  armatureName: Armature
+  rootName: Hips
+  mmFilename: loco_database.bin
+  mmSettings:
+    ignoreRangeEnd: 0
+    version: 0
+    databaseType: 0
+    features:
+    - bone: 5
+      boneIdx: 0
+      type: 0
+      weight: 0.75
+    - bone: 5
+      boneIdx: 0
+      type: 1
+      weight: 1
+    - bone: 6
+      boneIdx: 0
+      type: 0
+      weight: 0.75
+    - bone: 6
+      boneIdx: 0
+      type: 1
+      weight: 1
+    - bone: 0
+      boneIdx: 0
+      type: 1
+      weight: 1
+    - bone: 55
+      boneIdx: 0
+      type: 2
+      weight: 1
+    - bone: 55
+      boneIdx: 0
+      type: 3
+      weight: 1.25
+  mmControllerSettings:
+    visScale: 0.05
+    forceSearchTime: 0.1
+    simulationVelocityHalflife: 0.27
+    simulationRotationHalflife: 0.27
+    predictionDistance: 40
+    maxSpeed: 10
+    startFrameIdx: 0
+  retargetingMap:
+  - src: 0
+    dst: ROOT
+    childIdx: 0
+    srcUp: {x: 0, y: 1, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 1
+    dst: Hips
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 10
+    dst: Spine
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 11
+    dst: Spine1
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 12
+    dst: Spine2
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 0
+  - src: 13
+    dst: Neck
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 14
+    dst: Head
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 19
+    dst: RightShoulder
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 0
+  - src: 15
+    dst: LeftShoulder
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 0
+  - src: 20
+    dst: RightArm
+    childIdx: 0
+    srcUp: {x: 0, y: 1, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 1, y: 0, z: 0}
+    dstSide: {x: 0, y: -1, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 21
+    dst: RightForeArm
+    childIdx: 0
+    srcUp: {x: 0, y: 1, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 1, y: 0, z: 0}
+    dstSide: {x: 0, y: -1, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 16
+    dst: LeftArm
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: -1, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 17
+    dst: LeftForeArm
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: -1, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 2
+    dst: LeftUpLeg
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 3
+    dst: LeftLeg
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 4
+    dst: LeftFoot
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 6
+    dst: RightUpLeg
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 7
+    dst: RightLeg
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 8
+    dst: RightFoot
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 22
+    dst: RightHand
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 1, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - src: 18
+    dst: LeftHand
+    childIdx: 0
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: -1, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+--- !u!114 &2691831550001618384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3141507884253300468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: ab3767c0356e89f47aabf4d6e87cbbfe
+  hasSpawned: 0
+--- !u!114 &1407865044821170804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3141507884253300468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b641ccd1550bc4da4607004fc8261c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  trackedBones: 00000000070000000800000036000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000010000000200000003000000040000000500000006000000
+  bones: []
+  root: {fileID: 0}
+  updateFrameRate: 1
+  nextUpdateCounter: 0
+  initOnStart: 0
+  initialized: 0
+  armatureName: Armature
+  useRootRotation: 1
+--- !u!114 &-2117493834711139991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3141507884253300468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dcbf0fc05717de44aaa6dbd9d030850, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  target: {fileID: 0}
+  minStopDistance: 0.1
+  minStartDistance: 10
+  initiated: 0
+  distanceToTarget: 0
+  state: 0
+  pdController: {fileID: 0}
+  mirror: {fileID: 0}
+  player: {fileID: 0}
+  follower: {fileID: 0}
+  highlight: {fileID: 0}
+  locomotionController: {fileID: 0}
