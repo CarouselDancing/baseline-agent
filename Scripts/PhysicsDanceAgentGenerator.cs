@@ -63,7 +63,7 @@ public class PhysicsDanceAgentGenerator : PDRagDollGenerator
 
 
 
-    //add components order matters: agent and decision requester must be at the end
+   
     override public void AddPDControllerComponents()
     {
 

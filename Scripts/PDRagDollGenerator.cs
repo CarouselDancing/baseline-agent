@@ -212,9 +212,7 @@ public class PDRagDollGenerator : MonoBehaviour
         }
     }
 
-
-
-    //add components order matters: agent and decision requester must be at the end
+    
     virtual public void AddPDControllerComponents()
     {
         if (createAnimationSource) CreateAnimationSource();
