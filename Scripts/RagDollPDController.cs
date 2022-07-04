@@ -179,13 +179,9 @@ public class RagDollPDController : RagDollPDControllerBase
                 activateUpperBodies();
             }
             if (createRootJoint){
-                foreach (var m in bodyMap){
-                    if (bodyTypes[m.dst.name] == BodyType.ROOT){
-                        CreateJoint(m.src.gameObject);
-                        break;
-                    }
-                }
+                CreateRootJoint();
             }
+
         }
         OnReset?.Invoke();
         
@@ -198,8 +194,16 @@ public class RagDollPDController : RagDollPDControllerBase
 #endif	      
     }
 
-    public void CreateJoint(GameObject other){
-        rootJoint = other.AddComponent<ConfigurableJoint>();
+    public void CreateRootJoint(){
+        GameObject kinematicReference = null;
+        foreach (var m in bodyMap){
+            if (bodyTypes[m.dst.name] == BodyType.ROOT){
+                kinematicReference = m.src.gameObject;
+                break;
+            }
+        }
+        if(kinematicReference == null)return;
+        rootJoint = kinematicReference.AddComponent<ConfigurableJoint>();
         rootJoint.angularXMotion = ConfigurableJointMotion.Locked;
         rootJoint.angularYMotion = ConfigurableJointMotion.Locked;
         rootJoint.angularZMotion = ConfigurableJointMotion.Locked;
