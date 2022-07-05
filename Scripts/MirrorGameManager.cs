@@ -10,14 +10,9 @@ using Mirror;
 public class MirrorGameManager : MonoBehaviour
 {
     public static MirrorGameManager Instance;
-    public RoomConfig roomConfig;
     public DebugMessage debugMessage;
-    public NetworkManager networkManager;
     public UserMenu userMenu;
     public ClientConfig config;
-    public bool host;
-    public bool server;
-    public bool client;
     public RPMUserAvatar player;
 
     void Start()
@@ -28,9 +23,6 @@ public class MirrorGameManager : MonoBehaviour
         }else{
             GameObject.DestroyImmediate(this); //singleton monobehavior
         }
-        if(client)networkManager.StartClient();
-        if(host)networkManager.StartHost();
-        if(server)networkManager.StartServer();
     }
 
     
