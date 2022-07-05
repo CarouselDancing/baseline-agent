@@ -79,30 +79,14 @@ public class RPMUserAvatar : RPMAvatarManager
     
     public void SpawnAgent()
     {
-        Debug.Log("CreateDancer1");
-        if (roomConfig == null || roomConfig.AvatarURLs.Count == 0 || roomConfig.StartZones.Count == 0 || roomConfig.AvatarURLs.Count == 0 || roomConfig.AnimationOverriders.Count==0)  return;
-        int mi =  UnityEngine.Random.Range(0, roomConfig.AvatarURLs.Count);
-        int ai = UnityEngine.Random.Range(0, roomConfig.AnimationOverriders.Count);
-        int si = UnityEngine.Random.Range(0, roomConfig.StartZones.Count);
-        string avatarURL =  roomConfig.AvatarURLs[mi];
-        Vector3 position = roomConfig.StartZones[si].GetRandomStartPosition();
-        Quaternion rotation = GetRandomRotation();
-        Debug.Log("CreateDancer2");
-        CmdSpawnAgent(avatarURL, position, rotation);
+        CmdSpawnAgent();
     }
 
 
     [Command]
-    void CmdSpawnAgent(string avatarURL, Vector3 position, Quaternion rotation)
+    void CmdSpawnAgent()
     {
-        if (!NetworkServer.active) return;
-        Debug.Log("CmdSpawnAgent");
-        var go = GameObject.Instantiate(generator);
-        go.transform.position = position;
-        go.transform.rotation = rotation;
-        var gen = go.GetComponent<RPMAgentGenerator>();
-        gen.AvatarURL = avatarURL;
-        NetworkServer.Spawn(go);
+       RoomManager.Instance.SpawnAgent();
     }
     
     Quaternion GetRandomRotation(){
