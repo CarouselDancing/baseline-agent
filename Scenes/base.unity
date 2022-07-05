@@ -131,6 +131,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1875281616008088758, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
+        type: 3}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 2712723670520404936, guid: ddf185027c154344eb86ff0b579c1b70,
+        type: 3}
     - target: {fileID: 1875281616008088904, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
         type: 3}
       propertyPath: m_RootOrder

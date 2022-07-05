@@ -8,6 +8,7 @@ namespace Carousel.BaselineAgent{
 public class RoomManager : NetworkBehaviour
 {
     public GameObject generator;
+    public GameObject cube;
     public RoomConfig roomConfig;
     public static RoomManager Instance;
 
@@ -23,6 +24,7 @@ public class RoomManager : NetworkBehaviour
         for(int i = 0; i < numAgents;i++){
             SpawnAgent();
         }
+        SpawnCube();
     }
 
     public void SpawnAgent()
@@ -46,6 +48,12 @@ public class RoomManager : NetworkBehaviour
     Quaternion GetRandomRotation(){
         var y =  UnityEngine.Random.Range(-180, 180);
         return Quaternion.Euler(0,y,0);
+    } 
+    
+    public void SpawnCube()
+    {
+        var go = GameObject.Instantiate(cube);
+        NetworkServer.Spawn(go);
     }
 
 }
