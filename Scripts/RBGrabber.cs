@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 namespace Carousel{
     
 namespace BaselineAgent{
@@ -53,19 +55,21 @@ public class RBGrabber : MonoBehaviour
     }
 
     
-     void  OnTriggerEnter (Collider other){
+     void  OnTriggerEnter(Collider other){
         var ab = other.GetComponent<ArticulationBody>();
         if(ab != null) {
             SetGrabbableObject(ab);
         }
     }
 
-    void  OnTriggerExit (Collider other){
+    void  OnTriggerExit(Collider other){
         var ab = other.GetComponent<ArticulationBody>();
         if(ab == grabbableObject) {
             grabbableObject = null;
         }
     }
+
+
 
     public void GrabObject(){
         Debug.Log("GrabObject");
@@ -73,8 +77,9 @@ public class RBGrabber : MonoBehaviour
         CreateJoint();
         joint.connectedArticulationBody = grabbableObject;
         lineRenderer.enabled = true;
-        
     } 
+
+
     public void ReleaseObject(){
         Debug.Log("ReleaseObject");
         RemoveJoint();
