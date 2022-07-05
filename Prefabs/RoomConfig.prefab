@@ -68,8 +68,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  generator: {fileID: 3141507884253300468, guid: 1c6639dacf64b7d4ca605151b2d04612, type: 3}
+  generator: {fileID: 3141507884253300468, guid: 1c6639dacf64b7d4ca605151b2d04612,
+    type: 3}
   roomConfig: {fileID: 1875281616008088907}
+  numAgents: 1
 --- !u!114 &1875281616008088905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,5 +87,5 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: 63fe2c7df3cc2f5458a4b7ce25131ec4
   hasSpawned: 0
