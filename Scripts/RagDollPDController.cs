@@ -50,6 +50,8 @@ public class RagDollPDController : RagDollPDControllerBase
 
     ConfigurableJoint rootJoint;
     public bool createRootJoint = false;
+    public bool delayedActivation = false;
+    Transform kinematicReferenceRoot;
 
      
     void FixedUpdate()
@@ -58,6 +60,15 @@ public class RagDollPDController : RagDollPDControllerBase
         {
             OnEpisodeBegin();
             return;
+        }
+        if(delayedActivation && mode == PDControllerMode.OFF){
+            CopyBodyStates();
+            Activate();
+            delayedActivation = false;
+        }
+        if (createRootJoint&& (kinematicReferenceRoot.position - root.transform.position).magnitude > 1){
+            Deactivate();
+            delayedActivation = true;
         }
         switch (mode){
             case PDControllerMode.OFF:
@@ -203,15 +214,15 @@ public class RagDollPDController : RagDollPDControllerBase
     }
 
     public void CreateRootJoint(){
-        GameObject kinematicReference = null;
+        kinematicReferenceRoot = null;
         foreach (var m in bodyMap){
             if (bodyTypes[m.dst.name] == BodyType.ROOT){
-                kinematicReference = m.src.gameObject;
+                kinematicReferenceRoot = m.src;
                 break;
             }
         }
-        if(kinematicReference == null)return;
-        rootJoint = kinematicReference.AddComponent<ConfigurableJoint>();
+        if(kinematicReferenceRoot == null)return;
+        rootJoint = kinematicReferenceRoot.gameObject.AddComponent<ConfigurableJoint>();
         rootJoint.angularXMotion = ConfigurableJointMotion.Locked;
         rootJoint.angularYMotion = ConfigurableJointMotion.Locked;
         rootJoint.angularZMotion = ConfigurableJointMotion.Locked;

@@ -67,7 +67,8 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         ac.follower = GetComponentInChildren<PhysicsPairDanceFollower>();
         ac.pdController.alignReferenceRoot = false;
         ac.pdController.createRootJoint = true;
-        ac.pdController.mode = PDControllerMode.FULL;
+        ac.pdController.mode = PDControllerMode.OFF;
+        ac.pdController.delayedActivation = true;
         AddNetworkAgentInteraction(poseProvider.transform, ac);
         return ac;
     }
