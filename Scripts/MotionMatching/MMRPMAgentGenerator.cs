@@ -62,6 +62,8 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         retargeting.retargetingMap = retargetingMap;
 
         ac.locomotionController = controller;
+        ac.minStartDistance = minStartDistance;
+        ac.minStopDistance = minStopDistance;
         ac.mirror = poseProvider.GetComponent<RuntimeMirroring>();
         ac.pdController = GetComponentInChildren<RagDollPDController>();
         ac.follower = GetComponentInChildren<PhysicsPairDanceFollower>();
