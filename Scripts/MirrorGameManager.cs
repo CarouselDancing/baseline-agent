@@ -18,6 +18,7 @@ public class MirrorGameManager : MonoBehaviour
     public bool host;
     public bool server;
     public bool client;
+    public RPMUserAvatar player;
 
     void Start()
     {
@@ -51,7 +52,8 @@ public class MirrorGameManager : MonoBehaviour
     }
 
     public void RegisterPlayer(RPMUserAvatar player){
-          if(userMenu != null){
+        this.player = player;
+        if(userMenu != null){
             userMenu.Register(player);
         }
     }
