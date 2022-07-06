@@ -135,7 +135,8 @@ public class RPMAgentGenerator : RPMGeneratorBase
         var ac = GetComponent<NetworkAgentController>();
         var parent = go.transform.Find(armatureName);
         parent = parent.Find(rootName);
-        ac.highlight = go.AddComponent<BlinkingHighlightGroupController>();
+        ac.highlight = go.AddComponent<OutlineGroupController>();
+        ac.highlight.SetMode(false);
         AddNetworkAgentInteraction(parent, ac);
     }
 

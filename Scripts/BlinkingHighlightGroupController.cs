@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlinkingHighlightGroupController : MonoBehaviour
+public class BlinkingHighlightGroupController : HighlightGroupController
 {
     public Color startColor = Color.white, endColor = Color.green;
     [Range(0, 10)]
@@ -15,7 +15,7 @@ public class BlinkingHighlightGroupController : MonoBehaviour
         GenerateHighlights(transform);
     }
 
-    void GenerateHighlights(Transform t)
+    override public void GenerateHighlights(Transform t)
     {
         
         Renderer ren = t.gameObject.GetComponent<Renderer>();
@@ -34,7 +34,7 @@ public class BlinkingHighlightGroupController : MonoBehaviour
         }
     }
 
-    public void SetMode(bool active){
+    override public void SetMode(bool active){
         foreach(var b in highlights){
             b.blink = active;
         }

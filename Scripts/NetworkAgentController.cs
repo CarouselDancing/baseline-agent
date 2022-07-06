@@ -26,7 +26,7 @@ public class NetworkAgentController  : NetworkBehaviour
     public RuntimeMirroring mirror;
     public PlayerControllerBase player;
     public PhysicsPairDanceFollower follower;
-    public BlinkingHighlightGroupController highlight;
+    public HighlightGroupController highlight;
 
    
     public void UpdateDistanceToTarget(){
