@@ -345,7 +345,8 @@ public class RuntimeMirroring : CharacterPoser
     {
         var anim = model.GetComponent<Animator>();
         var jointMap = new List<RuntimeMirroring.JointMap>();
-
+        var hips = anim.GetBoneTransform(HumanBodyBones.Hips).name;
+        jointMap.Add(new RuntimeMirroring.JointMap { src = hips, dst = hips });
         var spine = anim.GetBoneTransform(HumanBodyBones.Spine).name;
         jointMap.Add(new RuntimeMirroring.JointMap { src = spine, dst = spine });
         var chest = anim.GetBoneTransform(HumanBodyBones.Chest).name;
