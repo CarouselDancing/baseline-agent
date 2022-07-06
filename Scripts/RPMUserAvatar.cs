@@ -41,7 +41,7 @@ public class RPMUserAvatar : RPMAvatarManager
         MirrorGameManager.ShowMessage("OnRPMAvatarLoaded");
         bool activateFootRig = GlobalAgentGameState.GetInstance().config.activateFootTrackers;
         var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig);
-        config = ikRigBuilder.Build(avatar);
+        config = ikRigBuilder.Build(avatar, IsOwner);
         SetupRig(config, avatar);
         CreateRigidBodyFigure(avatar, config.Root, settings.modelLayer);
         var root = config.Root;
@@ -76,6 +76,8 @@ public class RPMUserAvatar : RPMAvatarManager
         triggerCollider.isTrigger = true;
         return grabber;
     }
+
+
     
     public void SpawnAgent()
     {
