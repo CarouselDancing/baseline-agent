@@ -31,6 +31,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.032989502, y: 0.006000012, z: 0.0074272156}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -82,13 +83,15 @@ MonoBehaviour:
   roomConfig: {fileID: 0}
   generator: {fileID: 3141507884253300468, guid: db7974e48edccd94b81a308beffc11ea,
     type: 3}
-  interactionZoneOffset: {x: 0, y: -2, z: 1}
+  interactionZoneOffset: {x: 0, y: -2, z: 0.8}
   interactionZone: {fileID: 0}
   grabberTriggerRadius: 0.1
   config: {fileID: 0}
   OnFinished:
     m_PersistentCalls:
       m_Calls: []
+  leftGrabber: {fileID: 0}
+  rightGrabber: {fileID: 0}
 --- !u!114 &6134176247903083179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +191,8 @@ MonoBehaviour:
   referenceLayer: 
   figureType: 0
   disableLimits: 0
+  upperBodyNames: []
+  solverIterations: 255
 --- !u!114 &2548320742715012015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,5 +208,3 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   userAvatar: {fileID: 1117380497844330438}
-  leftGrabber: {fileID: 0}
-  rightGrabber: {fileID: 0}
