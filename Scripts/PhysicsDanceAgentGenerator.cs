@@ -15,8 +15,6 @@ namespace BaselineAgent{
 [RequireComponent(typeof(FigureGeneratorSettings))]
 public class PhysicsDanceAgentGenerator : PDRagDollGenerator
 {
-    public MirrorSettings mirrorSettings;  
-    public bool createMirror;
     public bool createReferencePose;
     public bool createFollowerScript;
     GameObject referencePose;
@@ -96,38 +94,6 @@ public class PhysicsDanceAgentGenerator : PDRagDollGenerator
         
     }    
 
-    RuntimeMirroring AddMirrorComponent(GameObject o){
-        var mirror = o.AddComponent<RuntimeMirroring>();
-        mirror.src = null;
-        mirror.mirrorVector = mirrorSettings.mirrorVector;
-        mirror.relativeRootOffset = mirrorSettings.mirrorRootOffset;
-        mirror.mode = mirrorSettings.mode;
-        mirror.translationMode = mirrorSettings.translationMode;
-        mirror.rootName = settings.rootName;
-        mirror.rootPosSet = false;
-        
-        if(useAvatarModel)
-        {   
-            mirror.jointMap = RuntimeMirroring.CreateHumanoidMirrorMap(o);
-        
-        }else{
-            mirror.jointMap =  new List<RuntimeMirroring.JointMap>();
-            foreach (var r in mirrorSettings.jointMap)
-            {
-                var _r = new RuntimeMirroring.JointMap { src = r.name, dst = r.refName };
-                mirror.jointMap.Add(_r);
-            }
-        }
-      
-        mirror.groundFeet = mirrorSettings.groundFeet;
-        if (mirror.groundFeet) { 
-            mirror.footTip = mirror.GetComponentsInChildren<Transform>()?.First(x => x.name == mirrorSettings.footTipName);
-        }
-
-
-        mirror.active = false;
-        return mirror;
-    }
     
     void CreateReferencePoseTarget()
     {

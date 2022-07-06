@@ -21,6 +21,7 @@ public class MirrorSettings
     public bool groundFeet = false;
     public string footTipName;
     public RuntimeMirroring.TranslationMode translationMode;
+    public bool ignoreLowerBody = false;
 };
 
 
@@ -28,7 +29,7 @@ public class MirrorSettings
 
 
 
-public class RuntimeMirroring : MonoBehaviour
+public class RuntimeMirroring : CharacterPoser
 {
     public enum MirrorMode
     {
@@ -68,25 +69,30 @@ public class RuntimeMirroring : MonoBehaviour
     public bool rootPosSet = false;
     public bool groundFeet = false;
     public Transform footTip;
-    public bool active = true;
 
     public float footTipOffset =0;
     public Vector3 externalPosition;
-    public bool initialized;
-    
-
     public string rootName;
 
+    
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(!active || inPipeline)return;
+        //transform.position = src.GetGlobalPosition(Bones.Entity);
+        if (!initialized) SetTransforms();
         UpdatePose();
-      
+    }
+
+    override public void UpdatePose(){
+        if(!initialized)SetTransforms();
+        MirrorPose();
     }
 
 
-    public void SetTransforms()
+    override public void SetTransforms()
     {
+        if(src==null)return;
         mirrorMatrix.m00 = mirrorVector.x;
         mirrorMatrix.m11 = mirrorVector.y;
         mirrorMatrix.m22 = mirrorVector.z;
@@ -124,14 +130,8 @@ public class RuntimeMirroring : MonoBehaviour
 
     }
 
-    public void UpdatePose(){
-        if(!initialized && active)SetTransforms();
-        MirrorPose();
-    }
-
     public void MirrorPose()
     { 
-        if(!active) return;
         if (mode == MirrorMode.GLOBAL)
         {
             if(translationMode == TranslationMode.ABSOLUTE){
@@ -149,141 +149,43 @@ public class RuntimeMirroring : MonoBehaviour
     }
     public void MirrorPoseGlobal()
     {
-        if (rootMap == null) return;
         var srcRootRotation = rootMap.srcT.rotation;
-        var dstRootRotation = rootMap.dstT.rotation;
         srcRootRotation = Quaternion.Euler(0, srcRootRotation.eulerAngles.y, 0);
-        var worldToLocal = Quaternion.Inverse(srcRootRotation);
-        var _relativeRootOffset = srcRootRotation * relativeRootOffset;
+
+        Vector3 _relativeRootOffset = srcRootRotation * relativeRootOffset;
         //_relativeRootOffset.y = 0;
-
-        foreach (var m in jointMap)
-        {
-            if (m.src == "ignore") continue;
-
-            var srcT = m.srcT;
-            var dstT = m.dstT;
-            var relativePos = worldToLocal * (srcT.position - rootMap.srcT.position);
-            var matrix = mirrorMatrix * Matrix4x4.TRS(relativePos, worldToLocal * srcT.rotation, Vector3.one) * mirrorMatrix;
-
-           
-            dstT.rotation = srcRootRotation * matrix.rotation;
-            dstT.localRotation *= Quaternion.Euler(0, 180, 0);
-
-             Vector3 delta = matrix.GetColumn(3);
-            dstT.position = _relativeRootOffset + rootMap.srcT.position + srcRootRotation * delta;
-        }
+        MirrorJointRotationsAndPositions(srcRootRotation, _relativeRootOffset, Vector3.zero, true); 
         ApplyFootGrounding();
     }
-
-    public void MirrorPoseGlobalWithRelativeTranslation()
-    {
-        if (rootMap == null) return;
-        var srcRootRotation = rootMap.srcT.rotation;
-        var dstRootRotation = rootMap.dstT.rotation;
-        srcRootRotation = Quaternion.Euler(0, srcRootRotation.eulerAngles.y, 0);
-        var worldToLocal = Quaternion.Inverse(srcRootRotation);
-        var _relativeRootOffset = srcRootRotation * relativeRootOffset;
-        //_relativeRootOffset.y = 0;
-
-        Matrix4x4 rootMatrix = mirrorMatrix * Matrix4x4.TRS(Vector3.zero, worldToLocal * srcRootRotation, Vector3.one) * mirrorMatrix;
-        rootMap.dstT.rotation = srcRootRotation * rootMatrix.rotation;
-        rootMap.dstT.localRotation *= Quaternion.Euler(0, 180, 0);
-        var absoluteMirroredRootPos = _relativeRootOffset + rootMap.srcT.position;
-        if (applyRootPosition)
-        {
-            switch (translationMode)
-            {
-                case TranslationMode.ABSOLUTE:
-                    rootMap.dstT.position =absoluteMirroredRootPos;
-                    break;
-                case TranslationMode.RELATIVE:
-                    if (!rootPosSet)
-                    {
-                        rootMap.dstT.position = absoluteMirroredRootPos;
-                    }
-                    else
-                    {
-                        var delta = rootMap.srcT.position - lastPosition;
-                        delta = Quaternion.Inverse(rootMap.dstT.rotation)  * -delta;
-                        rootMatrix = mirrorMatrix * Matrix4x4.TRS(delta, Quaternion.identity, Vector3.one) * mirrorMatrix;
-                        delta = rootMatrix.GetColumn(3);
-                        delta.y = 0; //HACK TO prevent moving up and down
-                        rootMap.dstT.position = rootMap.dstT.position + rootMap.dstT.rotation  * delta;
-                    }
-                    lastPosition = rootMap.srcT.position;
-                    rootPosSet = true;
-                    break;
-            };
-        }
-        Vector3 deltaToAbs = Vector3.zero;
-        if(translationMode == TranslationMode.RELATIVE){
-            deltaToAbs = rootMap.dstT.position-absoluteMirroredRootPos;
-        }
-        
-        foreach (var m in jointMap)
-        {
-            if (m.src == "ignore" || m.src == rootName) continue;
-
-            var srcT = m.srcT;
-            var dstT = m.dstT;
-            var relativePos = worldToLocal * (srcT.position - rootMap.srcT.position);
-            var matrix = mirrorMatrix * Matrix4x4.TRS(relativePos, worldToLocal * srcT.rotation, Vector3.one) * mirrorMatrix;
-
-           
-            dstT.rotation = srcRootRotation * matrix.rotation;
-            dstT.localRotation *= Quaternion.Euler(0, 180, 0);
-
-             Vector3 delta = matrix.GetColumn(3);
-            dstT.position = _relativeRootOffset + rootMap.srcT.position + srcRootRotation * delta;
-            dstT.position+= deltaToAbs;
-        }
-        ApplyFootGrounding();
-
-    }
-    
     
     public void MirrorPoseGlobalWithExternalTranslation()
     {
-    
-        if (rootMap == null) return;
         var srcRootRotation = rootMap.srcT.rotation;
-        var dstRootRotation = rootMap.dstT.rotation;
         srcRootRotation = Quaternion.Euler(0, srcRootRotation.eulerAngles.y, 0);
-        var worldToLocal = Quaternion.Inverse(srcRootRotation);
-        var _relativeRootOffset = srcRootRotation * relativeRootOffset;
-
-        Matrix4x4 rootMatrix = mirrorMatrix * Matrix4x4.TRS(Vector3.zero, worldToLocal * srcRootRotation, Vector3.one) * mirrorMatrix;
-        rootMap.dstT.rotation = srcRootRotation * rootMatrix.rotation;
-        rootMap.dstT.localRotation *= Quaternion.Euler(0, 180, 0);
+        Vector3 _relativeRootOffset = MirrorRootTransform(srcRootRotation);
         var absoluteMirroredRootPos = _relativeRootOffset + rootMap.srcT.position;
-        Vector3 deltaToAbs = Vector3.zero;
-          
-        deltaToAbs = externalPosition-absoluteMirroredRootPos;
-        deltaToAbs.y = 0;
-        foreach (var m in jointMap)
-        {
-            if (m.src == "ignore" ) continue;
-
-            var srcT = m.srcT;
-            var dstT = m.dstT;
-            var relativePos = worldToLocal * (srcT.position - rootMap.srcT.position);
-            var matrix = mirrorMatrix * Matrix4x4.TRS(relativePos, worldToLocal * srcT.rotation, Vector3.one) * mirrorMatrix;
-
-           
-            dstT.rotation = srcRootRotation * matrix.rotation;
-            dstT.localRotation *= Quaternion.Euler(0, 180, 0);
-
-            Vector3 delta = matrix.GetColumn(3);
-            dstT.position = _relativeRootOffset + rootMap.srcT.position + srcRootRotation * delta;
-            dstT.position += deltaToAbs;
-        }
+        Vector3 deltaToRootPos = externalPosition-absoluteMirroredRootPos;
+        deltaToRootPos.y = 0;
+        MirrorJointRotationsAndPositions(srcRootRotation, _relativeRootOffset, deltaToRootPos); 
         ApplyFootGroundingV2();
     }
     
+    public void MirrorPoseGlobalWithRelativeTranslation()
+    {
+        var srcRootRotation = rootMap.srcT.rotation;
+        srcRootRotation = Quaternion.Euler(0, srcRootRotation.eulerAngles.y, 0);
+        Vector3 _relativeRootOffset = MirrorRootTransform(srcRootRotation);
+        //_relativeRootOffset.y = 0;
+        var absoluteMirroredRootPos = _relativeRootOffset + rootMap.srcT.position;
+        Vector3 deltaToRootPos = rootMap.dstT.position-absoluteMirroredRootPos;
+        
+        MirrorJointRotationsAndPositions(srcRootRotation, _relativeRootOffset, deltaToRootPos); 
+        ApplyFootGrounding();
+
+    }
 
     public void ApplyFootGrounding(){
-          if (groundFeet && footTip != null && footTip.position.y != 0)
+        if (groundFeet && footTip != null && footTip.position.y != 0)
         {
 
             rootMap.dstT.position += new Vector3(0,-footTip.position.y+footTipOffset,0);
@@ -303,55 +205,83 @@ public class RuntimeMirroring : MonoBehaviour
 
     public void MirrorPoseLocal()
     {
-
         var srcRootRotation = rootMap.srcT.rotation;
-        var dstRootRotation = rootMap.dstT.rotation;
         srcRootRotation = Quaternion.Euler(0, srcRootRotation.eulerAngles.y, 0);
-        var worldToLocal = Quaternion.Inverse(srcRootRotation);
+        if(translationMode != TranslationMode.IGNORE) MirrorRootTransform(srcRootRotation);
+        ApplyFootGrounding();
+        MirrorJointRotations(srcRootRotation);
+    }
+
+
+    public Vector3 MirrorRootTransform(Quaternion srcRootRotation){
+        var dstRootRotation = rootMap.dstT.rotation;
+        var invRootRotation = Quaternion.Inverse(srcRootRotation);
         var _relativeRootOffset = srcRootRotation * relativeRootOffset;
-        Matrix4x4 matrix = mirrorMatrix * Matrix4x4.TRS(Vector3.zero, worldToLocal * srcRootRotation, Vector3.one) * mirrorMatrix;
+        Matrix4x4 matrix = mirrorMatrix * Matrix4x4.TRS(Vector3.zero, invRootRotation * srcRootRotation, Vector3.one) * mirrorMatrix;
         rootMap.dstT.rotation = srcRootRotation * matrix.rotation;
         rootMap.dstT.localRotation *= Quaternion.Euler(0, 180, 0);
-        if (applyRootPosition)
+        if (!applyRootPosition) return _relativeRootOffset;
+        var absoluteMirroredRootPos = _relativeRootOffset + rootMap.srcT.position;
+     
+        switch (translationMode)
         {
-            switch (translationMode)
-            {
-                case TranslationMode.ABSOLUTE:
-                    rootMap.dstT.position = _relativeRootOffset + rootMap.srcT.position;
-                    break;
-                case TranslationMode.RELATIVE:
-                    if (!rootPosSet)
-                    {
-                        rootMap.dstT.position = _relativeRootOffset + rootMap.srcT.position;
-                    }
-                    else
-                    {
-                        var delta = rootMap.srcT.position - lastPosition;
-                        matrix = mirrorMatrix * Matrix4x4.TRS(delta, Quaternion.identity, Vector3.one) * mirrorMatrix;
-                        delta = matrix.GetColumn(3);
-                        rootMap.dstT.position = rootMap.dstT.position + delta;
-                    }
-                    lastPosition = rootMap.srcT.position;
-                    rootPosSet = true;
-                    break;
-            };
-        }
-        ApplyFootGrounding();
-        foreach (var m in jointMap)
-        {
+            case TranslationMode.ABSOLUTE:
+                rootMap.dstT.position = absoluteMirroredRootPos;
+                break;
+            case TranslationMode.RELATIVE:
+                if (!rootPosSet)
+                {
+                    rootMap.dstT.position = absoluteMirroredRootPos;
+                }
+                else
+                {
+                    var delta = rootMap.srcT.position - lastPosition;
+                    matrix = mirrorMatrix * Matrix4x4.TRS(delta, Quaternion.identity, Vector3.one) * mirrorMatrix;
+                    delta = matrix.GetColumn(3);
+                    delta.y = 0; //HACK TO prevent moving up and down
+                    rootMap.dstT.position = rootMap.dstT.position + delta;
+                }
+                lastPosition = rootMap.srcT.position;
+                rootPosSet = true;
+                break;
+        };
+        return _relativeRootOffset;      
+    }
+
+    public void MirrorJointRotations(Quaternion srcRootRotation)
+    {
+        var invRootRotation = Quaternion.Inverse(srcRootRotation);
+        Matrix4x4 matrix;
+        foreach (var m in jointMap){
             if (m.dst == rootName) continue;
-            
             var srcT = m.srcT;
             var dstT = m.dstT;
-            if(srcT == null){
-                Debug.Log(m.src);
-            }
-            matrix = mirrorMatrix * Matrix4x4.TRS(Vector3.zero, worldToLocal * srcT.rotation, Vector3.one) * mirrorMatrix;
+            matrix = mirrorMatrix * Matrix4x4.TRS(Vector3.zero, invRootRotation * srcT.rotation, Vector3.one) * mirrorMatrix;
             dstT.rotation = srcRootRotation * matrix.rotation;
             dstT.localRotation *= Quaternion.Euler(0, 180, 0);
         }
     }
 
+    public void MirrorJointRotationsAndPositions(Quaternion srcRootRotation, Vector3 relativeRootOffset, Vector3 deltaToRootPos, bool includeRoot = false){
+        var invRootRotation = Quaternion.Inverse(srcRootRotation);
+        foreach (var m in jointMap)
+        {
+            if (m.src == "ignore" || (!includeRoot || m.src == rootName)) continue;
+
+            var srcT = m.srcT;
+            var dstT = m.dstT;
+            var relativePos = invRootRotation * (srcT.position - rootMap.srcT.position);
+            var matrix = mirrorMatrix * Matrix4x4.TRS(relativePos, invRootRotation * srcT.rotation, Vector3.one) * mirrorMatrix;
+
+           
+            dstT.rotation = srcRootRotation * matrix.rotation;
+            dstT.localRotation *= Quaternion.Euler(0, 180, 0);
+
+            Vector3 delta = matrix.GetColumn(3);
+            dstT.position = relativeRootOffset + rootMap.srcT.position + srcRootRotation * delta;
+            dstT.position+= deltaToRootPos;
+        }
+    }
 
     public void SnapTo(Vector3 snapPosition)
     {
@@ -391,6 +321,31 @@ public class RuntimeMirroring : MonoBehaviour
 
         var hips = anim.GetBoneTransform(HumanBodyBones.Hips).name;
         jointMap.Add(new RuntimeMirroring.JointMap { src = hips, dst = hips });
+        var spine = anim.GetBoneTransform(HumanBodyBones.Spine).name;
+        jointMap.Add(new RuntimeMirroring.JointMap { src = spine, dst = spine });
+        var chest = anim.GetBoneTransform(HumanBodyBones.Chest).name;
+        jointMap.Add(new RuntimeMirroring.JointMap { src = chest, dst = chest });
+        var upperChest = anim.GetBoneTransform(HumanBodyBones.Chest).name;
+        jointMap.Add(new RuntimeMirroring.JointMap { src = upperChest, dst = upperChest });
+        var head = anim.GetBoneTransform(HumanBodyBones.Head).name;
+        jointMap.Add(new RuntimeMirroring.JointMap { src = head, dst = head });
+        var leftArm = anim.GetBoneTransform(HumanBodyBones.RightUpperArm).name;
+        var rightArm = anim.GetBoneTransform(HumanBodyBones.LeftUpperArm).name;
+        jointMap.Add(new RuntimeMirroring.JointMap { src = leftArm, dst = rightArm });
+        jointMap.Add(new RuntimeMirroring.JointMap { src = rightArm, dst = leftArm });
+        var leftLowerArm = anim.GetBoneTransform(HumanBodyBones.RightLowerArm).name;
+        var rightLowerArm = anim.GetBoneTransform(HumanBodyBones.LeftLowerArm).name;
+        jointMap.Add(new RuntimeMirroring.JointMap { src = leftLowerArm, dst = rightLowerArm });
+        jointMap.Add(new RuntimeMirroring.JointMap { src = rightLowerArm, dst = leftLowerArm });
+
+        return jointMap;
+    }
+
+    public static List<RuntimeMirroring.JointMap> CreateUpperBodyHumanoidMirrorMap(GameObject model)
+    {
+        var anim = model.GetComponent<Animator>();
+        var jointMap = new List<RuntimeMirroring.JointMap>();
+
         var spine = anim.GetBoneTransform(HumanBodyBones.Spine).name;
         jointMap.Add(new RuntimeMirroring.JointMap { src = spine, dst = spine });
         var chest = anim.GetBoneTransform(HumanBodyBones.Chest).name;

@@ -1,3 +1,4 @@
+/* generates active ragdoll that follows an animation source */
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ public class PDRagDollGenerator : MonoBehaviour
     public GameObject character;
     protected GameObject animationSource;
     public GameObject stabilizerJointPrefab;
+    public MirrorSettings mirrorSettings; 
 
     public bool DebugPauseOnReset = false;
     public bool useAvatarModel = false;
@@ -35,7 +37,8 @@ public class PDRagDollGenerator : MonoBehaviour
     public bool runOnAwake = true;
     public UnityEvent OnFinished;
     public bool createAnimationSource;  
-    public bool createStabilizerJoint;
+    public bool createStabilizerJoint; 
+    public bool createMirror;
     public int version = 2;
 
     public AnimatorOverrideController animationController;
@@ -101,6 +104,7 @@ public class PDRagDollGenerator : MonoBehaviour
       
 
         AddPDControllerComponents();
+        if(createMirror)AddMirrorComponent(animationSource);
 
         transform.position = originalPos;
         transform.rotation = originalRot;
@@ -259,6 +263,39 @@ public class PDRagDollGenerator : MonoBehaviour
     }
 
 
+    public RuntimeMirroring AddMirrorComponent(GameObject o){
+        var mirror = o.AddComponent<RuntimeMirroring>();
+        mirror.src = null;
+        mirror.mirrorVector = mirrorSettings.mirrorVector;
+        mirror.relativeRootOffset = mirrorSettings.mirrorRootOffset;
+        mirror.mode = mirrorSettings.mode;
+        mirror.translationMode = mirrorSettings.translationMode;
+        mirror.rootName = settings.rootName;
+        mirror.rootPosSet = false;
+        
+        if(useAvatarModel && mirrorSettings.ignoreLowerBody)
+        {   
+            mirror.jointMap = RuntimeMirroring.CreateUpperBodyHumanoidMirrorMap(o);
+        }else if(useAvatarModel) {
+            mirror.jointMap = RuntimeMirroring.CreateHumanoidMirrorMap(o);
+        }else{
+            mirror.jointMap =  new List<RuntimeMirroring.JointMap>();
+            foreach (var r in mirrorSettings.jointMap)
+            {
+                var _r = new RuntimeMirroring.JointMap { src = r.name, dst = r.refName };
+                mirror.jointMap.Add(_r);
+            }
+        }
+      
+        mirror.groundFeet = mirrorSettings.groundFeet;
+        if (mirror.groundFeet) { 
+            mirror.footTip = mirror.GetComponentsInChildren<Transform>()?.First(x => x.name == mirrorSettings.footTipName);
+        }
+
+
+        mirror.active = false;
+        return mirror;
+    }
     
 
 }
