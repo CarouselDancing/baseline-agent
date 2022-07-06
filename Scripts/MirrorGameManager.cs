@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Linq;
 using Carousel.BaselineAgent;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 public class MirrorGameManager : MonoBehaviour
 {
@@ -15,16 +16,42 @@ public class MirrorGameManager : MonoBehaviour
     public ClientConfig config;
     public RPMUserAvatar player;
 
+
+    public bool host;
+    public bool server;
+    public bool client;
+    
+    public string ClientSceneName;
+    public string ServerSceneName;
+    public bool loadAdditiveScene = true;
+
     void Start()
     {
         if(Instance == null){
             Instance = this;
             LoadConfig();
+            StartMirror();
         }else{
             GameObject.DestroyImmediate(this); //singleton monobehavior
         }
     }
-
+    void StartMirror()
+    {
+        var n = GetComponent<AppNetworkManager>();
+        if(client){
+            n.StartClient();
+            if(loadAdditiveScene)SceneManager.LoadScene(ClientSceneName, LoadSceneMode.Additive);
+        }
+        if(host){
+            n.StartHost();
+            if(loadAdditiveScene)SceneManager.LoadScene(ClientSceneName, LoadSceneMode.Additive);
+        }
+        if(server){
+            n.StartServer();
+           if(loadAdditiveScene)SceneManager.LoadScene(ServerSceneName, LoadSceneMode.Additive);
+            
+        }
+    }
     
     protected void LoadConfig()
     {
@@ -32,7 +59,10 @@ public class MirrorGameManager : MonoBehaviour
         var configText = Resources.Load<TextAsset>("config").text;
        // string configText = File.ReadAllText(configFile);
         config = JsonUtility.FromJson<ClientConfig>(configText);
-        debugMessage.Show("loaded config "+configText);
+        ShowMessage("loaded config "+configText);
+        client = config.networkMode == "client";
+        server = config.networkMode == "server";
+        host = config.networkMode == "host";
 
     }
 

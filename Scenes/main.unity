@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 2312243950159652055}
   - component: {fileID: 2312243950159652059}
   - component: {fileID: 2312243950159652053}
-  - component: {fileID: 2312243950159652060}
+  - component: {fileID: 2312243950159652061}
   m_Layer: 0
   m_Name: AppNetworkManager
   m_TagString: Untagged
@@ -631,7 +631,7 @@ MonoBehaviour:
   - {fileID: 3141507884253300468, guid: 1c6639dacf64b7d4ca605151b2d04612, type: 3}
   - {fileID: 2712723670520404936, guid: ddf185027c154344eb86ff0b579c1b70, type: 3}
   - {fileID: 1875281616008088906, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4, type: 3}
---- !u!114 &2312243950159652060
+--- !u!114 &2312243950159652061
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -640,11 +640,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 2312243950159652058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a91379bc7dc20844ac5a76ee168aed6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3cda1f97e4809244e98f40f0976a529f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugMessage: {fileID: 0}
+  userMenu: {fileID: 0}
+  config:
+    url: localhost
+    port: 7777
+    rpmURL: https://d1a370nemizbjq.cloudfront.net/209a1bc2-efed-46c5-9dfd-edc8a1d9cbe4.glb
+    activateHipTracker: 0
+    activateFootTrackers: 0
+    hipTracker:
+      deviceID: 0
+      posOffset: []
+      rotOffset: []
+    leftFootTracker:
+      deviceID: 0
+      posOffset: []
+      rotOffset: []
+    rightFootTracker:
+      deviceID: 0
+      posOffset: []
+      rotOffset: []
+    activateDebugVis: 0
+    networkMode: 
+  player: {fileID: 0}
   host: 0
   server: 0
-  client: 1
+  client: 0
   ClientSceneName: OXRClientScene
   ServerSceneName: ServerScene
+  loadAdditiveScene: 1

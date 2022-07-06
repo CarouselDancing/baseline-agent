@@ -8,15 +8,9 @@ public class UserMenu : MonoBehaviour
 {
    public RPMUserAvatar _userAvatar;
 
-
-/*
-   public void Update(){
-      if(_userAvatar != null)return;
-      var avatars = GameObject.FindObjectsOfTypeAll(typeof(RPMUserAvatar));
-      foreach(RPMUserAvatar a in avatars){
-          if( a!= null && a.initiated && a.IsOwner) Register(a);
-      }  
-   }*/
+    public void Start(){
+        MirrorGameManager.Instance.userMenu = this;
+    }
 
    public void Register(RPMUserAvatar userAvatar){
       _userAvatar = userAvatar;
