@@ -21,20 +21,22 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
     
     override public void CreateServerAgentController(GameObject avatar){
         var prefab = GameObject.Instantiate(avatar);
-        var agentGenerator = gameObject.AddComponent<PDRagDollGenerator>();
-        agentGenerator.runOnAwake = false;
-        agentGenerator.character = avatar;
-        agentGenerator.CharacterPrefab = prefab;
-        agentGenerator.settings = settings;
-        agentGenerator.animationController = animationController;
-        agentGenerator.IgnoreList = IgnoreList;
-        agentGenerator.useAvatarModel = useAvatarModel;
-        agentGenerator.createAnimationSource = createAnimationSource;
-        agentGenerator.createStabilizerJoint = createStabilizerJoint;
+        var ragdollGenerator = gameObject.AddComponent<PDRagDollGenerator>();
+        ragdollGenerator.runOnAwake = false;
+        ragdollGenerator.character = avatar;
+        ragdollGenerator.CharacterPrefab = prefab;
+        ragdollGenerator.settings = settings;
+        ragdollGenerator.animationController = animationController;
+        ragdollGenerator.IgnoreList = IgnoreList;
+        ragdollGenerator.useAvatarModel = useAvatarModel;
+        ragdollGenerator.createAnimationSource = createAnimationSource;
+        ragdollGenerator.createStabilizerJoint = createStabilizerJoint;
+        ragdollGenerator.createMirror = createMirror;
+        ragdollGenerator.mirrorSettings = mirrorSettings;
       
-        agentGenerator.stabilizerJointPrefab = stabilizerJointPrefab;
-        agentGenerator.hideReference = hideReference;
-        agentGenerator.Generate();
+        ragdollGenerator.stabilizerJointPrefab = stabilizerJointPrefab;
+        ragdollGenerator.hideReference = hideReference;
+        ragdollGenerator.Generate();
 
         PhysicsPoseProvider poseProvider = GetComponentInChildren<PhysicsPoseProvider>();
         poseProvider.armatureName = armatureName;
@@ -60,6 +62,14 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         var retargeting = poseProvider.AddComponent<MMRuntimeRetargetingV1>();
         retargeting.src = controller;
         retargeting.retargetingMap = retargetingMap;
+
+        // add compositor that combines input from motion matching retargeting and mirroring
+        var compositor= poseProvider.AddComponent<PoseCompositor>();
+        compositor.posers = new List<CharacterPoser>();
+        compositor.Add(retargeting);
+        var mirror= poseProvider.GetComponent<RuntimeMirroring>();
+        if (mirror != null) compositor.Add(mirror);
+
 
         ac.locomotionController = controller;
         ac.minStartDistance = minStartDistance;

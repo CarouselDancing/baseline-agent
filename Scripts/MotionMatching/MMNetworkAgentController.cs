@@ -105,12 +105,26 @@ public class MMNetworkAgentController : NetworkAgentController
 
 
     override public void ActivatePairDance(){
-       
+        if(mirror!=null && !mirror.active && player !=null){
+           mirror.src = player.transform;
+           mirror.active = true;
+           mirror.initialized = false;
+           //animator.enabled = false;
+          // pdController.IsMirroring = true;
+            mirror.translationMode = RuntimeMirroring.TranslationMode.IGNORE;
+           
+       } 
        
     }
     
     override public void DeactivatePairDance(){
-     
+        if(mirror!=null && mirror.active){
+           mirror.active = false;
+           mirror.initialized = false;
+           mirror.src = null;
+           // animator.enabled = true;
+           // pdController.IsMirroring = false;
+       } 
     }
 
 }
