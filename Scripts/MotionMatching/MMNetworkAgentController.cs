@@ -122,6 +122,9 @@ public class MMNetworkAgentController : NetworkAgentController
            mirror.active = false;
            mirror.initialized = false;
            mirror.src = null;
+           pdController.Deactivate();
+           pdController.delayedActivation = true;
+           poseCompositor.UpdatePose();
            // animator.enabled = true;
            // pdController.IsMirroring = false;
        } 

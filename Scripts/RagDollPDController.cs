@@ -48,10 +48,13 @@ public class RagDollPDController : RagDollPDControllerBase
 
     public bool alignReferenceRoot = true;
 
-    ConfigurableJoint rootJoint;
+    public ConfigurableJoint rootJoint;
     public bool createRootJoint = false;
     public bool delayedActivation = false;
     Transform kinematicReferenceRoot;
+
+    public float maximumRootDistance = 0.9f;
+    public bool activateRootRepair = true;
 
      
     void FixedUpdate()
@@ -61,15 +64,7 @@ public class RagDollPDController : RagDollPDControllerBase
             OnEpisodeBegin();
             return;
         }
-        if(delayedActivation && mode == PDControllerMode.OFF){
-            CopyBodyStates();
-            Activate();
-            delayedActivation = false;
-        }
-        if (createRootJoint&& (kinematicReferenceRoot.position - root.transform.position).magnitude > 1){
-            Deactivate();
-            delayedActivation = true;
-        }
+        if(activateRootRepair)HandleBrokenRoot();
         switch (mode){
             case PDControllerMode.OFF:
                 CopyBodyStates();
@@ -82,6 +77,20 @@ public class RagDollPDController : RagDollPDControllerBase
                 ApplyUpperBodyPDTargets();
                 break;
         };
+    }
+
+    public void HandleBrokenRoot(){
+        if(delayedActivation && mode == PDControllerMode.OFF){
+            CopyBodyStates();
+            Activate();
+            delayedActivation = false;
+        }else if(createRootJoint){
+            float rootDistance = (kinematicReferenceRoot.position - root.transform.position).magnitude;
+            if (rootDistance > maximumRootDistance){
+                Deactivate();
+                delayedActivation = true;
+            }
+        }
     }
 
 

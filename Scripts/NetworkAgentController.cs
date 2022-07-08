@@ -27,7 +27,7 @@ public class NetworkAgentController  : NetworkBehaviour
     public PlayerControllerBase player;
     public PhysicsPairDanceFollower follower;
     public HighlightGroupController highlight;
-
+    public PoseCompositor poseCompositor;
    
     public void UpdateDistanceToTarget(){
         distanceToTarget = 0;

@@ -69,7 +69,7 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         compositor.Add(retargeting);
         var mirror= poseProvider.GetComponent<RuntimeMirroring>();
         if (mirror != null) compositor.Add(mirror);
-
+        ac.poseCompositor = compositor;
 
         ac.locomotionController = controller;
         ac.minStartDistance = minStartDistance;
