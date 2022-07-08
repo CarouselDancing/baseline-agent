@@ -163,7 +163,7 @@ MonoBehaviour:
     translationMode: 4
     ignoreLowerBody: 1
   minStopDistance: 0.1
-  minStartDistance: 2
+  minStartDistance: 0.1
   armatureName: Armature
   rootName: Hips
   mmFilename: loco_database.bin
@@ -203,11 +203,12 @@ MonoBehaviour:
   mmControllerSettings:
     visScale: 0.05
     forceSearchTime: 0.1
-    simulationVelocityHalflife: 0.27
+    simulationVelocityHalflife: 0
     simulationRotationHalflife: 0.27
     predictionDistance: 40
     maxSpeed: 10
     startFrameIdx: 0
+    speedFactor: 8
   retargetingMap:
   - src: 0
     dst: ROOT
@@ -454,7 +455,7 @@ MonoBehaviour:
   syncInterval: 0.1
   target: {fileID: 0}
   minStopDistance: 0.1
-  minStartDistance: 10
+  minStartDistance: 0.1
   initiated: 0
   distanceToTarget: 0
   state: 0
