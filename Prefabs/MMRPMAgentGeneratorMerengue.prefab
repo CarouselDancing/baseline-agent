@@ -166,7 +166,7 @@ MonoBehaviour:
   minStartDistance: 0.1
   armatureName: Armature
   rootName: Hips
-  mmFilename: database_merengue_full.bin
+  mmFilename: merengue_database.bin
   mmSettings:
     ignoreRangeEnd: 0
     version: 1
