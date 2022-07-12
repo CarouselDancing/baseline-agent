@@ -209,7 +209,7 @@ MonoBehaviour:
     maxSpeed: 10
     startFrameIdx: 0
     speedFactor: 8
-  retargetingMap:
+  retargetingMapV1:
   - src: 0
     dst: ROOT
     childIdx: 0
@@ -399,6 +399,147 @@ MonoBehaviour:
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
+  retargetingMapV2:
+  - bone: 55
+    srcUp: {x: 0, y: 1, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 0
+    srcUp: {x: 0, y: 1, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 7
+    srcUp: {x: 0, y: 1, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 8
+    srcUp: {x: 0, y: 0.8, z: 0.2}
+    srcSide: {x: -1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 9
+    srcUp: {x: 0, y: 1, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 10
+    srcUp: {x: 0, y: 1, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 11
+    srcUp: {x: 1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 12
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: 1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 13
+    srcUp: {x: 1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 14
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: 1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 15
+    srcUp: {x: 1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 16
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: 1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 17
+    srcUp: {x: 1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 18
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: 1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 1
+    srcUp: {x: 0, y: -1, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 2
+    srcUp: {x: 0, y: -1, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 3
+    srcUp: {x: 0, y: -1, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 4
+    srcUp: {x: 0, y: -1, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 5
+    srcUp: {x: 0, y: -0.1, z: -0.3}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 6
+    srcUp: {x: 0, y: -0.1, z: -0.3}
+    srcSide: {x: 1, y: 0, z: 0}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
 --- !u!114 &2691831550001618384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,4 +605,5 @@ MonoBehaviour:
   player: {fileID: 0}
   follower: {fileID: 0}
   highlight: {fileID: 0}
+  poseCompositor: {fileID: 0}
   locomotionController: {fileID: 0}

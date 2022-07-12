@@ -17,7 +17,8 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
     public string mmFilename;
     public MMSettings mmSettings;
     public MMControllerSettigs mmControllerSettings;
-    public List<MMRuntimeRetargetingV1.RetargetingMap> retargetingMap;
+    public List<MMRuntimeRetargetingV1.RetargetingMap> retargetingMapV1;
+    public List<MMRuntimeRetargetingV2.RetargetingMap> retargetingMapV2;
     
     override public void CreateServerAgentController(GameObject avatar){
         var prefab = GameObject.Instantiate(avatar);
@@ -58,15 +59,25 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         controller.root = root;
         controller.mm = mm;
         controller.settings = mmControllerSettings;
-
-        var retargeting = poseProvider.AddComponent<MMRuntimeRetargetingV1>();
-        retargeting.src = controller;
-        retargeting.retargetingMap = retargetingMap;
+        controller.invertDirection = mmSettings.version != MMDatabaseVersion.HOLDEN;
 
         // add compositor that combines input from motion matching retargeting and mirroring
         var compositor= poseProvider.AddComponent<PoseCompositor>();
         compositor.posers = new List<CharacterPoser>();
-        compositor.Add(retargeting);
+
+
+        if(mmSettings.version == MMDatabaseVersion.HOLDEN){
+            var retargetingV1 = poseProvider.AddComponent<MMRuntimeRetargetingV1>();
+            retargetingV1.src = controller;
+            retargetingV1.retargetingMap = retargetingMapV1;
+            compositor.Add(retargetingV1);
+        }else{
+            var retargetingV2 = poseProvider.AddComponent<MMRuntimeRetargetingV2>();
+            retargetingV2.src = controller;
+            retargetingV2.retargetingMap = retargetingMapV2;
+            compositor.Add(retargetingV2);
+        }
+
         var mirror= poseProvider.GetComponent<RuntimeMirroring>();
         if (mirror != null) compositor.Add(mirror);
         ac.poseCompositor = compositor;
