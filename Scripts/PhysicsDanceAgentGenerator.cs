@@ -18,6 +18,7 @@ public class PhysicsDanceAgentGenerator : PDRagDollGenerator
     public bool createReferencePose;
     public bool createFollowerScript;
     GameObject referencePose;
+    public bool createRootJoint;
 
     override public void Generate()
     {
@@ -75,10 +76,12 @@ public class PhysicsDanceAgentGenerator : PDRagDollGenerator
         RagDollPDControllerBase pdController;
         if (mode == GeneratorMode.ArticulationBody || mode == GeneratorMode.Prefab){
             pdController = character.AddComponent<RagDollPDController>();
-            pdController.upperBodyNames = settings.upperBodyNames;
         }else{
             pdController = character.AddComponent<RBRagDollPDController>();
         }
+        pdController.upperBodyNames = settings.upperBodyNames;
+        pdController.createRootJoint = createRootJoint;
+        pdController.alignReferenceRoot = false;
         pdController.DebugPauseOnReset = DebugPauseOnReset;
         if (createAnimationSource) { 
            pdController.animationSrc = animationSource.GetComponent<PhysicsPoseProvider>();

@@ -12,9 +12,10 @@ public class RBRagDollPDController : RagDollPDControllerBase
 
     List<Rigidbody> _mocapBodyParts;
     List<ArticulationBody> _mocapBodyPartsA;
-    List<ArticulationBody> _bodyParts;
+    List<Rigidbody> _bodyParts;
     RagDoll003 _ragDollSettings;
     List<ConfigurableJoint> _motors;
+    Rigidbody root;
 
 
     bool _hasLazyInitialized;
@@ -33,8 +34,19 @@ public class RBRagDollPDController : RagDollPDControllerBase
             OnEpisodeBegin();
             return;
         }
-        if(mode == PDControllerMode.OFF)return;
-        
+        if(activateRootRepair)HandleBrokenRoot();
+        switch (mode){
+            case PDControllerMode.OFF:
+                CopyBodyStates();
+                break;
+            case PDControllerMode.FULL:
+                ApplyPDTargets();
+                break;
+        };
+    }
+
+    public void ApplyPDTargets(){
+
         GetMocapTargets();
     
         int i = 0;
@@ -46,6 +58,19 @@ public class RBRagDollPDController : RagDollPDControllerBase
         }
     }
 
+    public void HandleBrokenRoot(){
+        if(delayedActivation && mode == PDControllerMode.OFF){
+            CopyBodyStates();
+            Activate();
+            delayedActivation = false;
+        }else if(createRootJoint){
+            float rootDistance = (kinematicReferenceRoot.position - root.transform.position).magnitude;
+            if (rootDistance > maximumRootDistance){
+                Deactivate();
+                delayedActivation = true;
+            }
+        }
+    }
 
    public override void OnEpisodeBegin()
     {
@@ -56,14 +81,37 @@ public class RBRagDollPDController : RagDollPDControllerBase
             _mocapBodyParts = animationSrc.GetComponentsInChildren<Rigidbody>().ToList();
             _mocapBodyPartsA = animationSrc.GetComponentsInChildren<ArticulationBody>().ToList();
     
-            _bodyParts = GetComponentsInChildren<ArticulationBody>().ToList();
+            if (_mocapBodyParts.Count > 0) {
+                Rigidbody mocapBody = _mocapBodyParts.First(x => x.name == animationSrc.rootName);
+                kinematicReferenceRoot = mocapBody.transform;
+            }
+            else
+            {
+                ArticulationBody mocapBody = _mocapBodyPartsA.First(x => x.name ==animationSrc.rootName);
+                kinematicReferenceRoot = mocapBody.transform;
+            }
+            _bodyParts = GetComponentsInChildren<Rigidbody>().ToList();
+            bodyTypes = new Dictionary<string, BodyType>();
+            bodyMap = new List<BodyMap>();
+            
+            foreach(var b in _bodyParts){
+                b.solverIterations = solverIterations;
+                b.solverVelocityIterations = solverIterations;
+                BodyType bt = BodyType.LOWER;
+                if(b.name == kinematicReferenceRoot.name){
+                    bt = BodyType.ROOT;
+                    root = b;
+                }else if(upperBodyNames.Contains(b.name)){
+                    bt = BodyType.UPPER;
+                }
+               
+                bodyTypes[b.name] = bt;
+                var src = animationSrc.GetComponentsInChildren<Transform>().First(x => x.name == b.name);
+                bodyMap.Add(new BodyMap(){dst= b.transform, src = src});
+            }
+            bodyMap.Add(new BodyMap(){dst= root.transform, src = kinematicReferenceRoot.transform});
             _ragDollSettings = GetComponent<RagDoll003>();
 
-            foreach (var body in GetComponentsInChildren<ArticulationBody>())
-            {
-                body.solverIterations = 255;
-                body.solverVelocityIterations = 255;
-            }
 
             _motors = GetComponentsInChildren<ConfigurableJoint>()
                 .Distinct()
@@ -71,8 +119,14 @@ public class RBRagDollPDController : RagDollPDControllerBase
 
             storeOriginalRotations();
             _hasLazyInitialized = true;
-            animationSrc.ResetToIdle();
-            animationSrc.CopyStatesToRB(this.gameObject);
+            animationSrc.ResetToIdle();   
+            if(createRootJoint){
+                CopyBodyStates();
+                CreateRootJoint();
+            }else{
+                animationSrc.CopyStatesToRB(this.gameObject);
+            }
+            
         }
 
      
@@ -144,6 +198,59 @@ public class RBRagDollPDController : RagDollPDControllerBase
         return _mocapTargets;
     }    
  
+ 
+    override public void CreateRootJoint(){
+        kinematicReferenceRoot = null;
+        foreach (var m in bodyMap){
+            if (bodyTypes[m.dst.name] == BodyType.ROOT){
+                kinematicReferenceRoot = m.src;
+                break;
+            }
+        }
+        if(kinematicReferenceRoot == null)return;
+        rootJoint = kinematicReferenceRoot.gameObject.AddComponent<ConfigurableJoint>();
+        rootJoint.angularXMotion = ConfigurableJointMotion.Locked;
+        rootJoint.angularYMotion = ConfigurableJointMotion.Locked;
+        rootJoint.angularZMotion = ConfigurableJointMotion.Locked;
+        rootJoint.xMotion = ConfigurableJointMotion.Locked;
+        rootJoint.yMotion = ConfigurableJointMotion.Locked;
+        rootJoint.zMotion = ConfigurableJointMotion.Locked;
+        rootJoint.connectedBody = root;
+    }
+
+
+    override public void Deactivate(){
+        mode = PDControllerMode.OFF;
+        if(!_hasLazyInitialized) return;
+        deactivateBodies();
+        var stateController = animationSrc.GetComponent<AnimStateController>();
+        if(stateController!= null)stateController.applyRootMotion = true;
+    }
+
+    override public void Activate(){
+        mode = PDControllerMode.FULL;
+        if(!_hasLazyInitialized) return;
+        activateBodies();
+        if(rootJoint != null) {
+            rootJoint.connectedBody = root;
+        }
+    }
+
+    void activateBodies(){
+        foreach (var b in _bodyParts)
+        {
+            b.isKinematic = false;
+            b.solverIterations = solverIterations;
+            b.solverVelocityIterations = solverIterations;
+        }
+     }
+     void deactivateBodies(){
+        foreach (var b in _bodyParts)
+        {
+            b.isKinematic = true;
+        }
+     }
+
 }
 
 }

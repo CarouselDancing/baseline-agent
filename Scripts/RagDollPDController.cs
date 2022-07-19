@@ -10,12 +10,6 @@ namespace Carousel{
     
 namespace BaselineAgent{
 
-public enum BodyType{
-    ROOT,
-    LOWER,
-    UPPER
-}
-
 public class RagDollPDController : RagDollPDControllerBase
 {
 
@@ -25,7 +19,6 @@ public class RagDollPDController : RagDollPDControllerBase
     RagDoll003 _ragDollSettings;
     List<ArticulationBody> _bodies;
     List<ArticulationBody> _motors;
-    Dictionary<string, BodyType> bodyTypes;
 
     public int numActionDims;
 
@@ -40,21 +33,8 @@ public class RagDollPDController : RagDollPDControllerBase
 
     public Vector3 rootForce;
     public Vector3 rootTorque;
-    public Transform targetRoot;
-
-    public int solverIterations = 255;
     
     public bool IsMirroring;
-
-    public bool alignReferenceRoot = true;
-
-    public ConfigurableJoint rootJoint;
-    public bool createRootJoint = false;
-    public bool delayedActivation = false;
-    Transform kinematicReferenceRoot;
-
-    public float maximumRootDistance = 0.9f;
-    public bool activateRootRepair = true;
 
      
     void FixedUpdate()
@@ -123,15 +103,15 @@ public class RagDollPDController : RagDollPDControllerBase
 
     public void ApplyExternalForceOnRoot(){
         if(root == null) return;
-         var delta = (targetRoot.position - root.transform.position)*Time.fixedDeltaTime;
+         var delta = (kinematicReferenceRoot.position - root.transform.position)*Time.fixedDeltaTime;
          //delta.y = 0;
          rootForce = kp * delta;
          transform.position += delta;
-        var deltaV = (targetRoot.GetComponent<Rigidbody>().velocity - root.velocity);
+        var deltaV = (kinematicReferenceRoot.GetComponent<Rigidbody>().velocity - root.velocity);
         rootForce += kd * deltaV;
         root.AddForce(root.mass * rootForce);
         rootForce = Vector3.ClampMagnitude(rootForce, limit);
-        var deltaQ = Quaternion.Inverse(root.transform.rotation)*targetRoot.rotation;
+        var deltaQ = Quaternion.Inverse(root.transform.rotation)*kinematicReferenceRoot.rotation;
         var deltaY = deltaQ.eulerAngles.y*Mathf.Deg2Rad;
         rootTorque = rkp * Vector3.up*deltaY*Time.fixedDeltaTime/2;
         //float angle;
@@ -222,30 +202,7 @@ public class RagDollPDController : RagDollPDControllerBase
 #endif	      
     }
 
-    public void CreateRootJoint(){
-        kinematicReferenceRoot = null;
-        foreach (var m in bodyMap){
-            if (bodyTypes[m.dst.name] == BodyType.ROOT){
-                kinematicReferenceRoot = m.src;
-                break;
-            }
-        }
-        if(kinematicReferenceRoot == null)return;
-        rootJoint = kinematicReferenceRoot.gameObject.AddComponent<ConfigurableJoint>();
-        rootJoint.angularXMotion = ConfigurableJointMotion.Locked;
-        rootJoint.angularYMotion = ConfigurableJointMotion.Locked;
-        rootJoint.angularZMotion = ConfigurableJointMotion.Locked;
-        rootJoint.xMotion = ConfigurableJointMotion.Locked;
-        rootJoint.yMotion = ConfigurableJointMotion.Locked;
-        rootJoint.zMotion = ConfigurableJointMotion.Locked;
-        rootJoint.connectedArticulationBody = root;
 
-    }
-    public void RemoveJoint(){
-        if(rootJoint != null)DestroyImmediate(rootJoint);
-        rootJoint = null;
-
-    }
 
     void Initialize(){
         _mocapBodyParts = animationSrc.GetComponentsInChildren<Rigidbody>().ToList();
@@ -256,14 +213,14 @@ public class RagDollPDController : RagDollPDControllerBase
 
         root = GetComponentsInChildren<ArticulationBody>().Where(x => x.isRoot).FirstOrDefault();
 
-            if (_mocapBodyParts.Count > 0) {
+       if (_mocapBodyParts.Count > 0) {
             Rigidbody mocapBody = _mocapBodyParts.First(x => x.name == animationSrc.rootName);
-            targetRoot = mocapBody.transform;
+            kinematicReferenceRoot = mocapBody.transform;
         }
         else
         {
             ArticulationBody mocapBody = _mocapBodyPartsA.First(x => x.name ==animationSrc.rootName);
-            targetRoot = mocapBody.transform;
+            kinematicReferenceRoot = mocapBody.transform;
         }
         _bodies =  GetComponentsInChildren<ArticulationBody>().ToList();
 
@@ -279,7 +236,7 @@ public class RagDollPDController : RagDollPDControllerBase
             bodyTypes[m.name] = bt;
         }
         bodyMap = new List<BodyMap>();
-        bodyMap.Add(new BodyMap(){dst= root.transform, src = targetRoot.transform});
+        bodyMap.Add(new BodyMap(){dst= root.transform, src = kinematicReferenceRoot.transform});
         foreach (var b in _bodies){
             var src = animationSrc.GetComponentsInChildren<Transform>().First(x => x.name == b.name);
             bodyMap.Add(new BodyMap(){dst= b.transform, src = src});
@@ -465,7 +422,7 @@ public class RagDollPDController : RagDollPDControllerBase
         //joint.WakeUp();
     }
 
-    public void Deactivate(){
+    override public void Deactivate(){
         mode = PDControllerMode.OFF;
         if(!_hasLazyInitialized) return;
         deactivateBodies();
@@ -474,7 +431,7 @@ public class RagDollPDController : RagDollPDControllerBase
         if(!IsMirroring) SetReferenceRootTransform();
     }
 
-     public void Activate(){
+     override public void Activate(){
         mode = PDControllerMode.FULL;
         if(!_hasLazyInitialized) return;
         activateBodies();
@@ -518,9 +475,9 @@ public class RagDollPDController : RagDollPDControllerBase
      }
     void SetReferenceRootTransform(){
         if(!alignReferenceRoot) return;
-        var delta =root.transform.position - targetRoot.position;
+        var delta =root.transform.position - kinematicReferenceRoot.position;
         delta.y = 0;
-        var deltaQ = Quaternion.Inverse(targetRoot.rotation)*root.transform.rotation;
+        var deltaQ = Quaternion.Inverse(kinematicReferenceRoot.rotation)*root.transform.rotation;
         var deltaY = deltaQ.eulerAngles.y;
         deltaQ = Quaternion.AngleAxis(deltaY, Vector3.up);
         animationSrc.transform.position += delta;
@@ -528,7 +485,25 @@ public class RagDollPDController : RagDollPDControllerBase
         
     }
 
-
+ 
+    override public void CreateRootJoint(){
+        kinematicReferenceRoot = null;
+        foreach (var m in bodyMap){
+            if (bodyTypes[m.dst.name] == BodyType.ROOT){
+                kinematicReferenceRoot = m.src;
+                break;
+            }
+        }
+        if(kinematicReferenceRoot == null)return;
+        rootJoint = kinematicReferenceRoot.gameObject.AddComponent<ConfigurableJoint>();
+        rootJoint.angularXMotion = ConfigurableJointMotion.Locked;
+        rootJoint.angularYMotion = ConfigurableJointMotion.Locked;
+        rootJoint.angularZMotion = ConfigurableJointMotion.Locked;
+        rootJoint.xMotion = ConfigurableJointMotion.Locked;
+        rootJoint.yMotion = ConfigurableJointMotion.Locked;
+        rootJoint.zMotion = ConfigurableJointMotion.Locked;
+        rootJoint.connectedArticulationBody = root;
+    }
 }
 
 }
