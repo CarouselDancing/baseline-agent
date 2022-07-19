@@ -17,16 +17,19 @@ public class RBGrabber : MonoBehaviour
     }
     public Side side;
     public Rigidbody grabber;
-    public ArticulationBody grabbableObject;
+    public Collider grabbableObject;
     public ConfigurableJoint joint;
     LineRenderer lineRenderer;
     public float width = 0.1f;
     List<Vector3> positions;
     public float grabberRadius = 0.1f;
+    public string layerName = "marathon";
+    public int layer;
     
 
      void Start()
     {
+        layer = LayerMask.NameToLayer(layerName);
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
@@ -39,7 +42,7 @@ public class RBGrabber : MonoBehaviour
 
     }
 
-    public void SetGrabbableObject(ArticulationBody ab){
+    public void SetGrabbableObject(Collider ab){
         if(ab != grabber){
             grabbableObject = ab;
             Debug.Log("grab "+ name+ " " + ab.name);
@@ -56,26 +59,30 @@ public class RBGrabber : MonoBehaviour
 
     
      void  OnTriggerEnter(Collider other){
-        var ab = other.GetComponent<ArticulationBody>();
-        if(ab != null) {
-            SetGrabbableObject(ab);
-        }
+        if (other.gameObject.layer != layer) return;
+        SetGrabbableObject(other);
     }
 
     void  OnTriggerExit(Collider other){
-        var ab = other.GetComponent<ArticulationBody>();
-        if(ab == grabbableObject) {
+        if (other.gameObject.layer != layer) return;
+        if(other == grabbableObject) {
             grabbableObject = null;
         }
     }
-
 
 
     public void GrabObject(){
         Debug.Log("GrabObject");
         if (grabbableObject == null) return;
         CreateJoint();
-        joint.connectedArticulationBody = grabbableObject;
+        
+        var ab = grabbableObject.GetComponent<ArticulationBody>();
+        var rb = grabbableObject.GetComponent<Rigidbody>();
+        if(ab != null) {
+            joint.connectedArticulationBody = ab;
+        }else if(rb != null){
+            joint.connectedBody = rb;
+        } 
         lineRenderer.enabled = true;
     } 
 
@@ -87,9 +94,9 @@ public class RBGrabber : MonoBehaviour
 
       void Update()
     {
-        if(!lineRenderer.enabled || joint == null ) return;
+        if(!lineRenderer.enabled || joint == null || grabbableObject ==null) return;
         positions[0] = transform.position;
-        positions[1] = joint.connectedArticulationBody.transform.position;
+        positions[1] = grabbableObject.transform.position;
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
         lineRenderer.positionCount = positions.Count;
