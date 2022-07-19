@@ -137,7 +137,7 @@ PrefabInstance:
     - target: {fileID: 1875281616008088758, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4, type: 3}
       propertyPath: generator
       value: 
-      objectReference: {fileID: 3141507884253300468, guid: 1c6639dacf64b7d4ca605151b2d04612, type: 3}
+      objectReference: {fileID: 3141507884253300468, guid: 6be95a84477d8b54fbbaff03fac3ea41, type: 3}
     - target: {fileID: 1875281616008088904, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -617,7 +617,7 @@ MonoBehaviour:
   - {fileID: 3141507884253300468, guid: 1c6639dacf64b7d4ca605151b2d04612, type: 3}
   - {fileID: 2712723670520404936, guid: ddf185027c154344eb86ff0b579c1b70, type: 3}
   - {fileID: 1875281616008088906, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4, type: 3}
-  - {fileID: 3141507884253300468, guid: f807260c2b212d74f82b6f33f3d9b573, type: 3}
+  - {fileID: 3141507884253300468, guid: 6be95a84477d8b54fbbaff03fac3ea41, type: 3}
 --- !u!114 &2312243950159652061
 MonoBehaviour:
   m_ObjectHideFlags: 0

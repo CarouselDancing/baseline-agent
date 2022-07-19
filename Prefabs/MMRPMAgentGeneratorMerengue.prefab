@@ -166,7 +166,7 @@ MonoBehaviour:
   minStartDistance: 0.1
   armatureName: Armature
   rootName: Hips
-  mmFilename: merengue_database.bin
+  mmFilename: database_merengue_raw.bin
   mmSettings:
     ignoreRangeEnd: 0
     version: 1
@@ -175,7 +175,7 @@ MonoBehaviour:
     - bone: 5
       boneIdx: 0
       type: 0
-      weight: 0.75
+      weight: 2
     - bone: 5
       boneIdx: 0
       type: 1
@@ -183,7 +183,7 @@ MonoBehaviour:
     - bone: 6
       boneIdx: 0
       type: 0
-      weight: 0.75
+      weight: 2
     - bone: 6
       boneIdx: 0
       type: 1
@@ -202,13 +202,14 @@ MonoBehaviour:
       weight: 1.25
   mmControllerSettings:
     visScale: 0.05
-    forceSearchTime: 1
-    simulationVelocityHalflife: 0
+    forceSearchTime: 0.5
+    simulationVelocityHalflife: 0.27
     simulationRotationHalflife: 0.27
     predictionDistance: 40
-    maxSpeed: 2.5
+    maxSpeed: 0.5
+    minSpeed: 0.1
     startFrameIdx: 0
-    speedFactor: 1
+    speedFactor: 2
   retargetingMapV1:
   - src: 0
     dst: ROOT
@@ -402,144 +403,147 @@ MonoBehaviour:
   retargetingMapV2:
   - bone: 55
     srcUp: {x: 0, y: 1, z: 0}
-    srcSide: {x: -1, y: 0, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 0
     srcUp: {x: 0, y: 1, z: 0}
-    srcSide: {x: -1, y: 0, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 7
     srcUp: {x: 0, y: 1, z: 0}
-    srcSide: {x: -1, y: 0, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
-  - bone: 8
+  - bone: 54
     srcUp: {x: 0, y: 0.8, z: 0.2}
-    srcSide: {x: -1, y: 0, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 9
     srcUp: {x: 0, y: 1, z: 0}
-    srcSide: {x: -1, y: 0, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 10
     srcUp: {x: 0, y: 1, z: 0}
-    srcSide: {x: -1, y: 0, z: 0}
+    srcSide: {x: 1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 11
-    srcUp: {x: 1, y: 0, z: 0}
-    srcSide: {x: 0, y: 0, z: -1}
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: 1}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 12
-    srcUp: {x: -1, y: 0, z: 0}
-    srcSide: {x: 0, y: 0, z: 1}
+    srcUp: {x: 1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 13
-    srcUp: {x: 1, y: 0, z: 0}
-    srcSide: {x: 0, y: 0, z: -1}
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: 1}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 14
-    srcUp: {x: -1, y: 0, z: 0}
-    srcSide: {x: 0, y: 0, z: 1}
+    srcUp: {x: 1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 15
-    srcUp: {x: 1, y: 0, z: 0}
-    srcSide: {x: 0, y: 0, z: -1}
+    srcUp: {x: -1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: 1}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 16
-    srcUp: {x: -1, y: 0, z: 0}
-    srcSide: {x: 0, y: 0, z: 1}
-    dstUp: {x: 0, y: 1, z: 0}
-    dstSide: {x: 1, y: 0, z: 0}
-    dstT: {fileID: 0}
-    active: 1
-  - bone: 17
     srcUp: {x: 1, y: 0, z: 0}
     srcSide: {x: 0, y: 0, z: -1}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
-  - bone: 18
+  - bone: 17
     srcUp: {x: -1, y: 0, z: 0}
     srcSide: {x: 0, y: 0, z: 1}
+    dstUp: {x: 0, y: 1, z: 0}
+    dstSide: {x: 1, y: 0, z: 0}
+    dstT: {fileID: 0}
+    active: 1
+  - bone: 18
+    srcUp: {x: 1, y: 0, z: 0}
+    srcSide: {x: 0, y: 0, z: -1}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 1
     srcUp: {x: 0, y: -1, z: 0}
-    srcSide: {x: 1, y: 0, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 2
     srcUp: {x: 0, y: -1, z: 0}
-    srcSide: {x: 1, y: 0, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 3
     srcUp: {x: 0, y: -1, z: 0}
-    srcSide: {x: 1, y: 0, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 4
     srcUp: {x: 0, y: -1, z: 0}
-    srcSide: {x: 1, y: 0, z: 0}
+    srcSide: {x: -1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 5
-    srcUp: {x: 0, y: -0.1, z: -0.3}
-    srcSide: {x: 1, y: 0, z: 0}
+    srcUp: {x: 0, y: -0.1, z: 0.3}
+    srcSide: {x: -1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 6
-    srcUp: {x: 0, y: -0.1, z: -0.3}
-    srcSide: {x: 1, y: 0, z: 0}
+    srcUp: {x: 0, y: -0.1, z: 0.3}
+    srcSide: {x: -1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
+  invertDirection: 0
+  useVelocity: 1
+  generatorMode: 1
 --- !u!114 &2691831550001618384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -555,7 +559,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: f807260c2b212d74f82b6f33f3d9b573
+  m_AssetId: 6be95a84477d8b54fbbaff03fac3ea41
   hasSpawned: 0
 --- !u!114 &1407865044821170804
 MonoBehaviour:
