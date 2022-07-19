@@ -22,7 +22,7 @@ public class NetworkAgentController  : NetworkBehaviour
     public bool IsMirroring{  get { return mirror != null && mirror.active; }}  
 
     public AgentState state  = AgentState.IDLE;
-    public RagDollPDController pdController;
+    public RagDollPDControllerBase pdController;
     public RuntimeMirroring mirror;
     public PlayerControllerBase player;
     public PhysicsPairDanceFollower follower;

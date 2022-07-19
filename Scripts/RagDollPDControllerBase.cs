@@ -47,6 +47,7 @@ public abstract class RagDollPDControllerBase : MonoBehaviour
 
     public int solverIterations = 255;
     public bool delayedActivation = false;
+    public bool IsMirroring;
 
     
     public void CopyBodyStates(){

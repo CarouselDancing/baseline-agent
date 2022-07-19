@@ -229,10 +229,10 @@ public class PDRagDollGenerator : MonoBehaviour
         RagDollPDControllerBase pdController;
         if (mode == GeneratorMode.ArticulationBody || mode == GeneratorMode.Prefab){
             pdController = character.AddComponent<RagDollPDController>();
-            pdController.upperBodyNames = settings.upperBodyNames;
         }else{
             pdController = character.AddComponent<RBRagDollPDController>();
         }
+        pdController.upperBodyNames = settings.upperBodyNames;
         pdController.DebugPauseOnReset = DebugPauseOnReset;
         if (createAnimationSource) { 
            pdController.animationSrc = animationSource.GetComponent<PhysicsPoseProvider>();

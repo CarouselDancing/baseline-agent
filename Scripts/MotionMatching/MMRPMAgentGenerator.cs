@@ -19,6 +19,9 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
     public MMControllerSettigs mmControllerSettings;
     public List<MMRuntimeRetargetingV1.RetargetingMap> retargetingMapV1;
     public List<MMRuntimeRetargetingV2.RetargetingMap> retargetingMapV2;
+    public bool invertDirection;
+    public bool useVelocity;
+    public GeneratorMode generatorMode;
     
     override public void CreateServerAgentController(GameObject avatar){
         var prefab = GameObject.Instantiate(avatar);
@@ -37,6 +40,7 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
       
         ragdollGenerator.stabilizerJointPrefab = stabilizerJointPrefab;
         ragdollGenerator.hideReference = hideReference;
+        ragdollGenerator.mode = generatorMode;
         ragdollGenerator.Generate();
 
         PhysicsPoseProvider poseProvider = GetComponentInChildren<PhysicsPoseProvider>();
@@ -59,7 +63,9 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         controller.root = root;
         controller.mm = mm;
         controller.settings = mmControllerSettings;
-        controller.invertDirection = mmSettings.version != MMDatabaseVersion.HOLDEN;
+        controller.invertDirection = invertDirection;
+        controller.useMotionVelocity = useVelocity;
+        controller.useMotionAngularVelocity = useVelocity;
 
         // add compositor that combines input from motion matching retargeting and mirroring
         var compositor= poseProvider.AddComponent<PoseCompositor>();
@@ -86,7 +92,8 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         ac.minStartDistance = minStartDistance;
         ac.minStopDistance = minStopDistance;
         ac.mirror = poseProvider.GetComponent<RuntimeMirroring>();
-        ac.pdController = GetComponentInChildren<RagDollPDController>();
+        ac.pdController = GetComponentInChildren<RagDollPDControllerBase>();
+
         ac.follower = GetComponentInChildren<PhysicsPairDanceFollower>();
         ac.pdController.alignReferenceRoot = false;
         ac.pdController.createRootJoint = true;
