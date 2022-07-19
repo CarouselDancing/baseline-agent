@@ -28,5 +28,27 @@ public class RagDollPDControllerEditor : Editor
         }
     }
 }
+
+
+[CustomEditor(typeof(RBRagDollPDController))]
+public class RBRagDollPDControllerEditor : Editor
+
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        var c = (RBRagDollPDController)target;
+        if (GUILayout.Button("Activate"))
+        {
+
+            c.Activate();
+        }
+        if (GUILayout.Button("Deactivate"))
+        {
+
+            c.Deactivate();
+        }
+    }
+}
 }
 }
