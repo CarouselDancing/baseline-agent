@@ -47,7 +47,8 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         poseProvider.armatureName = armatureName;
 
         NetworkAgentController ac = ConfigurePoseProvider(poseProvider.gameObject);
-        
+        ac.highlight = go.AddComponent<OutlineGroupController>();
+        ac.highlight.SetMode(false);
         //AddAgentInteraction(go, ac);
         DestroyImmediate(prefab);
     }
