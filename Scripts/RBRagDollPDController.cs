@@ -42,6 +42,10 @@ public class RBRagDollPDController : RagDollPDControllerBase
             case PDControllerMode.FULL:
                 ApplyPDTargets();
                 break;
+            case PDControllerMode.UPPER_BODY:
+                CopyLowerBodyStates();
+                ApplyUpperBodyPDTargets();
+                break;
         };
     }
 
@@ -58,10 +62,27 @@ public class RBRagDollPDController : RagDollPDControllerBase
         }
     }
 
+
+    public void ApplyUpperBodyPDTargets(){
+
+        GetMocapTargets();
+    
+        int i = 0;
+        foreach (var m in _motors)
+        {
+            if (bodyTypes[m.name] != BodyType.UPPER)
+                continue;
+            Quaternion targetRotation = _mocapTargets[i];
+            m.targetRotation = Quaternion.Inverse(targetRotation) * _originalRotations[i];
+            i++;
+        }
+    }
+
+
     public void HandleBrokenRoot(){
         if(delayedActivation && mode == PDControllerMode.OFF){
             CopyBodyStates();
-            Activate();
+            ActivateUpperBody();
             delayedActivation = false;
         }else if(createRootJoint){
             float rootDistance = (kinematicReferenceRoot.position - root.transform.position).magnitude;
@@ -119,12 +140,20 @@ public class RBRagDollPDController : RagDollPDControllerBase
 
             storeOriginalRotations();
             _hasLazyInitialized = true;
-            animationSrc.ResetToIdle();   
+            animationSrc.ResetToIdle();
+            if(!createRootJoint){
+                animationSrc.CopyStatesToRB(this.gameObject);
+            }
+            if (mode != PDControllerMode.FULL){
+               deactivateBodies();
+            }
+            else if (mode == PDControllerMode.UPPER_BODY){
+                activateUpperBodies();
+            }
+
             if(createRootJoint){
                 CopyBodyStates();
                 CreateRootJoint();
-            }else{
-                animationSrc.CopyStatesToRB(this.gameObject);
             }
             
         }
@@ -250,6 +279,44 @@ public class RBRagDollPDController : RagDollPDControllerBase
             b.isKinematic = true;
         }
      }
+
+     void activateUpperBodies(){
+       foreach (var b in _bodyParts)
+        {
+            if(bodyTypes[b.name] == BodyType.UPPER || bodyTypes[b.name] == BodyType.ROOT){
+                b.isKinematic = false;
+                b.solverIterations = solverIterations;
+                b.solverVelocityIterations = solverIterations;
+            }
+        }
+     }
+     
+     public void ActivateUpperBody(){
+        mode = PDControllerMode.UPPER_BODY;
+        if(!_hasLazyInitialized) return;
+        activateUpperBodies();
+        if(rootJoint != null) {
+            rootJoint.connectedBody = root;
+        }
+    }
+
+    
+    public void CopyLowerBodyStates(){
+        foreach (var m in bodyMap){
+            switch (bodyTypes[m.dst.name]){
+                /*case BodyType.ROOT:
+                   //  root.TeleportRoot( m.src.position, m.src.rotation);
+                    m.dst.transform.position = m.src.position;
+                    m.dst.transform.rotation = m.src.rotation;
+                    break;*/
+                case BodyType.LOWER:
+                    m.dst.transform.position = m.src.position;
+                    m.dst.transform.rotation = m.src.rotation;
+                    break;
+            }
+        }
+    }
+
 
 }
 

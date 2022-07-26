@@ -53,10 +53,14 @@ MonoBehaviour:
   width: 0.04
   mat: {fileID: 2100000, guid: 889152b92b03deb45a83e37cacff3327, type: 2}
   tansluscentMat: {fileID: 2100000, guid: 34188905abc69aa4fb6f5beb35f7d365, type: 2}
-  leftFoot: {fileID: 4265222953134221812, guid: d7e74826b97900f4c9aee54919671488, type: 3}
-  rightFoot: {fileID: 6601363404923112111, guid: b9991eb4882c22d4ba9471772b7c66ee, type: 3}
-  headPrefab: {fileID: 370539650439615074, guid: 29c2d32eeeff4d24496b3856ee173586, type: 3}
-  reference: {fileID: 5918097597002162060, guid: 48864c1e2797cb442b2f0810282fad59, type: 3}
+  leftFoot: {fileID: 4265222953134221812, guid: d7e74826b97900f4c9aee54919671488,
+    type: 3}
+  rightFoot: {fileID: 6601363404923112111, guid: b9991eb4882c22d4ba9471772b7c66ee,
+    type: 3}
+  headPrefab: {fileID: 370539650439615074, guid: 29c2d32eeeff4d24496b3856ee173586,
+    type: 3}
+  reference: {fileID: 5918097597002162060, guid: 48864c1e2797cb442b2f0810282fad59,
+    type: 3}
   footOffset: -0.1
   lengthScaleFactor: 0.8
   headOffset: 0.1
@@ -109,14 +113,16 @@ MonoBehaviour:
   figureType: 2
   disableLimits: 0
   upperBodyNames:
-  - lower_waist
-  - upper_waist
-  - torso
-  - head
-  - left_upper_arm
-  - right_upper_arm
-  - right_larm
-  - left_larm
+  - Spine
+  - Spine1
+  - Spine2
+  - head(Clone)
+  - LeftArm
+  - LeftForeArm
+  - LeftHand
+  - RightArm
+  - RightForeArm
+  - RightHand
   solverIterations: 1000
 --- !u!114 &6127051739409072689
 MonoBehaviour:
@@ -150,8 +156,10 @@ MonoBehaviour:
   createReferencePose: 0
   createStabilizerJoint: 0
   CreateFollowerScript: 1
-  stabilizerJointPrefab: {fileID: 41755481902903899, guid: 10b5193901ecbcb428e002ebf3f63517, type: 3}
-  agentInteractionPrefab: {fileID: 7516485150346812101, guid: 915e541938235214391d105cab184461, type: 3}
+  stabilizerJointPrefab: {fileID: 41755481902903899, guid: 10b5193901ecbcb428e002ebf3f63517,
+    type: 3}
+  agentInteractionPrefab: {fileID: 7516485150346812101, guid: 915e541938235214391d105cab184461,
+    type: 3}
   hideReference: 1
   mirrorSettings:
     mirrorVector: {x: 1, y: 1, z: -1}

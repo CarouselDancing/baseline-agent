@@ -48,6 +48,11 @@ public class RBRagDollPDControllerEditor : Editor
 
             c.Deactivate();
         }
+        if (GUILayout.Button("Activate Upper Body"))
+        {
+
+            c.ActivateUpperBody();
+        }
     }
 }
 }

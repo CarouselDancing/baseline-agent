@@ -74,6 +74,22 @@ public class RagDollPDController : RagDollPDControllerBase
     }
 
 
+    public void CopyLowerBodyStates(){
+        foreach (var m in bodyMap){
+            switch (bodyTypes[m.dst.name]){
+                case BodyType.ROOT:
+                   //  root.TeleportRoot( m.src.position, m.src.rotation);
+                    m.dst.transform.position = m.src.position;
+                    m.dst.transform.rotation = m.src.rotation;
+                    break;
+                case BodyType.LOWER:
+                    m.dst.transform.position = m.src.position;
+                    m.dst.transform.rotation = m.src.rotation;
+                    break;
+            }
+        }
+    }
+
     public void ApplyPDTargets(){
         var vectorAction = GetMocapTargets();
     
@@ -127,22 +143,6 @@ public class RagDollPDController : RagDollPDControllerBase
 
     }
 
-    public void CopyLowerBodyStates(){
-        foreach (var m in bodyMap){
-            switch (bodyTypes[m.dst.name]){
-                case BodyType.ROOT:
-                   //  root.TeleportRoot( m.src.position, m.src.rotation);
-                    m.dst.transform.position = m.src.position;
-                    m.dst.transform.rotation = m.src.rotation;
-                    break;
-                case BodyType.LOWER:
-                    m.dst.transform.position = m.src.position;
-                    m.dst.transform.rotation = m.src.rotation;
-                    break;
-            }
-        }
-    }
-
 
     public void ApplyUpperBodyPDTargets(){
         var vectorAction = GetMocapTargets();
@@ -183,7 +183,7 @@ public class RagDollPDController : RagDollPDControllerBase
             if (mode != PDControllerMode.FULL){
                deactivateBodies();
             }
-            if (mode == PDControllerMode.UPPER_BODY){
+            else if (mode == PDControllerMode.UPPER_BODY){
                 activateUpperBodies();
             }
             if (createRootJoint){
