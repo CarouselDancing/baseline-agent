@@ -77,19 +77,6 @@ public class RPMUserAvatar : RPMAvatarManager
         return grabber;
     }
 
-
-    
-    public void SpawnAgent()
-    {
-        CmdSpawnAgent();
-    }
-
-
-    [Command]
-    void CmdSpawnAgent()
-    {
-       RoomManager.Instance.SpawnAgent();
-    }
     
     Quaternion GetRandomRotation(){
         var y =  UnityEngine.Random.Range(-180, 180);
@@ -154,77 +141,8 @@ public class RPMUserAvatar : RPMAvatarManager
         MirrorGameManager.ShowMessage("SetHeight "+yOffset.ToString());
       
    }
-    public void ToggleFollower(){
-        CmdToggleFollower();
-    }
-    [Command]
-    void CmdToggleFollower(){
-        interactionZone.ToggleFollower();
-    }
-    public void ActivateAgent(){
-        CmdActivateAgent();
-    }
-    [Command]
-    void CmdActivateAgent(){
-        interactionZone.ActivateAgent();
-    }
-    public void DeactivateAgent(){
-        CmdDeactivateAgent();
-    }
-    [Command]
-    void CmdDeactivateAgent(){
-        interactionZone.DeactivateAgent();
-    }
-    public void ActivateFollower(){
-        CmdActivateFollower();
-    }
-
-    [Command]
-    void CmdActivateFollower(){
-        interactionZone.ActivateFollower();
-    }
-    public void DeactivateFollower(){
-        CmdActivateFollower();
-    }
-
-    [Command]
-    void CmdDeactivateFollower(){
-        interactionZone.DeactivateFollower();
-        
-    } 
-    public void ToggleAgentDancing(){
-        CmdToggleAgentDancing();
-    }
-
-    [Command]
-    void CmdToggleAgentDancing(){
-        interactionZone.ToggleDancing();
-        
-    }
-    public void ActivatePairDance(){
-        CmdActivatePairDance();
-    }
-    [Command]
-    void CmdActivatePairDance(){
-        interactionZone.ActivatePairDance();
-        
-    }
-    public void DeactivatePairDance(){
-        CmdDeactivatePairDance();
-    }
-    [Command]
-    void CmdDeactivatePairDance(){
-        interactionZone.DeactivatePairDance();
-        
-    }
-    public void RemoveAgent(){
-        CmdRemoveAgent();
-    }
-    [Command]
-    void CmdRemoveAgent(){
-        interactionZone.RemoveAgent();
-        
-    }
+   
+    
 
 }
 

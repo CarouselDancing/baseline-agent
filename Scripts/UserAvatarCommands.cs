@@ -61,4 +61,105 @@ public class UserAvatarCommands : NetworkBehaviour
             }
     }
 
+
+    public void SpawnAgent()
+    {
+        CmdSpawnAgent();
+    }
+
+
+    [Command]
+    void CmdSpawnAgent()
+    {
+       RoomManager.Instance.SpawnAgent();
+    }
+
+
+    public void ToggleFollower(){
+        CmdToggleFollower();
+    }
+
+    [Command]
+    void CmdToggleFollower(){
+        userAvatar.interactionZone.ToggleFollower();
+    }
+
+    public void ActivateAgent(){
+        CmdActivateAgent();
+    }
+    
+    [Command]
+    void CmdActivateAgent(){
+        userAvatar.interactionZone.ActivateAgent();
+    }
+
+    public void DeactivateAgent(){
+        CmdDeactivateAgent();
+    }
+
+    [Command]
+    void CmdDeactivateAgent(){
+        userAvatar.interactionZone.DeactivateAgent();
+    }
+    public void ActivateFollower(){
+        CmdActivateFollower();
+    }
+
+    [Command]
+    void CmdActivateFollower(){
+        userAvatar.interactionZone.ActivateFollower();
+    }
+    public void DeactivateFollower(){
+        CmdActivateFollower();
+    }
+
+    [Command]
+    void CmdDeactivateFollower(){
+        userAvatar.interactionZone.DeactivateFollower();
+        
+    } 
+    public void ToggleAgentDancing(){
+        CmdToggleAgentDancing();
+    }
+
+    [Command]
+    void CmdToggleAgentDancing(){
+        userAvatar.interactionZone.ToggleDancing();
+        
+    }
+
+    public void ActivatePairDance(){
+        CmdActivatePairDance();
+    }
+
+    [Command]
+    void CmdActivatePairDance(){
+        userAvatar.interactionZone.ActivatePairDance();
+        
+    }
+
+    public void DeactivatePairDance(){
+        CmdDeactivatePairDance();
+    }
+
+    [Command]
+    void CmdDeactivatePairDance(){
+        userAvatar.interactionZone.DeactivatePairDance();
+        
+    }
+
+    public void RemoveAgent(){
+        CmdRemoveAgent();
+    }
+
+    [Command]
+    void CmdRemoveAgent(){
+        userAvatar.interactionZone.RemoveAgent();
+        
+    }
+
+    public void SetHeight(){
+        userAvatar.SetHeight();
+    }
+
 }

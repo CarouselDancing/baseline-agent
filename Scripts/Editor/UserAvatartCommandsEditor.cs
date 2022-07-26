@@ -6,13 +6,13 @@ using UnityEditor;
 namespace Carousel
 {
     namespace BaselineAgent{
-[CustomEditor(typeof(RPMUserAvatar))]
-public class RPMUserAvatarEditor : Editor
+[CustomEditor(typeof(UserAvatarCommands))]
+public class UserAvatarCommandsEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        var controller = (RPMUserAvatar)target;
+        var controller = (UserAvatarCommands)target;
 
         if (GUILayout.Button("Generate"))
         {

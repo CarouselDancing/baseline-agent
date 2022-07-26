@@ -7,6 +7,7 @@ using Carousel.BaselineAgent;
 public class UserMenu : MonoBehaviour
 {
    public RPMUserAvatar _userAvatar;
+   public UserAvatarCommands _userCommands;
 
     public void Start(){
         MirrorGameManager.Instance.userMenu = this;
@@ -14,55 +15,56 @@ public class UserMenu : MonoBehaviour
 
    public void Register(RPMUserAvatar userAvatar){
       _userAvatar = userAvatar;
+      _userCommands = userAvatar.gameObject.GetComponent<UserAvatarCommands>();
    }
 
    public void SpawnAgent(){
         MirrorGameManager.ShowMessage("Spawn Agent");
-       _userAvatar?.SpawnAgent();
+       _userCommands?.SpawnAgent();
    }   
    
    public void ActivateAgent(){
         MirrorGameManager.ShowMessage("ActivateAgent");
-       _userAvatar?.ActivateAgent();
+       _userCommands?.ActivateAgent();
    } 
    
    public void DeactivateAgent(){
         MirrorGameManager.ShowMessage("DeactivateAgent");
-       _userAvatar?.DeactivateAgent();
+       _userCommands?.DeactivateAgent();
    }   
    
    public void ToggleFollower(){
         MirrorGameManager.ShowMessage("ToggleFollower");
-       _userAvatar?.ToggleFollower();
+       _userCommands?.ToggleFollower();
    }    
 
    public void ActivateFollower(){
         MirrorGameManager.ShowMessage("ActivateFollower");
-       _userAvatar?.ActivateFollower();
+       _userCommands?.ActivateFollower();
    }    
 
    public void DeactivateFollower(){
         MirrorGameManager.ShowMessage("DeactivateFollower");
-       _userAvatar?.DeactivateFollower();
+       _userCommands?.DeactivateFollower();
    } 
 
    public void ActivatePairDance(){
         MirrorGameManager.ShowMessage("ActivatePairDance");
-       _userAvatar?.ActivatePairDance();
+       _userCommands?.ActivatePairDance();
    } 
 
    public void DeactivatePairDance(){
         MirrorGameManager.ShowMessage("DeactivatePairDance");
-       _userAvatar?.DeactivatePairDance();
+       _userCommands?.DeactivatePairDance();
    } 
 
    public void ToggleAgentDancing(){
         MirrorGameManager.ShowMessage("ToggleAgentDancing");
-       _userAvatar?.ToggleAgentDancing();
+       _userCommands?.ToggleAgentDancing();
    } 
    public void RemoveAgent(){
         MirrorGameManager.ShowMessage("RemoveAgent");
-       _userAvatar?.RemoveAgent();
+       _userCommands?.RemoveAgent();
    }
 
 
