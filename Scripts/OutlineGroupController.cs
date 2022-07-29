@@ -15,7 +15,8 @@ public class OutlineGroupController : HighlightGroupController
 
     override public void GenerateHighlights(Transform t)
     {
-        
+        //print("NOT USING OUTLINE");
+        //return;
         Renderer ren = t.gameObject.GetComponent<Renderer>();
         if(ren!= null) {
             var o = t.gameObject.AddComponent<Outline>();
