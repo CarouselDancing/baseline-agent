@@ -2,20 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Carousel.BaselineAgent;
-
+using UnityEngine.UI;
 
 public class UserMenu : MonoBehaviour
 {
+   public List<Selectable> agentElements;
+   public List<Selectable> avatarElements;
    public RPMUserAvatar _userAvatar;
    public UserAvatarCommands _userCommands;
+   public bool isAgentInteractable = false;
+   public bool isAvatarInteractable = false;
+
 
     public void Start(){
         MirrorGameManager.Instance.userMenu = this;
     }
 
    public void Register(RPMUserAvatar userAvatar){
-      _userAvatar = userAvatar;
-      _userCommands = userAvatar.gameObject.GetComponent<UserAvatarCommands>();
+    _userAvatar = userAvatar;
+    _userCommands = userAvatar.gameObject.GetComponent<UserAvatarCommands>();
+    SetAvatarInteractability(true);
+
    }
 
    public void SpawnAgent(){
@@ -36,6 +43,11 @@ public class UserMenu : MonoBehaviour
    public void ToggleFollower(){
         MirrorGameManager.ShowMessage("ToggleFollower");
        _userCommands?.ToggleFollower();
+   }    
+
+   public void ToggleMirror(){
+        MirrorGameManager.ShowMessage("ToggleMirror");
+       _userCommands?.ToggleMirror();
    }    
 
    public void ActivateFollower(){
@@ -76,5 +88,22 @@ public class UserMenu : MonoBehaviour
 
    public void ExitGame(){
          Application.Quit();
+   }
+
+   public void SetAgentInteractability(bool isActive){
+    isAgentInteractable = isActive;
+    foreach(var e in agentElements){
+        e.interactable  = isAgentInteractable;
+    }
+   }   
+   public void SetAvatarInteractability(bool isActive){
+    isAvatarInteractable = isActive;
+    foreach(var e in avatarElements){
+        e.interactable  = isAvatarInteractable;
+    }
+   }
+
+   public void ToggleConsole(){
+         MirrorGameManager.ToggleConsole();
    }
 }

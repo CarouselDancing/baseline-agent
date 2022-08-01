@@ -82,6 +82,15 @@ public class UserAvatarCommands : NetworkBehaviour
     [Command]
     void CmdToggleFollower(){
         userAvatar.interactionZone.ToggleFollower();
+    } 
+    
+    public void ToggleMirror(){
+        CmdToggleMirror();
+    }
+
+    [Command]
+    void CmdToggleMirror(){
+        userAvatar.interactionZone.ToggleMirror();
     }
 
     public void ActivateAgent(){

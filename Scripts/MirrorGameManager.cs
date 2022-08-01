@@ -70,8 +70,15 @@ public class MirrorGameManager : MonoBehaviour
     public static void ShowMessage(string message){
         Debug.Log("debug: "+message);
         if(Instance != null && Instance.debugMessage != null){
-            Instance.debugMessage.Show(message);
+            Instance.debugMessage.Write(message);
         }
+    }
+
+    public static void ToggleConsole(){
+        if(Instance != null && Instance.debugMessage != null){
+            Instance.debugMessage.ToggleVisibility();
+        }
+
     }
 
     public void RegisterPlayer(RPMUserAvatar player){

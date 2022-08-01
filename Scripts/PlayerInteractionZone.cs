@@ -17,11 +17,15 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public Transform partnerTarget;
 
     override public void  OnTriggerEnter (Collider other){
+        int prevCount = collection.Count;
         var a= other.GetComponent<AgentInteraction>();
         if(a != null && !collection.Contains(a)) {
             a.SetHighlightMode(true);
             collection.Add(a);
         }
+        if(prevCount == 0 && collection.Count > 0){
+            MirrorGameManager.Instance.userMenu.SetAgentInteractability(true);
+        } 
     }
 
     override public void OnTriggerExit (Collider other){
@@ -29,6 +33,9 @@ public class PlayerInteractionZone : ObjectCollectionZone
         if(collection.Contains(a)) {
             a.SetHighlightMode(false);
             collection.Remove(a);
+        }
+        if(collection.Count == 0) {
+            MirrorGameManager.Instance.userMenu.SetAgentInteractability(false);
         }
     }
 
@@ -92,6 +99,14 @@ public class PlayerInteractionZone : ObjectCollectionZone
             DeactivateFollower();
         }else{
             ActivateFollower();
+        }
+    }
+
+   public void ToggleMirror(){
+        if(IsPairDancing){
+            DeactivatePairDance();
+        }else{
+            ActivatePairDance();
         }
     }
 
