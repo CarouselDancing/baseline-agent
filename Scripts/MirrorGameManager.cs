@@ -37,6 +37,8 @@ public class MirrorGameManager : RESTInterface
     public bool server;
     public bool client;
     
+    
+    public string menuScene = "Start";
     public string scene = "main";
 
     void Awake(){
@@ -68,6 +70,17 @@ public class MirrorGameManager : RESTInterface
             n.StartHost();
         }else if(server){
             n.StartServer();
+        }
+    }
+    public void StopMirror()
+    {
+        var n = AppNetworkManager.singleton;
+        if(client){
+            n.StopClient();
+        }else if(host){
+            n.StopHost();
+        }else if(server){
+            n.StopServer();
         }
     }
     
@@ -110,7 +123,7 @@ public class MirrorGameManager : RESTInterface
         this.host = true;
         this.client = false;
         RegisterServer();
-        StartCoroutine(LoadYourAsyncScene());
+        StartCoroutine(LoadYourAsyncScene(scene));
     }
 
     public void RegisterServer(){
@@ -153,24 +166,35 @@ public class MirrorGameManager : RESTInterface
         this.host = false;
         this.client = true;
         if (url != "") config.url = url;
-        StartCoroutine(LoadYourAsyncScene());
+        StartCoroutine(LoadYourAsyncScene(scene));
     }
 
     public void StartServer()
     {
         this.server = true;
-        StartCoroutine(LoadYourAsyncScene());
+        StartCoroutine(LoadYourAsyncScene(scene));
+    }
+    public void OpenMainMenu()
+    {
+        var trackerConfig = Camera.main.GetComponent<VRRigConfig>();
+        if(trackerConfig !=null)trackerConfig.DisableAllTargets();
+        ShowMessage("ToMainMenu ");
+        if (host || server)UnregisterServer();
+        StopMirror();
+        this.host = false;
+        this.server = false;
+        this.client = false;
+        StartCoroutine(LoadYourAsyncScene(menuScene));
     }
 
     public void ExitGame()
     {
-        if (host)UnregisterServer();
         Application.Quit();
     }
     
-    IEnumerator LoadYourAsyncScene()
+    IEnumerator LoadYourAsyncScene(string s)
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(s);
         if(loadingscreen != null) loadingscreen.SetActive(true);
         // asyncLoad.allowSceneActivation = false;
         // Wait until the asynchronous scene fully loads

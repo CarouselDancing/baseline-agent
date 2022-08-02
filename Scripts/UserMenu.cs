@@ -87,7 +87,7 @@ public class UserMenu : MonoBehaviour
    }
 
    public void ExitGame(){
-         Application.Quit();
+        MirrorGameManager.Instance.OpenMainMenu();
    }
 
    public void SetAgentInteractability(bool isActive){
