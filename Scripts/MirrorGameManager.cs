@@ -39,7 +39,8 @@ public class MirrorGameManager : RESTInterface
     
     
     public string menuScene = "Start";
-    public string scene = "main";
+    public string mainScene = "main";
+    public bool loadAsync;
 
     void Awake(){
         
@@ -48,6 +49,7 @@ public class MirrorGameManager : RESTInterface
         }else{
             GameObject.DestroyImmediate(gameObject); //singleton monobehavior
         }
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
 
@@ -73,6 +75,7 @@ public class MirrorGameManager : RESTInterface
         ShowMessage(logString, false);
 
     }
+
     void OnDestroy(){
     }
 
@@ -80,10 +83,13 @@ public class MirrorGameManager : RESTInterface
     {
         var n = AppNetworkManager.singleton;
         if(client){
+            ShowMessage("StartClient");
             n.StartClient();
         }else if(host){
+            ShowMessage("StartHost");
             n.StartHost();
         }else if(server){
+            ShowMessage("server");
             n.StartServer();
         }
     }
@@ -105,15 +111,15 @@ public class MirrorGameManager : RESTInterface
         var configText = Resources.Load<TextAsset>("config").text;
        // string configText = File.ReadAllText(configFile);
         config = JsonUtility.FromJson<ClientConfig>(configText);
-        ShowMessage("loaded config "+configText);
+        ShowMessage("Mirror Game Manager: loaded config "+configText);
         client = config.networkMode == "client";
         server = config.networkMode == "server";
         host = config.networkMode == "host";
 
     }
 
-    public static void ShowMessage(string message){
-        Debug.Log("debug: "+message);
+    public static void ShowMessage(string message, bool print=false){
+        if(print)Debug.Log("debug: "+message);
         if(Instance != null && Instance.debugMessage != null){
             Instance.debugMessage.Write(message);
         }
@@ -138,7 +144,11 @@ public class MirrorGameManager : RESTInterface
         this.host = true;
         this.client = false;
         RegisterServer();
-        StartCoroutine(LoadYourAsyncScene(scene));
+        if(loadAsync){
+            StartCoroutine(LoadYourAsyncScene(mainScene));
+        }else{    
+            SceneManager.LoadScene(mainScene);
+        }
     }
 
     public void RegisterServer(){
@@ -181,14 +191,22 @@ public class MirrorGameManager : RESTInterface
         this.host = false;
         this.client = true;
         if (url != "") config.url = url;
-        StartCoroutine(LoadYourAsyncScene(scene));
+        if(loadAsync){
+            StartCoroutine(LoadYourAsyncScene(mainScene));
+        }else{    
+            SceneManager.LoadScene(mainScene);
+        }
     }
 
     public void StartServer()
     {
         this.server = true;
         RegisterServer();
-        StartCoroutine(LoadYourAsyncScene(scene));
+        if(loadAsync){
+            StartCoroutine(LoadYourAsyncScene(mainScene));
+        }else{    
+            SceneManager.LoadScene(mainScene);
+        }
     }
     public void OpenMainMenu()
     {
@@ -200,7 +218,11 @@ public class MirrorGameManager : RESTInterface
         this.host = false;
         this.server = false;
         this.client = false;
-        StartCoroutine(LoadYourAsyncScene(menuScene));
+        if(loadAsync){
+            StartCoroutine(LoadYourAsyncScene(menuScene));
+        }else{
+            SceneManager.LoadScene(menuScene);
+        }
     }
 
     public void ExitGame()
@@ -222,7 +244,6 @@ public class MirrorGameManager : RESTInterface
         } 
         if(loadingscreen != null) loadingscreen.SetActive(false);
         
-        StartMirror();
     }
 
 
@@ -242,7 +263,11 @@ public class MirrorGameManager : RESTInterface
         }
         return localIP;
     }
-
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ShowMessage("OnSceneLoaded "+ scene.name);
+        if(scene.name == mainScene) StartMirror();
+    }
 
 
 }
