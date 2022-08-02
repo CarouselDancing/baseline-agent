@@ -7,13 +7,40 @@ using UnityEngine.UI;
 public class DebugMessage : MonoBehaviour
 {
     public GameObject panel;
-    public Text text;
+    public GameObject contentObject;
+    //public Text text;
+    public List<string> messages;
+    public List<GameObject> messgeObjects;
+    public int maxCount = 10;
+    public GameObject entryPrefab;
 
      public void Start(){
+        messgeObjects = new List<GameObject>();
+        messages = new List<string>();
         MirrorGameManager.Instance.debugMessage = this;
     }
     public void Write(string message){
-        text.text = message;
+        messages.Add(message);
+        if(messages.Count > maxCount){
+            messages.RemoveAt(0);
+        }
+        UpdateMessages();
+    }    
+
+    public void UpdateMessages(){
+        foreach(var mo in messgeObjects){
+            Destroy(mo);
+        }
+        messgeObjects = new List<GameObject>();
+        for (int i = messages.Count-1; i >=0; i--){
+            
+            // var mo = new GameObject(count.ToString());
+            // mo.transform.parent = contentObject.transform;
+            var mo = GameObject.Instantiate(entryPrefab, contentObject.transform);
+            var t = mo.GetComponentInChildren<Text>();
+            t.text = messages[i];
+            messgeObjects.Add(mo);
+        }
     }    
 
     public void ToggleVisibility(){
