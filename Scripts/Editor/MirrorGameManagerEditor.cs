@@ -18,12 +18,12 @@ public class MirrorGameManagerEditor : Editor
         if (GUILayout.Button("Host"))
         {
 
-           t.EnterScene(true);
+           t.HostServer();
         }
         if (GUILayout.Button("Join"))
         {
 
-           t.EnterScene(false);
+           t.JoinServer("");
         }
         if (GUILayout.Button("Server"))
         {

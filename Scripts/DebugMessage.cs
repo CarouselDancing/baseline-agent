@@ -27,7 +27,8 @@ public class DebugMessage : MonoBehaviour
     public void Show(){
         panel.SetActive(true);
     }
-       public void Hide(){
+    
+    public void Hide(){
         panel.SetActive(false);
     }
 

@@ -2,14 +2,18 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
 using System.Linq;
 using Carousel.BaselineAgent;
 using Mirror;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 
-public class MirrorGameManager : MonoBehaviour
+
+public class MirrorGameManager : RESTInterface
 {
     public GameObject loadingscreen;
     public Slider slider;
@@ -35,11 +39,15 @@ public class MirrorGameManager : MonoBehaviour
         }
     }
 
+
     void Start()
     {
 
         LoadConfig();
         DontDestroyOnLoad(gameObject);
+    }
+
+    void OnDestroy(){
     }
 
     public void StartMirror()
@@ -88,14 +96,57 @@ public class MirrorGameManager : MonoBehaviour
         }
     }
 
-      
-    public void EnterScene(bool host=false)
-    {
-        this.host = host;
-        this.client = !host;
+    public void HostServer(){
+        
+        this.host = true;
+        this.client = false;
+        RegisterServer();
         StartCoroutine(LoadYourAsyncScene());
     }
-      
+
+    public void RegisterServer(){
+        Debug.Log("register server");
+        var url = LocalIPAddress();
+        var serverEntry = new ServerEntry(){
+            name = url,
+            address = url,
+            port = 7777,
+            protocol = "kcp"
+        };
+        string data = "";
+        var setting = new JsonSerializerSettings();
+        data = JsonConvert.SerializeObject(serverEntry, setting);
+        //Action<string> printResponse = (respText) => {Console.WriteLine(respText);};
+        StartCoroutine(sendRequestCoroutine("dance_servers/add", data, PrintResponse));
+    }
+
+    public void UnregisterServer(){
+
+        var url = LocalIPAddress();
+        var serverEntry = new ServerEntry(){
+            name = url,
+            address = url,
+            port = 7777,
+            protocol = "kcp"
+        };
+        string data = "";
+        var setting = new JsonSerializerSettings();
+        data = JsonConvert.SerializeObject(serverEntry, setting);
+        StartCoroutine(sendRequestCoroutine("dance_servers/remove", data, PrintResponse));
+    }
+
+    public void PrintResponse(string responseText){
+        Console.WriteLine(responseText);
+    }
+            
+    public void JoinServer(string url)
+    {
+        this.host = false;
+        this.client = true;
+        if (url != "") config.url = url;
+        StartCoroutine(LoadYourAsyncScene());
+    }
+
     public void StartServer()
     {
         this.server = true;
@@ -104,6 +155,7 @@ public class MirrorGameManager : MonoBehaviour
 
     public void ExitGame()
     {
+        if (host)UnregisterServer();
         Application.Quit();
     }
     
@@ -122,6 +174,24 @@ public class MirrorGameManager : MonoBehaviour
         if(loadingscreen != null) loadingscreen.SetActive(false);
         
         StartMirror();
+    }
+
+
+    //https://answers.unity.com/questions/1544275/how-to-get-local-ip-in-unity-201824.html
+    public static string LocalIPAddress()
+    {
+        IPHostEntry host;
+        string localIP = "127.0.0.1";
+        host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                localIP = ip.ToString();
+                break;
+            }
+        }
+        return localIP;
     }
 
 
