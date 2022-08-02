@@ -172,6 +172,7 @@ public class MirrorGameManager : RESTInterface
     public void StartServer()
     {
         this.server = true;
+        RegisterServer();
         StartCoroutine(LoadYourAsyncScene(scene));
     }
     public void OpenMainMenu()
