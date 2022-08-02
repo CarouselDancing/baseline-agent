@@ -58,6 +58,21 @@ public class MirrorGameManager : RESTInterface
         DontDestroyOnLoad(gameObject);
     }
 
+    void OnEnable()
+    {
+        Application.logMessageReceived += HandleLog;
+    }
+
+    void OnDisable()
+    {
+        Application.logMessageReceived -= HandleLog;
+    }
+
+    void HandleLog(string logString, string stackTrace, LogType type)
+    {
+        ShowMessage(logString, false);
+
+    }
     void OnDestroy(){
     }
 
