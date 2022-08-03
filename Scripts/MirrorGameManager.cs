@@ -11,6 +11,7 @@ using Mirror;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Newtonsoft.Json;
+using UnityEngine.Events;
 
 
 public struct ServerEntry{
@@ -41,6 +42,9 @@ public class MirrorGameManager : RESTInterface
     public string menuScene = "Start";
     public string mainScene = "main";
     public bool loadAsync;
+
+    public UnityEvent onStart;
+    public UnityEvent onStop;
 
     void Awake(){
         
@@ -81,6 +85,7 @@ public class MirrorGameManager : RESTInterface
 
     public void StartMirror()
     {
+        onStart?.Invoke();
         var n = AppNetworkManager.singleton;
         if(client){
             ShowMessage("StartClient");
@@ -95,6 +100,7 @@ public class MirrorGameManager : RESTInterface
     }
     public void StopMirror()
     {
+        onStop?.Invoke();
         var n = AppNetworkManager.singleton;
         if(client){
             n.StopClient();
