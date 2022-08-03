@@ -107,11 +107,16 @@ public class MirrorGameManager : RESTInterface
     
     protected void LoadConfig()
     {
-       // string configFile = Path.Combine(Application.streamingAssetsPath, "config.json");
-        var configText = Resources.Load<TextAsset>("config").text;
-       // string configText = File.ReadAllText(configFile);
-        config = JsonUtility.FromJson<ClientConfig>(configText);
-        ShowMessage("Mirror Game Manager: loaded config "+configText);
+      
+        config = ClientConfig.GetInstance();
+        if(config == null){
+            // string configFile = Path.Combine(Application.streamingAssetsPath, "config.json");
+                var configText = Resources.Load<TextAsset>("config").text;
+            // string configText = File.ReadAllText(configFile);
+            config = ClientConfig.InitInstance(configText);
+            ShowMessage("Mirror Game Manager: loaded config "+configText);
+        }
+        
         client = config.networkMode == "client";
         server = config.networkMode == "server";
         host = config.networkMode == "host";
