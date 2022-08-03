@@ -47,9 +47,11 @@ public class AgentInteraction : CollectableObject
   
     virtual public void ActivateFollower(Transform leader){
         agent?.LockToLeader(leader);
+        agent?.ActivatePairDance();
 
     }
     virtual public void DeactivateFollower(){
+        agent?.DeactivatePairDance();
         agent?.UnlockLeader();
     }
 
