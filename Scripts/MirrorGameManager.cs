@@ -89,6 +89,7 @@ public class MirrorGameManager : RESTInterface
         var n = AppNetworkManager.singleton;
         if(client){
             ShowMessage("StartClient");
+            n.networkAddress = config.url;
             n.StartClient();
         }else if(host){
             ShowMessage("StartHost");
