@@ -12,7 +12,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using UnityEngine.Events;
+using kcp2k;
 
+[Serializable]
+public struct NetworkManagerPrefabs{
+    public GameObject kcp;
+    public GameObject telepathy;
+
+}
 
 public struct ServerEntry{
     public string name;
@@ -32,6 +39,7 @@ public class MirrorGameManager : RESTInterface
     public UserMenu userMenu;
     public ClientConfig config;
     public RPMUserAvatar player;
+    public NetworkManagerPrefabs networkManagerPrefabs;
 
 
     public bool host;
@@ -85,6 +93,12 @@ public class MirrorGameManager : RESTInterface
 
     public void StartMirror()
     {
+        
+        GameObject networkManager = networkManagerPrefabs.kcp;
+        if(config.protocol == "telepathy"){
+            networkManager = networkManagerPrefabs.telepathy;
+        }
+        GameObject.Instantiate(networkManager);
         onStart?.Invoke();
         var n = AppNetworkManager.singleton;
         if(client){
@@ -110,6 +124,7 @@ public class MirrorGameManager : RESTInterface
         }else if(server){
             n.StopServer();
         }
+        Destroy(n.gameObject);
     }
     
     protected void LoadConfig()
@@ -169,8 +184,8 @@ public class MirrorGameManager : RESTInterface
         var serverEntry = new ServerEntry(){
             name = url,
             address = url,
-            port = 7777,
-            protocol = "kcp"
+            port = config.port,
+            protocol = config.protocol
         };
         string data = "";
         var setting = new JsonSerializerSettings();
@@ -185,8 +200,8 @@ public class MirrorGameManager : RESTInterface
         var serverEntry = new ServerEntry(){
             name = url,
             address = url,
-            port = 7777,
-            protocol = "kcp"
+            port = config.port,
+            protocol = config.protocol
         };
         string data = "";
         var setting = new JsonSerializerSettings();
@@ -198,11 +213,13 @@ public class MirrorGameManager : RESTInterface
         Console.WriteLine(responseText);
     }
             
-    public void JoinServer(string url)
+    public void JoinServer(string url, string protocol="", int port=-1)
     {
         this.host = false;
         this.client = true;
         if (url != "") config.url = url;
+        if (protocol != "") config.protocol = protocol;
+        if (port >-1) config.port = port;
         if(loadAsync){
             StartCoroutine(LoadYourAsyncScene(mainScene));
         }else{    
