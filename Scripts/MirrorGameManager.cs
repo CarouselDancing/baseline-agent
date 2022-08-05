@@ -47,7 +47,7 @@ public class MirrorGameManager : RESTInterface
     public bool client;
     
     
-    public string menuScene = "Start";
+    public string lobbyScene = "Lobby";
     public string mainScene = "main";
     public bool loadAsync;
 
@@ -68,6 +68,11 @@ public class MirrorGameManager : RESTInterface
     void Start()
     {
 
+        if(loadAsync){
+            StartCoroutine(LoadYourAsyncScene(lobbyScene));
+        }else{    
+            SceneManager.LoadScene(lobbyScene);
+        }
         LoadConfig();
         DontDestroyOnLoad(gameObject);
     }
@@ -248,9 +253,9 @@ public class MirrorGameManager : RESTInterface
         this.server = false;
         this.client = false;
         if(loadAsync){
-            StartCoroutine(LoadYourAsyncScene(menuScene));
+            StartCoroutine(LoadYourAsyncScene(lobbyScene));
         }else{
-            SceneManager.LoadScene(menuScene);
+            SceneManager.LoadScene(lobbyScene);
         }
     }
 
@@ -292,6 +297,7 @@ public class MirrorGameManager : RESTInterface
         }
         return localIP;
     }
+    // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ShowMessage("OnSceneLoaded "+ scene.name);
