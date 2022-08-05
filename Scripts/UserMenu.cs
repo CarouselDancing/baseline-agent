@@ -86,7 +86,7 @@ public class UserMenu : MonoBehaviour
       
    }
 
-   public void ExitGame(){
+   public void ExitToLobby(){
         MirrorGameManager.Instance.OpenMainMenu();
    }
 

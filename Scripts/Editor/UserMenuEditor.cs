@@ -25,9 +25,9 @@ public class UserMenuEditor : Editor
         {
             controller.SetHeight();
         }   
-        if (GUILayout.Button("ExitGame"))
+        if (GUILayout.Button("ExitToLobby"))
         {
-            controller.ExitGame();
+            controller.ExitToLobby();
         }
 
     }
