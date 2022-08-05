@@ -21,10 +21,18 @@ public class UserMenuEditor : Editor
         {
             controller.ToggleMirror();
         }   
-        if (GUILayout.Button("SetHeight"))
+        if (GUILayout.Button("Guess Height"))
         {
             controller.SetHeight();
         }   
+        if (GUILayout.Button("+"))
+        {
+            controller.MoveUp();
+        }
+        if (GUILayout.Button("-"))
+        {
+            controller.MoveDown();
+        }
         if (GUILayout.Button("ExitToLobby"))
         {
             controller.ExitToLobby();

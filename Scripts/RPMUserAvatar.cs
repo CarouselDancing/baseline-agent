@@ -15,6 +15,7 @@ namespace Carousel{
 public class RPMUserAvatar : RPMAvatarManager
 {
    
+    public static float HEIGHT_STEP_SIZE = 0.05f;
     public FigureGeneratorSettings settings;
     public int figureVersion;
     public GameObject PlayerInteractionZonePrefab;
@@ -142,7 +143,29 @@ public class RPMUserAvatar : RPMAvatarManager
       
    }
    
-    
+
+    public void MoveUp(){
+        
+        var trackerConfig = Camera.main.GetComponent<VRRigConfig>();
+        if(trackerConfig== null){
+            return;
+
+        }
+        var p = trackerConfig.origin.position;
+        p.y += HEIGHT_STEP_SIZE;
+        trackerConfig.origin.position = p;
+    }
+
+    public void MoveDown(){
+        var trackerConfig = Camera.main.GetComponent<VRRigConfig>();
+        if(trackerConfig== null){
+            return;
+
+        }
+        var p = trackerConfig.origin.position;
+        p.y -= HEIGHT_STEP_SIZE;
+        trackerConfig.origin.position = p;
+    }
 
 }
 

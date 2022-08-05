@@ -83,7 +83,17 @@ public class UserMenu : MonoBehaviour
    public void SetHeight(){
         MirrorGameManager.ShowMessage("SetHeight");
        _userAvatar?.SetHeight();
-      
+   } 
+   
+   
+   public void MoveUp(){
+        MirrorGameManager.ShowMessage("MoveUp");
+       _userAvatar?.MoveUp();
+   } 
+   
+   public void MoveDown(){
+        MirrorGameManager.ShowMessage("MoveDown");
+       _userAvatar?.MoveDown();
    }
 
    public void ExitToLobby(){
