@@ -18,6 +18,10 @@ public class MMNetworkAgentController : NetworkAgentController
         if(mirror == null){
             mirror = GetComponent<RuntimeMirroring>();
         }
+        if(lookat == null){
+            lookat = GetComponent<CustomLookAt>();
+        }
+        
         
         state = AgentState.IDLE;
     }
@@ -57,52 +61,10 @@ public class MMNetworkAgentController : NetworkAgentController
     }
 
 
-    bool IsPlayerDancing(){
-
-        if (player == null) return false;
-        return player.IsDancing;
-    }
-
     override public void ToggleDancing(){
         Debug.Log("toggle dancing");
    
     }
-
-    
-    public void Activate(PlayerInteractionZone playerInteraction)
-    {   
-        this.player = playerInteraction.player;
-        initiated = true;
-        Reset();
-    }
-
-        
-
-    public void Deactivate()
-    {
-        initiated = false;
-    }  
-
-    public void LockToLeader(Transform t){
-        target = t;
-    }
-
-
-    public void UnlockLeader(){
-
-       target = null;
-       Reset();
-    }
-
-    public void Reset(){
-       
-       
-    }
-
-    public void SetHighlightMode(bool active){
-        highlight?.SetMode(active);
-    }
-
 
     override public void ActivatePairDance(){
         if(mirror!=null && !mirror.active && player !=null){

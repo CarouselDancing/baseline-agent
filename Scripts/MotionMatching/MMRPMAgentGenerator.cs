@@ -94,6 +94,8 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         ac.minStopDistance = minStopDistance;
         ac.mirror = poseProvider.GetComponent<RuntimeMirroring>();
         ac.pdController = GetComponentInChildren<RagDollPDControllerBase>();
+        ac.lookat = ac.pdController.gameObject.AddComponent<CustomLookAt>();
+
 
         ac.follower = GetComponentInChildren<PhysicsPairDanceFollower>();
         ac.pdController.alignReferenceRoot = false;

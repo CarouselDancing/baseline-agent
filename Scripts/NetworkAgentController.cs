@@ -24,6 +24,7 @@ public class NetworkAgentController  : NetworkBehaviour
     public AgentState state  = AgentState.IDLE;
     public RagDollPDControllerBase pdController;
     public RuntimeMirroring mirror;
+    public CustomLookAt lookat;
     public PlayerControllerBase player;
     public PhysicsPairDanceFollower follower;
     public HighlightGroupController highlight;
@@ -60,9 +61,13 @@ public class NetworkAgentController  : NetworkBehaviour
     public void Deactivate()
     {
         initiated = false;
+        lookat.targetTransform = null;
     }  
 
     public void LockToLeader(Transform t){
+        
+        Debug.Log("lock to leader", this.player.GetComponent<Animator>());
+        lookat.targetTransform = Camera.main.transform;//this.player.GetComponent<Animator>().GetBoneTransform(lookat.targetBone);
         target = t;
     }
 
@@ -70,6 +75,7 @@ public class NetworkAgentController  : NetworkBehaviour
     public void UnlockLeader(){
 
        target = null;
+       lookat.targetTransform = null;
        Reset();
     }
 
