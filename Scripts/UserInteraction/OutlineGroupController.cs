@@ -18,11 +18,15 @@ public class OutlineGroupController : HighlightGroupController
         
         Renderer ren = t.gameObject.GetComponent<Renderer>();
         if(ren!= null) {
+            try{
             var o = t.gameObject.AddComponent<Outline>();
             o.OutlineColor = color;
             o.OutlineMode = Outline.Mode.OutlineAll;
             o.enabled = active;
             highlights.Add(o);
+            }catch 
+            {
+            }
 
         }
         for(int i = 0; i < t.childCount; i++)

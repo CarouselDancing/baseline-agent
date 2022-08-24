@@ -56,6 +56,24 @@ public class UserAvatarCommandsEditor : Editor
         }
 
 
+        if (GUILayout.Button("GiveRightHand"))
+        {
+            controller.GiveRightHand();
+        }
+        if (GUILayout.Button("ReleaseRight"))
+        {
+            controller.ReleaseRightHand();
+        }
+        if (GUILayout.Button("GiveLeftHand"))
+        {
+            controller.GiveLeftHand();
+        }
+        
+        if (GUILayout.Button("ReleaseLeft"))
+        {
+            controller.ReleaseLeftHand();
+        }
+        
     }
 
 }

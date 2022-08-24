@@ -124,6 +124,9 @@ public class RBRagDollPDController : RagDollPDControllerBase
                     root = b;
                 }else if(upperBodyNames.Contains(b.name)){
                     bt = BodyType.UPPER;
+                    Debug.Log("upper "+b.name);
+                }else{
+                    Debug.Log("lower "+b.name + upperBodyNames.Count().ToString());
                 }
                
                 bodyTypes[b.name] = bt;

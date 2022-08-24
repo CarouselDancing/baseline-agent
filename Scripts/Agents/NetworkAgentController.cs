@@ -29,6 +29,7 @@ public class NetworkAgentController  : NetworkBehaviour
     public PhysicsPairDanceFollower follower;
     public HighlightGroupController highlight;
     public PoseCompositor poseCompositor;
+    public Dictionary<int, CustomTwoBoneIK> ikControllers;
    
     public void UpdateDistanceToTarget(){
         distanceToTarget = 0;
@@ -80,8 +81,6 @@ public class NetworkAgentController  : NetworkBehaviour
     }
 
     public void Reset(){
-       
-       
     }
 
     public void SetHighlightMode(bool active){
@@ -97,6 +96,20 @@ public class NetworkAgentController  : NetworkBehaviour
     virtual public void DeactivatePairDance(){
        
     }
+
+
+    public void ActivateIK(int hand, Transform target){
+        ikControllers[hand].target = target;
+    }
+
+    
+    public void DeactivateIK(int hand){
+        ikControllers[hand].target = null;
+    }
+
+
+
+
 
 }
 }

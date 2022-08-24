@@ -171,4 +171,33 @@ public class UserAvatarCommands : NetworkBehaviour
         userAvatar.SetHeight();
     }
 
+
+    public void GiveRightHand(){
+        //connnect right user hand to left hand of character
+        CmdActivateHandIK(LEFT);
+    }
+    public void ReleaseRightHand(){
+        CmdDeactivateHandIK(LEFT);
+    }
+
+    public void GiveLeftHand(){
+        //connnect left user hand to right hand of character
+        CmdActivateHandIK(RIGHT); 
+    }
+    public void ReleaseLeftHand(){
+        CmdDeactivateHandIK(RIGHT);
+    }
+
+
+     [Command]
+    void CmdActivateHandIK(int side){
+        userAvatar.interactionZone.ActivateHandIK(side);
+    }
+   
+     [Command]
+    void CmdDeactivateHandIK(int side){
+        userAvatar.interactionZone.DeactivateHandIK(side);
+    }
+
+
 }

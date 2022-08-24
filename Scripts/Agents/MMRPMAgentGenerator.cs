@@ -87,6 +87,24 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
 
         var mirror= poseProvider.GetComponent<RuntimeMirroring>();
         if (mirror != null) compositor.Add(mirror);
+        var ikRigBuilder = new RPMIKRigBuilder(null, false);
+        CharacterRigConfig config = ikRigBuilder.BuildConfig(poseProvider);
+        ac.ikControllers = new Dictionary<int, CustomTwoBoneIK>();
+        var leftHandIK = poseProvider.AddComponent<CustomTwoBoneIK>();
+        leftHandIK.end = config.LeftHand;
+        leftHandIK.elbow = leftHandIK.end.parent;
+        leftHandIK.root = leftHandIK.elbow.parent;
+        ac.ikControllers[0] = leftHandIK;
+        compositor.Add(leftHandIK);
+        var rightHandIK = poseProvider.AddComponent<CustomTwoBoneIK>();
+        rightHandIK.end = config.RightHand;
+        rightHandIK.elbow = rightHandIK.end.parent;
+        rightHandIK.root = rightHandIK.elbow.parent;
+        ac.ikControllers[1] = rightHandIK;
+        compositor.Add(rightHandIK);
+
+        
+        //compositor.Add(ac.lookat);
         ac.poseCompositor = compositor;
 
         ac.locomotionController = controller;

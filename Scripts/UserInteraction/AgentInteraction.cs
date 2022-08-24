@@ -15,25 +15,7 @@ public class AgentInteraction : CollectableObject
     public NetworkAgentController agent;
 
     public bool deactivateOnLeave = false; 
-/*
-    void  OnTriggerEnter (Collider other){
-        if (agent == null) return;
-        var t = other.GetComponent<AgentInteraction>();
-        if (t==null || t.IsLeading)return;
-        t.SetCurrentAgentZone(this);
-    }
 
-    void  OnTriggerExit (Collider other){
-        if (agent == null) return;
-        var t = other.GetComponent<AgentInteraction>();
-        if (t==null || t.IsLeading)return;
-        if (deactivateOnLeave) {
-            t.DeactivateAgent(this);
-        }else{
-            t.RemoveAgentZone();
-        }
-    }
-    */
 
     virtual public void ActivateAgent(PlayerInteractionZone player){
         agent?.Activate(player);
@@ -69,6 +51,14 @@ public class AgentInteraction : CollectableObject
 
     public void SetHighlightMode(bool active){
         agent?.SetHighlightMode(active);
+    }
+
+    public void ActivateIK(int hand, Transform target){
+        agent?.ActivateIK(hand, target);
+    }
+
+    public void DeactivateIK(int hand){
+        agent?.DeactivateIK(hand);
     }
 
     }  

@@ -15,6 +15,7 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public AgentInteraction agent;
     public PlayerControllerBase player;
     public Transform partnerTarget;
+    public Dictionary<int, Transform> ikTargets;
 
     override public void  OnTriggerEnter (Collider other){
         int prevCount = collection.Count;
@@ -133,6 +134,20 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public void RemoveAgent(){
         if(agent != null) {
             DestroyImmediate(agent.agent.gameObject);
+        }
+    }
+
+
+    public void ActivateHandIK(int side){
+        if(agent != null && ikTargets.ContainsKey(side)) {
+            var ikTarget = ikTargets[side];
+            agent.ActivateIK(side, ikTarget);
+        }
+    }
+    
+    public void DeactivateHandIK(int side){
+        if(agent != null) {
+            agent.DeactivateIK(side);
         }
     }
 
