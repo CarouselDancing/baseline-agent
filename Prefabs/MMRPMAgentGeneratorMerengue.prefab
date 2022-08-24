@@ -218,6 +218,8 @@ MonoBehaviour:
     minSpeed: 0.1
     startFrameIdx: 0
     speedFactor: 2
+    useInterpolation: 1
+    maxDegreesPerSecond: 90
   retargetingMapV1:
   - src: 0
     dst: ROOT
@@ -536,14 +538,14 @@ MonoBehaviour:
     dstT: {fileID: 0}
     active: 1
   - bone: 5
-    srcUp: {x: 0, y: -0.1, z: 0.3}
+    srcUp: {x: 0, y: -0.1, z: 0.12}
     srcSide: {x: -1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
     dstT: {fileID: 0}
     active: 1
   - bone: 6
-    srcUp: {x: 0, y: -0.1, z: 0.3}
+    srcUp: {x: 0, y: -0.1, z: 0.12}
     srcSide: {x: -1, y: 0, z: 0}
     dstUp: {x: 0, y: 1, z: 0}
     dstSide: {x: 1, y: 0, z: 0}
@@ -614,6 +616,7 @@ MonoBehaviour:
   state: 0
   pdController: {fileID: 0}
   mirror: {fileID: 0}
+  lookat: {fileID: 0}
   player: {fileID: 0}
   follower: {fileID: 0}
   highlight: {fileID: 0}
