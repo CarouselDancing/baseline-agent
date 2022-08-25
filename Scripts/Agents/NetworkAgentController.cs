@@ -98,8 +98,10 @@ public class NetworkAgentController  : NetworkBehaviour
     }
 
 
-    public void ActivateIK(int hand, Transform target){
+    public Transform ActivateIK(int hand, Transform target){
         ikControllers[hand].target = target;
+        var poseProviderJoint = ikControllers[hand].end;
+        return poseProviderJoint;
     }
 
     

@@ -301,8 +301,36 @@ public class MirrorGameManager : RESTInterface
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ShowMessage("OnSceneLoaded "+ scene.name);
-        if(scene.name == mainScene) StartMirror();
+        if(scene.name == mainScene){
+            StartMirror();
+        } 
     }
+
+
+    public void GrabLeftHand(){
+        if (player== null) return;
+        player.commands.GrabLeftHand();
+
+    }
+
+    public void GrabRightHand(){
+        if (player== null) return;
+        player.commands.GrabRightHand();
+        
+    }
+
+    public void ReleaseLeftHand(){
+        if (player== null) return;
+        player.commands.ReleaseLeftHand();
+
+    }
+
+    public void ReleaseRightHand(){
+        if (player== null) return;
+        player.commands.ReleaseRightHand();
+        
+    }
+    
 
 
 }

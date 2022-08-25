@@ -15,6 +15,8 @@ namespace Carousel{
 public class RPMUserAvatar : RPMAvatarManager
 {
    
+    public static int LEFT = 0;
+    public static int RIGHT = 1;
     public static float HEIGHT_STEP_SIZE = 0.05f;
     public FigureGeneratorSettings settings;
     public int figureVersion;
@@ -30,6 +32,8 @@ public class RPMUserAvatar : RPMAvatarManager
     public RBGrabber leftGrabber;
     public RBGrabber rightGrabber;
     GlobalAgentGameState gameState;
+    public bool activateIK = true;
+    public UserAvatarCommands commands;
 
     override public void Start()
     {
@@ -37,6 +41,7 @@ public class RPMUserAvatar : RPMAvatarManager
         gameState = GlobalAgentGameState.GetInstance();
         roomConfig = gameState.roomConfig;
         networkAvatar = GetComponent<NetworkAvatar>();
+        commands = GetComponent<UserAvatarCommands>();
         if (IsOwner)
         {
             MirrorGameManager.ShowMessage(" GlobalGameState.GetInstance");
@@ -202,6 +207,42 @@ public class RPMUserAvatar : RPMAvatarManager
         p.y -= HEIGHT_STEP_SIZE;
         trackerConfig.origin.position = p;
     }
+
+    public void GrabHand(int side){
+        if (side == RIGHT){
+             //connnect right user hand to left hand of character
+            Transform t = null;
+            if (activateIK)t=interactionZone.ActivateHandIK(LEFT);
+            if(t!=null){
+                rightGrabber.WaitForObject(t);
+            }else{
+                rightGrabber.GrabObject();
+            }
+        }else{
+            //connnect left user hand to right hand of character
+            Transform t = null;
+            if (activateIK)t = interactionZone.ActivateHandIK(RIGHT);
+            if(t!=null){
+                leftGrabber.WaitForObject(t);
+            }else{
+                leftGrabber.GrabObject();
+            }
+        }
+    }
+
+    public void ReleaseHand(int side){
+        if (side == RIGHT){
+            interactionZone.DeactivateHandIK(LEFT);
+            rightGrabber.ReleaseObject();
+            
+        }else{
+            interactionZone.DeactivateHandIK(RIGHT);
+            leftGrabber.ReleaseObject();
+        }
+    }
+
+    
+
 
 }
 

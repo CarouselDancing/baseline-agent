@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Carousel.BaselineAgent;
+using Carousel.FigureGenerator;
 
 namespace Carousel
 {
@@ -138,11 +139,15 @@ public class PlayerInteractionZone : ObjectCollectionZone
     }
 
 
-    public void ActivateHandIK(int side){
+    public Transform ActivateHandIK(int side){
+        Transform t = null;
         if(agent != null && ikTargets.ContainsKey(side)) {
             var ikTarget = ikTargets[side];
-            agent.ActivateIK(side, ikTarget);
+            var poseProviderJoint = agent.ActivateIK(side, ikTarget);
+            GeneratorUtils.FindChild(agent.agent.pdController.transform, poseProviderJoint.name, out t);
+            
         }
+        return t;
     }
     
     public void DeactivateHandIK(int side){

@@ -53,8 +53,10 @@ public class AgentInteraction : CollectableObject
         agent?.SetHighlightMode(active);
     }
 
-    public void ActivateIK(int hand, Transform target){
-        agent?.ActivateIK(hand, target);
+    public Transform ActivateIK(int hand, Transform target){
+        Transform t = null;
+        if(agent != null) t = agent.ActivateIK(hand, target);
+        return t;
     }
 
     public void DeactivateIK(int hand){

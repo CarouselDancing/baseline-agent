@@ -7,58 +7,40 @@ using Carousel.BaselineAgent;
 
 public class UserAvatarCommands : NetworkBehaviour
 {
-    public static int LEFT = 0;
-    public static int RIGHT = 1;
     public RPMUserAvatar userAvatar;
 
     
-    public void GrabLeft(){
-        CmdGrab(0);
+    public void GrabLeftHand(){
+        GrabHand(0);
     }   
-    public void GrabRight(){
-        CmdGrab(1);
+    public void GrabRightHand(){
+        GrabHand(1);
     }
 
-    public void Grab(int side){
-        CmdGrab(side);
+    public void GrabHand(int side){
+        CmdGrabHand(side);
     }
     [Command]
-    void CmdGrab(int side){
-     if (side == RIGHT){
-            if(userAvatar.rightGrabber!=null) {
-                 userAvatar.rightGrabber.GrabObject();
-            }
-        }else{
-            if(userAvatar.leftGrabber != null) {
-                userAvatar.leftGrabber.GrabObject();
-            }
-        }
+    void CmdGrabHand(int side){
+        userAvatar.GrabHand(side);
     }   
     
-    public void ReleaseLeft(){
-        CmdRelease(0);
+    public void ReleaseLeftHand(){
+        ReleaseHand(0);
     }
 
-    public void ReleaseRight(){
-        CmdRelease(1);
+    public void ReleaseRightHand(){
+        ReleaseHand(1);
     }
 
-    public void Release(int side){
-        CmdRelease(side);
+    public void ReleaseHand(int side){
+        CmdReleaseHand(side);
     }
 
 
     [Command]
-    void CmdRelease(int side){
-          if (side == RIGHT){
-                if(userAvatar.rightGrabber!=null) {
-                     userAvatar.rightGrabber.ReleaseObject();
-                }
-            }else{
-                if(userAvatar.leftGrabber != null) {
-                     userAvatar.leftGrabber.ReleaseObject();
-                }
-            }
+    void CmdReleaseHand(int side){
+        userAvatar.ReleaseHand(side);
     }
 
 
@@ -169,34 +151,6 @@ public class UserAvatarCommands : NetworkBehaviour
 
     public void SetHeight(){
         userAvatar.SetHeight();
-    }
-
-
-    public void GiveRightHand(){
-        //connnect right user hand to left hand of character
-        CmdActivateHandIK(LEFT);
-    }
-    public void ReleaseRightHand(){
-        CmdDeactivateHandIK(LEFT);
-    }
-
-    public void GiveLeftHand(){
-        //connnect left user hand to right hand of character
-        CmdActivateHandIK(RIGHT); 
-    }
-    public void ReleaseLeftHand(){
-        CmdDeactivateHandIK(RIGHT);
-    }
-
-
-     [Command]
-    void CmdActivateHandIK(int side){
-        userAvatar.interactionZone.ActivateHandIK(side);
-    }
-   
-     [Command]
-    void CmdDeactivateHandIK(int side){
-        userAvatar.interactionZone.DeactivateHandIK(side);
     }
 
 
