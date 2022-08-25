@@ -178,7 +178,7 @@ MonoBehaviour:
   mmSettings:
     ignoreRangeEnd: 0
     version: 1
-    databaseType: 0
+    databaseType: 3
     features:
     - bone: 5
       boneIdx: 0
