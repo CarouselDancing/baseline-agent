@@ -16,9 +16,9 @@ public class RBGrabber : MonoBehaviour
         RIGHT
     }
     public Side side;
-    public Rigidbody parent;
+    public GameObject parent;
     public Rigidbody grabber;
-    public Collider grabbableObject;
+    public GameObject grabbableObject;
     public ConfigurableJoint joint;
     LineRenderer lineRenderer;
     public float width = 0.1f;
@@ -27,12 +27,12 @@ public class RBGrabber : MonoBehaviour
     public string layerName = "marathon";
     public int layer;
 
-    public Collider desiredGrabTarget;
+    public GameObject desiredGrabTarget;
     
 
      void Start()
     {
-        parent = transform.parent.GetComponent<Rigidbody>();
+        parent = transform.parent.gameObject;
         layer = LayerMask.NameToLayer(layerName);
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.startWidth = width;
@@ -47,9 +47,9 @@ public class RBGrabber : MonoBehaviour
 
     }
 
-    public void SetGrabbableObject(Collider collider){
-        if(collider == grabber || collider == parent)return;
-        grabbableObject = collider;
+    public void SetGrabbableObject(GameObject o){
+        if(o == grabber || o == parent)return;
+        grabbableObject = o;
         if (grabbableObject == desiredGrabTarget){
            GrabDesiredObject();
         }
@@ -64,17 +64,17 @@ public class RBGrabber : MonoBehaviour
     
      void  OnTriggerEnter(Collider other){
         if (other.gameObject.layer != layer) return;
-        SetGrabbableObject(other);
+        SetGrabbableObject(other.gameObject);
     }
 
     void  OnTriggerExit(Collider other){
         if (other.gameObject.layer != layer) return;
-        if(other == grabbableObject) {
+        if(other.gameObject == grabbableObject) {
             grabbableObject = null;
         }
     }
     public void WaitForObject(Transform t){
-        desiredGrabTarget = t.gameObject.GetComponent<Collider>();
+        desiredGrabTarget = t.gameObject;
         Debug.Log("WaitForObject "+ name+ " " + desiredGrabTarget.name);
 
     }
@@ -109,9 +109,9 @@ public class RBGrabber : MonoBehaviour
         }
     }
 
-    public void Connect(Collider col){
-        var ab = col.transform.GetComponent<ArticulationBody>();
-        var rb = col.transform.GetComponent<Rigidbody>();
+    public void Connect(GameObject o){
+        var ab = o.GetComponent<ArticulationBody>();
+        var rb = o.GetComponent<Rigidbody>();
 
         joint = grabber.gameObject.AddComponent<ConfigurableJoint>();
         joint.xMotion = ConfigurableJointMotion.Locked;
