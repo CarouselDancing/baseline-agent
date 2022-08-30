@@ -67,42 +67,41 @@ public class RPMUserAvatar : RPMAvatarManager
    
     override public void OnRPMAvatarLoaded(GameObject avatar, AvatarMetaData metaData=null)
     {
+        Debug.Log("Load user avatar");
         MirrorGameManager.ShowMessage("OnRPMAvatarLoaded");
-        try{ 
-            bool activateFootRig = gameState.config.activateFootTrackers;
-            var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig);
-            config = ikRigBuilder.Build(avatar, IsOwner);
-            SetupRig(config, avatar);
-            CreateRigidBodyFigure(avatar, config.Root, settings.modelLayer);
-            var root = config.Root;
-            var pli = Instantiate(PlayerInteractionZonePrefab);
-            pli.transform.parent = root;
-            pli.transform.localPosition = interactionZoneOffset;
-            interactionZone = pli.GetComponent<PlayerInteractionZone>();
-            var pt = Instantiate(PartnerTargetPrefab);
-            pt.transform.parent = root;
-            pt.transform.localPosition = interactionZoneOffset;
-            var controller = avatar.AddComponent<PlayerControllerBase>();
-            controller.root = root;
-            interactionZone.player = controller;
-            interactionZone.partnerTarget = pt.transform;
+        bool activateFootRig = gameState.config.activateFootTrackers;
+        var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig);
+        config = ikRigBuilder.Build(avatar, IsOwner);
+        SetupRig(config, avatar);
+        CreateRigidBodyFigure(avatar, config.Root, settings.modelLayer);
+        var root = config.Root;
+        var pli = Instantiate(PlayerInteractionZonePrefab);
+        pli.transform.parent = root;
+        pli.transform.localPosition = interactionZoneOffset;
+        interactionZone = pli.GetComponent<PlayerInteractionZone>();
+        var pto = Instantiate(PartnerTargetPrefab);
+        pto.transform.parent = avatar.transform;
+        var pt = pto.GetComponent<PartnerTarget>();
+        pt.leader = root;
+        pt.offset = interactionZoneOffset;
+        var controller = avatar.AddComponent<PlayerControllerBase>();
+        controller.root = root;
+        interactionZone.player = controller;
+        interactionZone.partnerTarget = pto.transform;
 
 
-            //store mirrored targets for hand holding
-            interactionZone.ikTargets = new Dictionary<int, Transform>();
-            interactionZone.ikTargets[(int)RBGrabber.Side.RIGHT] = config.LeftHand;
-            interactionZone.ikTargets[(int)RBGrabber.Side.LEFT] = config.RightHand;
+        //store mirrored targets for hand holding
+        interactionZone.ikTargets = new Dictionary<int, Transform>();
+        interactionZone.ikTargets[(int)RBGrabber.Side.RIGHT] = config.LeftHand;
+        interactionZone.ikTargets[(int)RBGrabber.Side.LEFT] = config.RightHand;
 
 
-            OnFinished?.Invoke();
-            leftGrabber = AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);
-            rightGrabber = AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);
-            if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
-            MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
-        }catch (Exception e){
-            MirrorGameManager.ShowMessage($"Exception Handler in OnRPMAvatarLoaded: {e}");
-
-        }
+        OnFinished?.Invoke();
+        leftGrabber = AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);
+        rightGrabber = AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);
+        if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
+        MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
+      
     }
     
     RBGrabber AddGrabber(GameObject o, RBGrabber.Side side){
