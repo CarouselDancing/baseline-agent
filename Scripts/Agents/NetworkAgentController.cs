@@ -30,6 +30,7 @@ public class NetworkAgentController  : NetworkBehaviour
     public HighlightGroupController highlight;
     public PoseCompositor poseCompositor;
     public Dictionary<int, CustomTwoBoneIK> ikControllers;
+    public bool useMirrorOnDefault = false;
    
     public void UpdateDistanceToTarget(){
         distanceToTarget = 0;

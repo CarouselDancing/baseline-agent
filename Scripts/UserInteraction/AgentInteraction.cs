@@ -28,7 +28,9 @@ public class AgentInteraction : CollectableObject
 
   
     virtual public void ActivateFollower(Transform leader){
-        agent?.LockToLeader(leader);
+        if(agent== null)return;
+        agent.LockToLeader(leader);
+        if(agent.useMirrorOnDefault)
         agent?.ActivatePairDance();
 
     }
