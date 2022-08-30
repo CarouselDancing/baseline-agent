@@ -74,7 +74,30 @@ public class MirrorGameManager : RESTInterface
             SceneManager.LoadScene(lobbyScene);
         }
         LoadConfig();
+        ConfigureTrackers();
         DontDestroyOnLoad(gameObject);
+    }
+
+    void ConfigureTrackers()
+    {
+        var trackerConfig = Camera.main.GetComponent<VRRigConfig>();
+        if (trackerConfig == null)
+        {
+            return;
+        }
+        ConfigureTracker(trackerConfig.hipTrackerTarget, config.hipTracker);
+        ConfigureTracker(trackerConfig.leftFootTarget, config.leftFootTracker);
+        ConfigureTracker(trackerConfig.rightFootTarget, config.rightFootTracker);
+    }
+    
+
+    public void ConfigureTracker(TrackerTarget tracker, TrackerConfig trackerConfig)
+    {
+        var _offset = trackerConfig.posOffset;
+        tracker.offset = new Vector3(_offset[0], _offset[1], _offset[2]);
+        var _rotOffset = trackerConfig.rotOffset;
+        tracker.rotationOffset = new Vector3(_rotOffset[0], _rotOffset[1], _rotOffset[2]);
+        
     }
 
     void OnEnable()
@@ -195,7 +218,6 @@ public class MirrorGameManager : RESTInterface
         string data = "";
         var setting = new JsonSerializerSettings();
         data = JsonConvert.SerializeObject(serverEntry, setting);
-        //Action<string> printResponse = (respText) => {Console.WriteLine(respText);};
         StartCoroutine(sendRequestCoroutine("dance_servers/add", data, PrintResponse));
     }
 
