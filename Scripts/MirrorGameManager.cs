@@ -332,24 +332,28 @@ public class MirrorGameManager : RESTInterface
     public void GrabLeftHand(){
         if (player== null) return;
         player.commands.GrabLeftHand();
+        player.handAnimationController.CloseLeftHand();
 
     }
 
     public void GrabRightHand(){
         if (player== null) return;
         player.commands.GrabRightHand();
+        player.handAnimationController.CloseRightHand();
         
     }
 
     public void ReleaseLeftHand(){
         if (player== null) return;
         player.commands.ReleaseLeftHand();
+        player.handAnimationController.OpenLeftHand();
 
     }
 
     public void ReleaseRightHand(){
         if (player== null) return;
         player.commands.ReleaseRightHand();
+        player.handAnimationController.OpenRightHand();
         
     }
     

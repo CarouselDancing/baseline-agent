@@ -34,6 +34,7 @@ public class RPMUserAvatar : RPMAvatarManager
     GlobalAgentGameState gameState;
     public bool activateIK = true;
     public UserAvatarCommands commands;
+    public HandAnimationController handAnimationController;
 
     override public void Start()
     {
@@ -99,6 +100,8 @@ public class RPMUserAvatar : RPMAvatarManager
         OnFinished?.Invoke();
         leftGrabber = AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);
         rightGrabber = AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);
+        
+        handAnimationController = avatar.AddComponent<HandAnimationController>();
         if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
         MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
       
@@ -206,6 +209,8 @@ public class RPMUserAvatar : RPMAvatarManager
         p.y -= HEIGHT_STEP_SIZE;
         trackerConfig.origin.position = p;
     }
+
+    //handle object interaction based on grabbing
 
     public void GrabHand(int side){
         if (side == RIGHT){
