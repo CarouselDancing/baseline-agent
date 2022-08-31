@@ -46,7 +46,9 @@ public class RPMUserAvatar : RPMAvatarManager
         if (IsOwner)
         {
             MirrorGameManager.ShowMessage(" GlobalGameState.GetInstance");
-            AvatarURL = gameState.config.rpmURL;
+            var config = gameState.config;
+            var avatarIndex = config.userAvatar;
+            AvatarURL = config.rpmAvatars[avatarIndex].url;
             
             MirrorGameManager.ShowMessage("SetupAvatarControllerFromRPM"+AvatarURL);
             if (AvatarURL != "")

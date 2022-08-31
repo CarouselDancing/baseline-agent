@@ -29,11 +29,11 @@ public class RoomManager : NetworkBehaviour
 
     public void SpawnAgent()
     {
-        if (roomConfig == null || roomConfig.AvatarURLs.Count == 0 || roomConfig.StartZones.Count == 0 || roomConfig.AvatarURLs.Count == 0 || roomConfig.AnimationOverriders.Count==0)  return;
-        int mi =  UnityEngine.Random.Range(0, roomConfig.AvatarURLs.Count);
+        if (roomConfig == null || roomConfig.rpmAvatars.Count == 0 || roomConfig.StartZones.Count == 0 ||  roomConfig.AnimationOverriders.Count==0)  return;
+        int mi =  UnityEngine.Random.Range(0, roomConfig.rpmAvatars.Count);
         int ai = UnityEngine.Random.Range(0, roomConfig.AnimationOverriders.Count);
         int si = UnityEngine.Random.Range(0, roomConfig.StartZones.Count);
-        string avatarURL =  roomConfig.AvatarURLs[mi];
+        string avatarURL =  roomConfig.rpmAvatars[mi].url;
         Vector3 position = roomConfig.StartZones[si].GetRandomStartPosition();
         Quaternion rotation = GetRandomRotation();
         
