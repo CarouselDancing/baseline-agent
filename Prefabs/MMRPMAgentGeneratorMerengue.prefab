@@ -220,6 +220,8 @@ MonoBehaviour:
     speedFactor: 2
     useInterpolation: 1
     maxDegreesPerSecond: 90
+    startConstraint: 0300000004000000
+    useStartConstraint: 1
   retargetingMapV1:
   - src: 0
     dst: ROOT
@@ -621,4 +623,5 @@ MonoBehaviour:
   follower: {fileID: 0}
   highlight: {fileID: 0}
   poseCompositor: {fileID: 0}
+  useMirrorOnDefault: 0
   locomotionController: {fileID: 0}
