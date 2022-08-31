@@ -23,15 +23,15 @@ public class RPMUserAvatar : RPMAvatarManager
     public GameObject PlayerInteractionZonePrefab;
     public GameObject PartnerTargetPrefab;
     public RoomConfig roomConfig;
+    public ClientConfig clientConfig;
     public GameObject generator;
     public Vector3 interactionZoneOffset;
     public PlayerInteractionZone interactionZone;
     public float grabberTriggerRadius = 0.1f;
-    public CharacterRigConfig config;
+    public CharacterRigConfig rigConfig;
     public UnityEvent OnFinished;
     public RBGrabber leftGrabber;
     public RBGrabber rightGrabber;
-    GlobalAgentGameState gameState;
     public bool activateIK = true;
     public UserAvatarCommands commands;
     public HandAnimationController handAnimationController;
@@ -39,16 +39,16 @@ public class RPMUserAvatar : RPMAvatarManager
     override public void Start()
     {
         MirrorGameManager.ShowMessage("Created Avatar");
-        gameState = GlobalAgentGameState.GetInstance();
-        roomConfig = gameState.roomConfig;
+        roomConfig = (RoomConfig)GameObject.FindObjectsOfTypeAll(typeof(RoomConfig)).FirstOrDefault();
+        clientConfig = MirrorGameManager.Instance.config;
         networkAvatar = GetComponent<NetworkAvatar>();
         commands = GetComponent<UserAvatarCommands>();
         if (IsOwner)
         {
             MirrorGameManager.ShowMessage(" GlobalGameState.GetInstance");
-            var config = gameState.config;
-            var avatarIndex = config.userAvatar;
-            AvatarURL = config.rpmAvatars[avatarIndex].url;
+            
+            var avatarIndex = clientConfig.userAvatar;
+            AvatarURL = clientConfig.rpmAvatars[avatarIndex].url;
             
             MirrorGameManager.ShowMessage("SetupAvatarControllerFromRPM"+AvatarURL);
             if (AvatarURL != "")
@@ -72,12 +72,12 @@ public class RPMUserAvatar : RPMAvatarManager
     {
         Debug.Log("Load user avatar");
         MirrorGameManager.ShowMessage("OnRPMAvatarLoaded");
-        bool activateFootRig = gameState.config.activateFootTrackers;
+        bool activateFootRig = clientConfig.activateFootTrackers;
         var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig);
-        config = ikRigBuilder.Build(avatar, IsOwner);
-        SetupRig(config, avatar);
-        CreateRigidBodyFigure(avatar, config.Root, settings.modelLayer);
-        var root = config.Root;
+        rigConfig = ikRigBuilder.Build(avatar, IsOwner);
+        SetupRig(rigConfig, avatar);
+        CreateRigidBodyFigure(avatar, rigConfig.Root, settings.modelLayer);
+        var root = rigConfig.Root;
         var pli = Instantiate(PlayerInteractionZonePrefab);
         pli.transform.parent = root;
         pli.transform.localPosition = interactionZoneOffset;
@@ -95,13 +95,13 @@ public class RPMUserAvatar : RPMAvatarManager
 
         //store mirrored targets for hand holding
         interactionZone.ikTargets = new Dictionary<int, Transform>();
-        interactionZone.ikTargets[(int)RBGrabber.Side.RIGHT] = config.LeftHand;
-        interactionZone.ikTargets[(int)RBGrabber.Side.LEFT] = config.RightHand;
+        interactionZone.ikTargets[(int)RBGrabber.Side.RIGHT] = rigConfig.LeftHand;
+        interactionZone.ikTargets[(int)RBGrabber.Side.LEFT] = rigConfig.RightHand;
 
 
         OnFinished?.Invoke();
-        leftGrabber = AddGrabber(config.LeftHand.gameObject,  RBGrabber.Side.LEFT);
-        rightGrabber = AddGrabber(config.RightHand.gameObject, RBGrabber.Side.RIGHT);
+        leftGrabber = AddGrabber(rigConfig.LeftHand.gameObject,  RBGrabber.Side.LEFT);
+        rightGrabber = AddGrabber(rigConfig.RightHand.gameObject, RBGrabber.Side.RIGHT);
         
         handAnimationController = avatar.AddComponent<HandAnimationController>();
         if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
@@ -179,7 +179,7 @@ public class RPMUserAvatar : RPMAvatarManager
             return;
 
         }
-        float avatarHeight = config.Head.position.y - config.ToeTip.position.y;
+        float avatarHeight = rigConfig.Head.position.y - rigConfig.ToeTip.position.y;
         float yOffset = avatarHeight - Camera.main.transform.position.y;
         var p = trackerConfig.origin.position;
         p.y += yOffset;

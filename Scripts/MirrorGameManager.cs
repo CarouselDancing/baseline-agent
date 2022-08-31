@@ -88,6 +88,8 @@ public class MirrorGameManager : RESTInterface
         ConfigureTracker(trackerConfig.hipTrackerTarget, config.hipTracker);
         ConfigureTracker(trackerConfig.leftFootTarget, config.leftFootTracker);
         ConfigureTracker(trackerConfig.rightFootTarget, config.rightFootTracker);
+        ConfigureTracker(trackerConfig.leftControllerTarget, config.leftControllerTracker);
+        ConfigureTracker(trackerConfig.rightControllerTarget, config.rightControllerTracker);
     }
     
 
@@ -167,9 +169,6 @@ public class MirrorGameManager : RESTInterface
             ShowMessage("Mirror Game Manager: loaded config "+configText);
         }
         
-        client = config.networkMode == "client";
-        server = config.networkMode == "server";
-        host = config.networkMode == "host";
 
     }
 
