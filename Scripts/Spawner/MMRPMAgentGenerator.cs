@@ -118,14 +118,14 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         ikRigBuilder.handCenterOffset = settings.handCenterOffset;
         ikRigBuilder.AddHandCenters(ref config);
         ikRigBuilder.handCenterOffset = settings.handCenterOffset;
-        ac.ikControllers = new Dictionary<int, CustomIK>();
-        var leftHandIK = poseProvider.AddComponent<CustomTwoBoneIK>();
+        ac.ikControllers = new Dictionary<int, CustomTwoBoneIK>();
+        var leftHandIK = poseProvider.AddComponent<CustomTwoBoneIKV1>();
         leftHandIK.end = config.LeftHand;
         leftHandIK.offsetPoint = config.LeftHandCenter;
         leftHandIK.elbow = config.LeftHand.parent;
         leftHandIK.root = leftHandIK.elbow.parent;
         ac.ikControllers[0] = leftHandIK;
-        var rightHandIK = poseProvider.AddComponent<CustomTwoBoneIK>();
+        var rightHandIK = poseProvider.AddComponent<CustomTwoBoneIKV1>();
         rightHandIK.end = config.RightHand;
         rightHandIK.offsetPoint = config.RightHandCenter;
         rightHandIK.elbow = config.RightHand.parent;
