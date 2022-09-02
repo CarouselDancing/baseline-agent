@@ -73,7 +73,8 @@ public class RPMUserAvatar : RPMAvatarManager
         Debug.Log("Load user avatar");
         MirrorGameManager.ShowMessage("OnRPMAvatarLoaded");
         bool activateFootRig = clientConfig.activateFootTrackers;
-        var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig);
+        var ikRigBuilder = new RPMIKRigBuilder(animationController, activateFootRig, true);
+        ikRigBuilder.handCenterOffset = settings.handCenterOffset;
         rigConfig = ikRigBuilder.Build(avatar, IsOwner);
         SetupRig(rigConfig, avatar);
         CreateRigidBodyFigure(avatar, rigConfig.Root, settings.modelLayer);
@@ -95,17 +96,18 @@ public class RPMUserAvatar : RPMAvatarManager
 
         //store mirrored targets for hand holding
         interactionZone.ikTargets = new Dictionary<int, Transform>();
-        interactionZone.ikTargets[(int)RBGrabber.Side.RIGHT] = rigConfig.LeftHand;
-        interactionZone.ikTargets[(int)RBGrabber.Side.LEFT] = rigConfig.RightHand;
+        interactionZone.ikTargets[(int)RBGrabber.Side.RIGHT] = rigConfig.LeftHandCenter;
+        interactionZone.ikTargets[(int)RBGrabber.Side.LEFT] = rigConfig.RightHandCenter;
 
 
-        OnFinished?.Invoke();
         leftGrabber = AddGrabber(rigConfig.LeftHand.gameObject,  RBGrabber.Side.LEFT);
         rightGrabber = AddGrabber(rigConfig.RightHand.gameObject, RBGrabber.Side.RIGHT);
         
         handAnimationController = avatar.AddComponent<HandAnimationController>();
         if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
         MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
+        
+        OnFinished?.Invoke();
       
     }
     

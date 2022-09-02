@@ -58,6 +58,7 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         var mm = poseProvider.AddComponent<MotionMatching.MotionMatching>();
         mm.filename = mmFilename;
         mm.settings = mmSettings;
+       
         var controller = poseProvider.AddComponent<TargetLocomotionController>();
         Transform root;
         GeneratorUtils.FindChild(poseProvider.transform, settings.rootName, out root);
@@ -88,24 +89,10 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
 
         var mirror= poseProvider.GetComponent<RuntimeMirroring>();
         if (mirror != null) compositor.Add(mirror);
-        var ikRigBuilder = new RPMIKRigBuilder(null, false);
-        CharacterRigConfig config = ikRigBuilder.BuildConfig(poseProvider);
-        ac.ikControllers = new Dictionary<int, CustomTwoBoneIK>();
-        var leftHandIK = poseProvider.AddComponent<CustomTwoBoneIK>();
-        leftHandIK.end = config.LeftHand;
-        leftHandIK.elbow = leftHandIK.end.parent;
-        leftHandIK.root = leftHandIK.elbow.parent;
-        ac.ikControllers[0] = leftHandIK;
-        compositor.Add(leftHandIK);
-        var rightHandIK = poseProvider.AddComponent<CustomTwoBoneIK>();
-        rightHandIK.end = config.RightHand;
-        rightHandIK.elbow = rightHandIK.end.parent;
-        rightHandIK.root = rightHandIK.elbow.parent;
-        ac.ikControllers[1] = rightHandIK;
-        compositor.Add(rightHandIK);
 
-        
-        //compositor.Add(ac.lookat);
+        AddIKRig(ac, poseProvider);
+        compositor.Add(ac.ikControllers[0]);
+        compositor.Add(ac.ikControllers[1]);
         ac.poseCompositor = compositor;
 
         ac.locomotionController = controller;
@@ -123,6 +110,27 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         ac.pdController.delayedActivation = true;
         AddNetworkAgentInteraction(poseProvider.transform, ac);
         return ac;
+    }
+
+    public void AddIKRig(MMNetworkAgentController ac, GameObject poseProvider){
+        var ikRigBuilder = new RPMIKRigBuilder(null, false);
+        CharacterRigConfig config = ikRigBuilder.BuildConfig(poseProvider);
+        ikRigBuilder.handCenterOffset = settings.handCenterOffset;
+        ikRigBuilder.AddHandCenters(ref config);
+        ikRigBuilder.handCenterOffset = settings.handCenterOffset;
+        ac.ikControllers = new Dictionary<int, CustomIK>();
+        var leftHandIK = poseProvider.AddComponent<CustomTwoBoneIK2>();
+        leftHandIK.end = config.LeftHand;
+        leftHandIK.offsetPoint = config.LeftHandCenter;
+        leftHandIK.elbow = config.LeftHand.parent;
+        leftHandIK.root = leftHandIK.elbow.parent;
+        ac.ikControllers[0] = leftHandIK;
+        var rightHandIK = poseProvider.AddComponent<CustomTwoBoneIK2>();
+        rightHandIK.end = config.RightHand;
+        rightHandIK.offsetPoint = config.RightHandCenter;
+        rightHandIK.elbow = config.RightHand.parent;
+        rightHandIK.root = rightHandIK.elbow.parent;
+        ac.ikControllers[1] = rightHandIK;
     }
 }
 }

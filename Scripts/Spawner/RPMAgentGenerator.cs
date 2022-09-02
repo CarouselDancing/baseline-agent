@@ -66,6 +66,8 @@ public class RPMAgentGenerator : RPMGeneratorBase
         }
         var ikRigBuilder = new RPMIKRigBuilder(animationController, false, false);
         var config = ikRigBuilder.BuildConfig(avatar);
+        ikRigBuilder.handCenterOffset = settings.handCenterOffset;
+        ikRigBuilder.AddHandCenters(ref config);
 
         avatar.transform.position = transform.position;
         avatar.transform.rotation = transform.rotation;

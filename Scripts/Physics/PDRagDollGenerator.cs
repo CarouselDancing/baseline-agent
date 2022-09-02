@@ -132,6 +132,8 @@ public class PDRagDollGenerator : MonoBehaviour
         abGenerator.figureType = settings.figureType;
         abGenerator.disableLimits = settings.disableLimits;
         abGenerator.solverIterations = settings.solverIterations;
+        abGenerator.handCenterOffset = settings.handCenterOffset;
+        abGenerator.useHandBalls = settings.useHandBalls;
         Transform root = null;
         GeneratorUtils.FindChild(o.transform, settings.rootName, out root);
         abGenerator.root = root;
@@ -173,6 +175,10 @@ public class PDRagDollGenerator : MonoBehaviour
         rbGenerator.root = root;
         rbGenerator.version = version;
         rbGenerator.figureType = settings.figureType;
+        rbGenerator.disableLimits = settings.disableLimits;
+        rbGenerator.solverIterations = settings.solverIterations;
+        rbGenerator.handCenterOffset = settings.handCenterOffset;
+        rbGenerator.useHandBalls = settings.useHandBalls;
         rbGenerator.isKinematic = isKinematic;
         rbGenerator.referenceBodies = new List<RigidBodyFigureGenerator.RefBodyMapping>();
         foreach (var r in settings.referenceBodies)

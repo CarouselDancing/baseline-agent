@@ -81,17 +81,45 @@ MonoBehaviour:
   PartnerTargetPrefab: {fileID: 6091544525865840373, guid: 639b1bd5c4933804299aa657dd9558dd,
     type: 3}
   roomConfig: {fileID: 0}
+  clientConfig:
+    url: localhost
+    port: 7777
+    userAvatar: 0
+    rpmAvatars:
+    - name: female
+      url: https://d1a370nemizbjq.cloudfront.net/209a1bc2-efed-46c5-9dfd-edc8a1d9cbe4.glb
+    protocol: kcp
+    activateHipTracker: 0
+    activateFootTrackers: 0
+    hipTracker:
+      posOffset: []
+      rotOffset: []
+    leftFootTracker:
+      posOffset: []
+      rotOffset: []
+    rightFootTracker:
+      posOffset: []
+      rotOffset: []
+    leftControllerTracker:
+      posOffset: []
+      rotOffset: []
+    rightControllerTracker:
+      posOffset: []
+      rotOffset: []
   generator: {fileID: 3141507884253300468, guid: db7974e48edccd94b81a308beffc11ea,
     type: 3}
   interactionZoneOffset: {x: 0, y: -2, z: 0.8}
   interactionZone: {fileID: 0}
   grabberTriggerRadius: 0.1
-  config: {fileID: 0}
+  rigConfig: {fileID: 0}
   OnFinished:
     m_PersistentCalls:
       m_Calls: []
   leftGrabber: {fileID: 0}
   rightGrabber: {fileID: 0}
+  activateIK: 1
+  commands: {fileID: 0}
+  handAnimationController: {fileID: 0}
 --- !u!114 &6134176247903083179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +221,8 @@ MonoBehaviour:
   disableLimits: 0
   upperBodyNames: []
   solverIterations: 255
+  handCenterOffset: {x: 0, y: 0.08, z: 0}
+  useHandBalls: 1
 --- !u!114 &2548320742715012015
 MonoBehaviour:
   m_ObjectHideFlags: 0

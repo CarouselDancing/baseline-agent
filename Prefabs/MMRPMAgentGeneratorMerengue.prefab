@@ -124,6 +124,8 @@ MonoBehaviour:
   - RightForeArm
   - RightHand
   solverIterations: 1000
+  handCenterOffset: {x: 0, y: 0.08, z: 0}
+  useHandBalls: 1
 --- !u!114 &6127051739409072689
 MonoBehaviour:
   m_ObjectHideFlags: 0
