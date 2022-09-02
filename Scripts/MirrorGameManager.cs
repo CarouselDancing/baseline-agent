@@ -54,6 +54,8 @@ public class MirrorGameManager : RESTInterface
     public UnityEvent onStart;
     public UnityEvent onStop;
 
+    public bool registerServerOnline = true;
+
     void Awake(){
         
         if(Instance == null){
@@ -197,16 +199,14 @@ public class MirrorGameManager : RESTInterface
         
         this.host = true;
         this.client = false;
-        RegisterServer();
+        if(registerServerOnline)RegisterServer();
         if(loadAsync){
             StartCoroutine(LoadYourAsyncScene(mainScene));
         }else{    
             SceneManager.LoadScene(mainScene);
         }
     }
-
-    public void RegisterServer(){
-        Debug.Log("register server");
+    public ServerEntry getServerEntry(){
         var url = LocalIPAddress();
         var serverEntry = new ServerEntry(){
             name = url,
@@ -214,6 +214,12 @@ public class MirrorGameManager : RESTInterface
             port = config.port,
             protocol = config.protocol
         };
+        return serverEntry;
+    }
+
+    public void RegisterServer(){
+        Debug.Log("register server");
+        var serverEntry = getServerEntry();
         string data = "";
         var setting = new JsonSerializerSettings();
         data = JsonConvert.SerializeObject(serverEntry, setting);
@@ -221,14 +227,7 @@ public class MirrorGameManager : RESTInterface
     }
 
     public void UnregisterServer(){
-
-        var url = LocalIPAddress();
-        var serverEntry = new ServerEntry(){
-            name = url,
-            address = url,
-            port = config.port,
-            protocol = config.protocol
-        };
+        var serverEntry = getServerEntry();
         string data = "";
         var setting = new JsonSerializerSettings();
         data = JsonConvert.SerializeObject(serverEntry, setting);
@@ -246,6 +245,7 @@ public class MirrorGameManager : RESTInterface
         if (url != "") config.url = url;
         if (protocol != "") config.protocol = protocol;
         if (port >-1) config.port = port;
+        ConfigureTrackers();
         if(loadAsync){
             StartCoroutine(LoadYourAsyncScene(mainScene));
         }else{    
@@ -256,7 +256,8 @@ public class MirrorGameManager : RESTInterface
     public void StartServer()
     {
         this.server = true;
-        RegisterServer();
+        if(registerServerOnline)RegisterServer();
+        ConfigureTrackers();
         if(loadAsync){
             StartCoroutine(LoadYourAsyncScene(mainScene));
         }else{    
@@ -268,7 +269,7 @@ public class MirrorGameManager : RESTInterface
         var trackerConfig = Camera.main.GetComponent<VRRigConfig>();
         if(trackerConfig !=null)trackerConfig.DisableAllTargets();
         ShowMessage("ToMainMenu ");
-        if (host || server)UnregisterServer();
+        if (registerServerOnline && (host || server))UnregisterServer();
         StopMirror();
         this.host = false;
         this.server = false;
@@ -302,22 +303,17 @@ public class MirrorGameManager : RESTInterface
     }
 
 
-    //https://answers.unity.com/questions/1544275/how-to-get-local-ip-in-unity-201824.html
+    //https://answers.unity.com/questions/1731994/get-the-device-ip-address-from-unity.html
     public static string LocalIPAddress()
-    {
-        IPHostEntry host;
-        string localIP = "127.0.0.1";
-        host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (IPAddress ip in host.AddressList)
-        {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
-                localIP = ip.ToString();
-                break;
-            }
-        }
-        return localIP;
-    }
+     {
+         return Dns.GetHostEntry(Dns.GetHostName())
+             .AddressList.First(
+                 f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+             .ToString();
+     }    
+
+
+
     // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
