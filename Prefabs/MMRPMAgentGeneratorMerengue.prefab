@@ -176,7 +176,8 @@ MonoBehaviour:
   minStartDistance: 0.1
   armatureName: Armature
   rootName: Hips
-  mmFilename: database_merengue_raw.bin
+  mmFilenames:
+  - database_merengue_raw.bin
   mmSettings:
     ignoreRangeEnd: 0
     version: 1
@@ -210,6 +211,7 @@ MonoBehaviour:
       boneIdx: 0
       type: 3
       weight: 1.25
+    format: 0
   mmControllerSettings:
     visScale: 0.05
     forceSearchTime: 0.5

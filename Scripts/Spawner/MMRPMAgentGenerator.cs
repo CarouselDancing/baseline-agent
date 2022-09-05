@@ -14,7 +14,7 @@ namespace Carousel{
     
 public class MMRPMAgentGenerator : RPMAgentGenerator
 {
-    public string mmFilename;
+    public List<string> mmFilenames;
     public MMSettings mmSettings;
     public MMControllerSettigs mmControllerSettings;
     public List<MMRuntimeRetargetingV1.RetargetingMap> retargetingMapV1;
@@ -56,7 +56,7 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
     override public NetworkAgentController ConfigurePoseProvider(GameObject poseProvider){
         var ac = GetComponent<MMNetworkAgentController>();
         var mm = poseProvider.AddComponent<MotionMatching.MotionMatching>();
-        mm.filename = mmFilename;
+        mm.filenames = mmFilenames;
         mm.settings = mmSettings;
        
         var controller = poseProvider.AddComponent<TargetLocomotionController>();
