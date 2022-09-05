@@ -226,6 +226,7 @@ MonoBehaviour:
     maxDegreesPerSecond: 90
     startConstraint: 0300000004000000
     useStartConstraint: 1
+    adaptControlWeight: 1
   retargetingMapV1:
   - src: 0
     dst: ROOT

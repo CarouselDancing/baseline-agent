@@ -70,6 +70,7 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         controller.useMotionAngularVelocity = useVelocity;
         controller.useAnnotationConstraint = mmControllerSettings.useStartConstraint;
         controller.annotationConstraint = mmControllerSettings.startConstraint;
+        controller.adaptControlWeight = mmControllerSettings.adaptControlWeight;
         // add compositor that combines input from motion matching retargeting and mirroring
         var compositor= poseProvider.AddComponent<PoseCompositor>();
         compositor.posers = new List<CharacterPoser>();
