@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using UnityEngine.Events;
 using kcp2k;
+using Carousel;
 
 [Serializable]
 public struct NetworkManagerPrefabs{
@@ -32,8 +33,6 @@ public struct ServerEntry{
 
 public class MirrorGameManager : RESTInterface
 {
-    public GameObject loadingscreen;
-    public Slider slider;
     public static MirrorGameManager Instance;
     public DebugMessage debugMessage;
     public UserMenu userMenu;
@@ -45,16 +44,13 @@ public class MirrorGameManager : RESTInterface
     public bool host;
     public bool server;
     public bool client;
-    
-    
-    public string lobbyScene = "Lobby";
-    public string mainScene = "main";
-    public bool loadAsync;
 
     public UnityEvent onStart;
     public UnityEvent onStop;
 
     public bool registerServerOnline = true;
+    public LoadingScreenUI loadingScreenUI;
+    public SceneLoader sceneLoader;
 
     void Awake(){
         
@@ -63,18 +59,17 @@ public class MirrorGameManager : RESTInterface
         }else{
             GameObject.DestroyImmediate(gameObject); //singleton monobehavior
         }
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        
     }
 
 
     void Start()
     {
 
-        if(loadAsync){
-            StartCoroutine(LoadYourAsyncScene(lobbyScene));
-        }else{    
-            SceneManager.LoadScene(lobbyScene);
-        }
+        sceneLoader = gameObject.AddComponent<SceneLoader>();
+        sceneLoader.loadingScreenUI = loadingScreenUI;
+        sceneLoader.mainSceneLoaded.AddListener(OnMainSceneLoaded);
+        sceneLoader.LoadLobbyScene();
         LoadConfig();
         ConfigureTrackers();
         DontDestroyOnLoad(gameObject);
@@ -200,12 +195,9 @@ public class MirrorGameManager : RESTInterface
         this.host = true;
         this.client = false;
         if(registerServerOnline)RegisterServer();
-        if(loadAsync){
-            StartCoroutine(LoadYourAsyncScene(mainScene));
-        }else{    
-            SceneManager.LoadScene(mainScene);
-        }
+        sceneLoader.LoadMainScene();
     }
+
     public ServerEntry getServerEntry(){
         var url = LocalIPAddress();
         var serverEntry = new ServerEntry(){
@@ -246,11 +238,7 @@ public class MirrorGameManager : RESTInterface
         if (protocol != "") config.protocol = protocol;
         if (port >-1) config.port = port;
         ConfigureTrackers();
-        if(loadAsync){
-            StartCoroutine(LoadYourAsyncScene(mainScene));
-        }else{    
-            SceneManager.LoadScene(mainScene);
-        }
+        sceneLoader.LoadMainScene();
     }
 
     public void StartServer()
@@ -258,12 +246,10 @@ public class MirrorGameManager : RESTInterface
         this.server = true;
         if(registerServerOnline)RegisterServer();
         ConfigureTrackers();
-        if(loadAsync){
-            StartCoroutine(LoadYourAsyncScene(mainScene));
-        }else{    
-            SceneManager.LoadScene(mainScene);
-        }
+        sceneLoader.LoadMainScene();
     }
+
+
     public void OpenMainMenu()
     {
         var trackerConfig = Camera.main.GetComponent<VRRigConfig>();
@@ -274,55 +260,28 @@ public class MirrorGameManager : RESTInterface
         this.host = false;
         this.server = false;
         this.client = false;
-        if(loadAsync){
-            StartCoroutine(LoadYourAsyncScene(lobbyScene));
-        }else{
-            SceneManager.LoadScene(lobbyScene);
-        }
+        sceneLoader.LoadLobbyScene();
     }
 
     public void ExitGame()
     {
         Application.Quit();
     }
-    
-    IEnumerator LoadYourAsyncScene(string s)
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(s);
-        if(loadingscreen != null) loadingscreen.SetActive(true);
-        // asyncLoad.allowSceneActivation = false;
-        // Wait until the asynchronous scene fully loads
-        while (!asyncLoad.isDone)
-        {
-            float loading = Mathf.Clamp01(asyncLoad.progress / .9f);
-            if(slider != null) slider.value = loading;
-            yield return null;
-        } 
-        if(loadingscreen != null) loadingscreen.SetActive(false);
-        
-    }
-
 
     //https://answers.unity.com/questions/1731994/get-the-device-ip-address-from-unity.html
     public static string LocalIPAddress()
-     {
+    {
          return Dns.GetHostEntry(Dns.GetHostName())
              .AddressList.First(
                  f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
              .ToString();
-     }    
+    }    
 
 
-
-    // called second
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnMainSceneLoaded()
     {
-        ShowMessage("OnSceneLoaded "+ scene.name);
-        if(scene.name == mainScene){
-            StartMirror();
-        } 
+        StartMirror();
     }
-
 
     public void GrabLeftHand(){
         if (player== null) return;
