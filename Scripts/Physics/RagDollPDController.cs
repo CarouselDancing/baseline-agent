@@ -502,6 +502,7 @@ public class RagDollPDController : RagDollPDControllerBase
         rootJoint.xMotion = ConfigurableJointMotion.Locked;
         rootJoint.yMotion = ConfigurableJointMotion.Locked;
         rootJoint.zMotion = ConfigurableJointMotion.Locked;
+        rootJoint.enablePreprocessing = enableRootJointPreprocessing;
         rootJoint.connectedArticulationBody = root;
     }
 }

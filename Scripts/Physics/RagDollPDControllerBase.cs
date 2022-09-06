@@ -40,6 +40,7 @@ public abstract class RagDollPDControllerBase : MonoBehaviour
     public bool alignReferenceRoot = true;
     public ConfigurableJoint rootJoint;
     public bool createRootJoint = false;
+    public bool enableRootJointPreprocessing = true;
     protected Transform kinematicReferenceRoot;
 
     public float maximumRootDistance = 0.9f;

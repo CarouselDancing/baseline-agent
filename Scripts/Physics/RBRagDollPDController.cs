@@ -247,6 +247,7 @@ public class RBRagDollPDController : RagDollPDControllerBase
         rootJoint.xMotion = ConfigurableJointMotion.Locked;
         rootJoint.yMotion = ConfigurableJointMotion.Locked;
         rootJoint.zMotion = ConfigurableJointMotion.Locked;
+        rootJoint.enablePreprocessing = enableRootJointPreprocessing;
         rootJoint.connectedBody = root;
     }
 
