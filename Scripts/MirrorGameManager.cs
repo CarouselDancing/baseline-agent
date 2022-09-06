@@ -49,7 +49,7 @@ public class MirrorGameManager : RESTInterface
     public UnityEvent onStop;
 
     public bool registerServerOnline = true;
-    public LoadingScreenUI loadingScreenUI;
+    public LoadingScreen loadingScreen;
     public SceneLoader sceneLoader;
 
     void Awake(){
@@ -67,7 +67,12 @@ public class MirrorGameManager : RESTInterface
     {
 
         sceneLoader = gameObject.AddComponent<SceneLoader>();
-        sceneLoader.loadingScreenUI = loadingScreenUI;
+        var assetDatabaseText = Resources.Load<TextAsset>("assetDatabase").text;
+        if (assetDatabaseText != null){
+            sceneLoader.assetDB = AssetDatabase.Init(assetDatabaseText);
+        }else{
+            sceneLoader.assetDB = new AssetDatabase();
+        }
         sceneLoader.mainSceneLoaded.AddListener(OnMainSceneLoaded);
         sceneLoader.LoadLobbyScene();
         LoadConfig();
@@ -160,7 +165,7 @@ public class MirrorGameManager : RESTInterface
         config = ClientConfig.GetInstance();
         if(config == null){
             // string configFile = Path.Combine(Application.streamingAssetsPath, "config.json");
-                var configText = Resources.Load<TextAsset>("config").text;
+            var configText = Resources.Load<TextAsset>("config").text;
             // string configText = File.ReadAllText(configFile);
             config = ClientConfig.InitInstance(configText);
             ShowMessage("Mirror Game Manager: loaded config "+configText);
@@ -283,6 +288,15 @@ public class MirrorGameManager : RESTInterface
         StartMirror();
     }
 
+    public IEnumerator ShowLoadingScreen(string info, AsyncOperation operation){
+        if(loadingScreen != null){
+            yield return loadingScreen.Show(info, operation);
+        }else{
+            yield return null;
+        }
+    }
+
+
     public void GrabLeftHand(){
         if (player== null) return;
         player.commands.GrabLeftHand();
@@ -311,6 +325,5 @@ public class MirrorGameManager : RESTInterface
         
     }
     
-
 
 }
