@@ -34,7 +34,6 @@ public class RagDollPDController : RagDollPDControllerBase
     public Vector3 rootForce;
     public Vector3 rootTorque;
     
-    public bool IsMirroring;
 
      
     void FixedUpdate()
