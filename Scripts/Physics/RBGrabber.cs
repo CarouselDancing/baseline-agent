@@ -26,6 +26,9 @@ public class RBGrabber : MonoBehaviour
     public float grabberRadius = 0.2f;
     public string layerName = "marathon";
     public int layer;
+    public bool useBreakForce = true;
+    public float breakForce = 10000f;
+    public bool enablePreprocessing = true;
 
     public GameObject desiredGrabTarget;
     
@@ -117,7 +120,8 @@ public class RBGrabber : MonoBehaviour
         joint.xMotion = ConfigurableJointMotion.Locked;
         joint.yMotion = ConfigurableJointMotion.Locked;
         joint.zMotion = ConfigurableJointMotion.Locked;
-
+        if (useBreakForce) joint.breakForce = breakForce;
+        joint.enablePreprocessing = enablePreprocessing;
         if(ab != null) {
             Debug.Log("connect "+ name+ " " + ab.name);
             joint.connectedArticulationBody = ab;
