@@ -92,6 +92,12 @@ public class MMNetworkAgentController : NetworkAgentController
        } 
     }
 
+    override public void ChangeDanceStyle(){
+       locomotionController.SwitchToNextDatabase();
+    }
+
+    
+
 }
 }
 }

@@ -70,10 +70,16 @@ public class UserMenu : MonoBehaviour
        _userCommands?.DeactivatePairDance();
    } 
 
+   public void ChangeDanceStyle(){
+        MirrorGameManager.ShowMessage("ChangeDanceStyle");
+       _userCommands?.ChangeDanceStyle();
+   } 
+
    public void ToggleAgentDancing(){
         MirrorGameManager.ShowMessage("ToggleAgentDancing");
        _userCommands?.ToggleAgentDancing();
    } 
+
    public void RemoveAgent(){
         MirrorGameManager.ShowMessage("RemoveAgent");
        _userCommands?.RemoveAgent();

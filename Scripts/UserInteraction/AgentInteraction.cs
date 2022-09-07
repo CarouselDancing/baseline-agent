@@ -64,6 +64,9 @@ public class AgentInteraction : CollectableObject
     public void DeactivateIK(int hand){
         agent?.DeactivateIK(hand);
     }
+    public void ChangeDanceStyle(){
+        agent?.ChangeDanceStyle();
+    }
 
     }  
 }

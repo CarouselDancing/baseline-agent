@@ -21,6 +21,10 @@ public class UserMenuEditor : Editor
         {
             controller.ToggleMirror();
         }   
+        if (GUILayout.Button("ChangeDanceStyle"))
+        {
+            controller.ChangeDanceStyle();
+        }   
         if (GUILayout.Button("Guess Height"))
         {
             controller.SetHeight();

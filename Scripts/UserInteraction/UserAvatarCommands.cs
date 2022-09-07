@@ -109,6 +109,7 @@ public class UserAvatarCommands : NetworkBehaviour
         userAvatar.interactionZone.DeactivateFollower();
         
     } 
+
     public void ToggleAgentDancing(){
         CmdToggleAgentDancing();
     }
@@ -116,6 +117,16 @@ public class UserAvatarCommands : NetworkBehaviour
     [Command]
     void CmdToggleAgentDancing(){
         userAvatar.interactionZone.ToggleDancing();
+        
+    }
+
+    public void ChangeDanceStyle(){
+        CmdChangeDanceStyle();
+    }
+
+    [Command]
+    void CmdChangeDanceStyle(){
+        userAvatar.interactionZone.ChangeDanceStyle();
         
     }
 

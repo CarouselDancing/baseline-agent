@@ -156,6 +156,10 @@ public class PlayerInteractionZone : ObjectCollectionZone
         }
     }
 
+    public void ChangeDanceStyle(){
+        if(agent != null)agent.ChangeDanceStyle();
+    }
+
 }
 
 }
