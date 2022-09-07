@@ -109,6 +109,7 @@ public class MMRPMAgentGenerator : RPMAgentGenerator
         ac.pdController.createRootJoint = true;
         ac.pdController.mode = PDControllerMode.OFF;
         ac.pdController.delayedActivation = true;
+        ac.pdController.solverIterations = settings.solverIterations;
         AddNetworkAgentInteraction(poseProvider.transform, ac);
         return ac;
     }
