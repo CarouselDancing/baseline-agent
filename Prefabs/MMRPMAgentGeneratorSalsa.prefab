@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1407865044821170804}
   - component: {fileID: -2117493834711139991}
   m_Layer: 0
-  m_Name: MMRPMAgentGeneratorMerengue
+  m_Name: MMRPMAgentGeneratorSalsa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
   - RightArm
   - RightForeArm
   - RightHand
-  solverIterations: 200
+  solverIterations: 1000
   handCenterOffset: {x: 0, y: 0.08, z: 0}
   useHandBalls: 1
 --- !u!114 &6127051739409072689
@@ -177,11 +177,11 @@ MonoBehaviour:
   armatureName: Armature
   rootName: Hips
   mmFilenames:
-  - database_merengue_raw3.npz
+  - salsa_database_raw2.bin
   mmSettings:
     ignoreRangeEnd: 0
     version: 1
-    databaseType: 3
+    databaseType: 0
     features:
     - bone: 5
       boneIdx: 0
@@ -211,22 +211,21 @@ MonoBehaviour:
       boneIdx: 0
       type: 3
       weight: 1.25
-    format: 1
+    format: 0
   mmControllerSettings:
     visScale: 0.05
     forceSearchTime: 0.5
     simulationVelocityHalflife: 0.27
     simulationRotationHalflife: 0.27
-    predictionDistance: 40
+    predictionDistance: 60
     maxSpeed: 0.5
     minSpeed: 0.1
     startFrameIdx: 0
-    speedFactor: 2
+    speedFactor: 1
     useInterpolation: 1
     maxDegreesPerSecond: 90
     startConstraint: 0300000004000000
-    useStartConstraint: 1
-    adaptControlWeight: 0
+    useStartConstraint: 0
   retargetingMapV1:
   - src: 0
     dst: ROOT
@@ -576,7 +575,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 6be95a84477d8b54fbbaff03fac3ea41
+  m_AssetId: 55b43ce7133ef4745b9135b502183422
   hasSpawned: 0
 --- !u!114 &1407865044821170804
 MonoBehaviour:
