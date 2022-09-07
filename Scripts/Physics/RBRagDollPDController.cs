@@ -34,6 +34,11 @@ public class RBRagDollPDController : RagDollPDControllerBase
             OnEpisodeBegin();
             return;
         }
+        if(createRootJoint && rootBodyControlMode == RootBodyControlMode.KINEMATIC){
+            root.isKinematic = true;
+            root.transform.position = kinematicReferenceRoot.position;
+            root.transform.rotation = kinematicReferenceRoot.rotation;
+        }
         if(activateRootRepair)HandleBrokenRoot();
         switch (mode){
             case PDControllerMode.OFF:
@@ -96,6 +101,7 @@ public class RBRagDollPDController : RagDollPDControllerBase
    public override void OnEpisodeBegin()
     {
 
+        rootBodyControlMode = RootBodyControlMode.KINEMATIC;
         if (!_hasLazyInitialized && animationSrc != null)
         {
          
@@ -156,7 +162,7 @@ public class RBRagDollPDController : RagDollPDControllerBase
 
             if(createRootJoint){
                 CopyBodyStates();
-                CreateRootJoint();
+                if(rootBodyControlMode == RootBodyControlMode.JOINT)CreateRootJoint();
             }
             
         }

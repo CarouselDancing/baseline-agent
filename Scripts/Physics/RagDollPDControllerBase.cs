@@ -22,6 +22,11 @@ public enum PDControllerMode{
 
 public abstract class RagDollPDControllerBase : MonoBehaviour
 {
+    public enum RootBodyControlMode{
+        NONE,
+        JOINT,
+        KINEMATIC
+    }
     [Serializable]
     public class BodyMap{
         public Transform src;
@@ -41,6 +46,7 @@ public abstract class RagDollPDControllerBase : MonoBehaviour
     public ConfigurableJoint rootJoint;
     public bool createRootJoint = false;
     public bool enableRootJointPreprocessing = true;
+    public RootBodyControlMode rootBodyControlMode = RootBodyControlMode.JOINT;
     protected Transform kinematicReferenceRoot;
 
     public float maximumRootDistance = 0.9f;
