@@ -51,6 +51,7 @@ public class MirrorGameManager : RESTInterface
     public bool registerServerOnline = true;
     public LoadingScreen loadingScreen;
     public SceneLoader sceneLoader;
+    public bool loadConfigFromStreamAssets = false;
 
     void Awake(){
         
@@ -164,9 +165,13 @@ public class MirrorGameManager : RESTInterface
       
         config = ClientConfig.GetInstance();
         if(config == null){
-            // string configFile = Path.Combine(Application.streamingAssetsPath, "config.json");
-            var configText = Resources.Load<TextAsset>("config").text;
-            // string configText = File.ReadAllText(configFile);
+            string configText = "";
+            if(loadConfigFromStreamAssets){
+                string configFile = Path.Combine(Application.streamingAssetsPath, "config.json");
+                configText = File.ReadAllText(configFile);
+            }else{
+                configText = Resources.Load<TextAsset>("config").text;
+            }
             config = ClientConfig.InitInstance(configText);
             ShowMessage("Mirror Game Manager: loaded config "+configText);
         }
