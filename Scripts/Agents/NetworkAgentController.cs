@@ -70,7 +70,8 @@ public class NetworkAgentController  : NetworkBehaviour
     public void LockToLeader(Transform t){
         
         Debug.Log("lock to leader", this.player.GetComponent<Animator>());
-        lookat.targetTransform = Camera.main.transform;//this.player.GetComponent<Animator>().GetBoneTransform(lookat.targetBone);
+        //lookat.targetTransform = Camera.main.transform;
+        lookat.targetTransform = this.player.GetComponent<Animator>().GetBoneTransform(lookat.targetBone);
         target = t;
     }
 
