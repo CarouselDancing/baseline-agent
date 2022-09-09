@@ -99,6 +99,7 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public void ToggleFollower(){
         if(IsLeading){
             DeactivateFollower();
+            DeactivateAgent();
         }else{
             ActivateFollower();
         }
