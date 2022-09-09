@@ -9,11 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1875281616008088904}
-  - component: {fileID: 1875281616008088907}
   - component: {fileID: 1875281616008088758}
   - component: {fileID: 1875281616008088905}
   m_Layer: 0
-  m_Name: RoomConfig
+  m_Name: RoomManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,27 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1875281616008088907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1875281616008088906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70b9702a136756b489e59eb4d3884bca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StartZones:
-  - {fileID: 0}
-  rpmAvatars:
-  - name: female
-    url: https://d1a370nemizbjq.cloudfront.net/ab1f14de-ce56-412a-b29b-54b78408e4db.glb
-  AnimationOverriders:
-  - {fileID: 22100000, guid: 9aee9c9f814b3c84990681c720b293f3, type: 2}
-  - {fileID: 22100000, guid: 3719e44dde685fd4fbf95f52c22077f9, type: 2}
-  - {fileID: 22100000, guid: 50244ad647a771245ae963f17c61b017, type: 2}
 --- !u!114 &1875281616008088758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,10 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  generator: {fileID: 3141507884253300468, guid: 9519454af99d9e44980f4b956ff48712,
-    type: 3}
-  cube: {fileID: 2712723670520404936, guid: ddf185027c154344eb86ff0b579c1b70, type: 3}
-  roomConfig: {fileID: 1875281616008088907}
+  generator: {fileID: 3141507884253300468, guid: 1c6639dacf64b7d4ca605151b2d04612, type: 3}
+  roomConfig: {fileID: 0}
   numAgents: 1
 --- !u!114 &1875281616008088905
 MonoBehaviour:
@@ -89,5 +65,5 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 63fe2c7df3cc2f5458a4b7ce25131ec4
+  m_AssetId: d7570f4fbad26cc488c63e090136631f
   hasSpawned: 0

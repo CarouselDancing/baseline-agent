@@ -131,23 +131,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1875281616008088758, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
-        type: 3}
-      propertyPath: cube
-      value: 
-      objectReference: {fileID: 2712723670520404936, guid: ddf185027c154344eb86ff0b579c1b70,
-        type: 3}
-    - target: {fileID: 1875281616008088758, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
-        type: 3}
-      propertyPath: generator
-      value: 
-      objectReference: {fileID: 3141507884253300468, guid: 9519454af99d9e44980f4b956ff48712,
-        type: 3}
-    - target: {fileID: 1875281616008088758, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
-        type: 3}
-      propertyPath: numAgents
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1875281616008088904, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
         type: 3}
       propertyPath: m_RootOrder
@@ -350,7 +333,7 @@ Terrain:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862157339}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 187b28cf7237ab3418c31a96f17cb967, type: 2}
   m_TreeDistance: 5000
@@ -506,7 +489,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1570249207}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
