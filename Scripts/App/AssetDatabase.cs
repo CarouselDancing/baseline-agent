@@ -17,6 +17,7 @@ namespace Carousel{
         public string url;
         public bool isRemote;
         public bool isScene;
+        public Vector3 offset = new Vector3(0,0,0);
         public Vector3 scale = new Vector3(1,1,1);
         public List<string> scripts = new List<string>();
         public AssetBundle loadedBundle;
@@ -92,6 +93,7 @@ namespace Carousel{
         	    GameObject assetPrefab = assetBundle.LoadAsset<GameObject>(desc.assetName);  
                 GameObject o = GameObject.Instantiate(assetPrefab);
                 o.transform.localScale = desc.scale;
+                o.transform.position += desc.offset;
                 assetBundle.Unload(false);
                 
             }
@@ -109,6 +111,7 @@ namespace Carousel{
                 GameObject assetPrefab = assetRequest.asset as GameObject;  
                 GameObject o = GameObject.Instantiate(assetPrefab);
                 o.transform.localScale = desc.scale;
+                o.transform.position += desc.offset;
                 assetBundle.Unload(false) ;
                  
             }
