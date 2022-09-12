@@ -292,6 +292,9 @@ public class MirrorGameManager : MonoBehaviour
         player.handAnimationController.OpenRightHand();
         
     }
+
+    public void SyncMusic(){
+    }
     
 
 }

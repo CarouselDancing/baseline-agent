@@ -17,14 +17,22 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public PlayerControllerBase player;
     public Transform partnerTarget;
     public Dictionary<int, Transform> ikTargets;
+    public PlayerControllerBase otherPlayer;
 
     override public void  OnTriggerEnter (Collider other){
         int prevCount = collection.Count;
-        var a= other.GetComponent<AgentInteraction>();
+
+        var a = other.GetComponent<AgentInteraction>();
         if(a != null && !collection.Contains(a)) {
             a.SetHighlightMode(true);
             collection.Add(a);
         }
+        /*var pi = other.GetComponent<PlayerInteractionZone>();
+        //only one player should be in the interaction zone
+        if( pi != null && otherPlayer == null && pi != this) {
+            otherPlayer = pi.player;
+            MirrorGameManager.Instance.userMenu.SetOtherPlayerInteractability(true);
+        }*/
         if(prevCount == 0 && collection.Count > 0){
             MirrorGameManager.Instance.userMenu.SetAgentInteractability(true);
         } 
@@ -36,6 +44,11 @@ public class PlayerInteractionZone : ObjectCollectionZone
             a.SetHighlightMode(false);
             collection.Remove(a);
         }
+        /*var pi = other.GetComponent<PlayerInteractionZone>();
+        if( pi != null && pi.player == otherPlayer) {
+            otherPlayer = null;
+            MirrorGameManager.Instance.userMenu.SetOtherPlayerInteractability(false);
+        }*/
         if(collection.Count == 0) {
             MirrorGameManager.Instance.userMenu.SetAgentInteractability(false);
         }

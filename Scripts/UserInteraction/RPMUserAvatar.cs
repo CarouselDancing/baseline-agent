@@ -35,6 +35,7 @@ public class RPMUserAvatar : RPMAvatarManager
     public bool activateIK = true;
     public UserAvatarCommands commands;
     public HandAnimationController handAnimationController;
+    //public UserConnectionVisualization userConnectionVis;
 
     override public void Start()
     {
@@ -106,7 +107,8 @@ public class RPMUserAvatar : RPMAvatarManager
         handAnimationController = avatar.AddComponent<HandAnimationController>();
         if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
         MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
-        
+        //userConnectionVis = new UserConnectionVisualization();
+        //userConnectionVis.Init(rigConfig.LeftHand, rigConfig.RightHand);
         OnFinished?.Invoke();
       
     }
@@ -249,7 +251,31 @@ public class RPMUserAvatar : RPMAvatarManager
         }
     }
 
-    
+    public void ConnectToOtherPlayer(){
+        /*
+        if(interactionZone.otherPlayer == null)return;
+        RPMUserAvatar otherPlayerAvatar = interactionZone.otherPlayer.transform.parent.GetComponent<RPMUserAvatar>();
+        if(otherPlayerAvatar == null)return;
+        var leftTarget = otherPlayerAvatar.leftGrabber.transform;
+        var rightTarget = otherPlayerAvatar.rightGrabber.transform;
+        userConnectionVis.Activate(leftTarget, rightTarget);
+
+        //tell server to tell all clients to let this player connect to me
+        if(IsOwner)otherPlayerAvatar.commands.CmdConnectToOtherPlayer();*/
+
+    }
+
+    public void DisconnectFromOtherPlayer(){ 
+        /*
+        if(interactionZone.otherPlayer == null)return;
+        RPMUserAvatar otherPlayerAvatar = interactionZone.otherPlayer.transform.parent.GetComponent<RPMUserAvatar>();
+        if(otherPlayerAvatar == null)return;
+        //tell server to tell all clients to let this player diconnect from me
+        if(IsOwner)otherPlayerAvatar.commands.CmdDisconnectFromOtherPlayer();
+        userConnectionVis.Deactivate();*/
+    }
+
+
 
 
 }

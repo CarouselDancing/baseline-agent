@@ -8,10 +8,12 @@ public class UserMenu : MonoBehaviour
 {
    public List<Selectable> agentElements;
    public List<Selectable> avatarElements;
+   public List<Selectable> otherPlayerElements;
    public RPMUserAvatar _userAvatar;
    public UserAvatarCommands _userCommands;
    public bool isAgentInteractable = false;
    public bool isAvatarInteractable = false;
+   public bool isOtherPlayerInteractable = false;
 
 
     public void Start(){
@@ -105,13 +107,19 @@ public class UserMenu : MonoBehaviour
    public void ExitToLobby(){
         MirrorGameManager.Instance.OpenMainMenu();
    }
-
+   public void SetOtherPlayerInteractability(bool isActive){
+    isOtherPlayerInteractable = isActive;
+    foreach(var e in otherPlayerElements){
+        e.interactable  = isOtherPlayerInteractable;
+    }
+   }   
    public void SetAgentInteractability(bool isActive){
     isAgentInteractable = isActive;
     foreach(var e in agentElements){
         e.interactable  = isAgentInteractable;
     }
    }   
+
    public void SetAvatarInteractability(bool isActive){
     isAvatarInteractable = isActive;
     foreach(var e in avatarElements){
@@ -121,5 +129,20 @@ public class UserMenu : MonoBehaviour
 
    public void ToggleConsole(){
          MirrorGameManager.ToggleConsole();
+   }
+
+   public void ConnectToOtherPlayer(){
+       _userAvatar?.ConnectToOtherPlayer();
+
+   }
+
+   public void DisconnectFromOtherPlayer(){
+       _userAvatar?.DisconnectFromOtherPlayer();
+
+   }
+
+   public void SyncMusic(){
+       _userCommands?.SyncMusic();
+
    }
 }

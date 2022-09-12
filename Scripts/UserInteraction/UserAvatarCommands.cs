@@ -164,5 +164,53 @@ public class UserAvatarCommands : NetworkBehaviour
         userAvatar.SetHeight();
     }
 
+    //tell server to tell client to connect to the other player
+    [Command]
+    public void CmdConnectToOtherPlayer(){
+       ConnectToOtherPlayerOnClients();
+        
+    }
+
+    //tell clients to connect to the other player
+    [ClientRpc]
+    public void ConnectToOtherPlayerOnClients(){
+        
+        userAvatar.ConnectToOtherPlayer();
+    }
+
+
+    //tell server to tell client to disconnect from the other player
+    [Command]
+    public void CmdDisconnectFromOtherPlayer(){
+       DisconnectFromOtherPlayerOnClients();
+        
+    }
+
+    //tell clients to disconnect from the other player
+    [ClientRpc]
+    public void DisconnectFromOtherPlayerOnClients(){
+        
+        userAvatar.DisconnectFromOtherPlayer();
+    }
+
+    
+    
+    public void SyncMusic(){
+        CmdSyncMusic();
+    }
+
+    //reset music on server
+    [Command]
+    public void CmdSyncMusic(){
+        MirrorGameManager.Instance?.SyncMusic();
+        SyncMusicOnClients();
+    }
+
+    //reset music on clients
+    [ClientRpc]
+    public void SyncMusicOnClients(){
+        
+        MirrorGameManager.Instance?.SyncMusic();
+    }
 
 }
