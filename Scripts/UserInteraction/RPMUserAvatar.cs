@@ -36,6 +36,7 @@ public class RPMUserAvatar : RPMAvatarManager
     public UserAvatarCommands commands;
     public HandAnimationController handAnimationController;
     //public UserConnectionVisualization userConnectionVis;
+    public bool isObserver = false;
 
     override public void Start()
     {
@@ -47,7 +48,11 @@ public class RPMUserAvatar : RPMAvatarManager
         if (IsOwner)
         {
             MirrorGameManager.ShowMessage(" GlobalGameState.GetInstance");
-            
+            isObserver= MirrorGameManager.Instance.config.isObserver;
+            if (isObserver){
+                CmdSetObserver(isObserver);
+                return;
+            }
             var avatarIndex = clientConfig.userAvatar;
             AvatarURL = clientConfig.rpmAvatars[avatarIndex].url;
             
@@ -107,8 +112,8 @@ public class RPMUserAvatar : RPMAvatarManager
         handAnimationController = avatar.AddComponent<HandAnimationController>();
         if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
         MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
-        //userConnectionVis = new UserConnectionVisualization();
-        //userConnectionVis.Init(rigConfig.LeftHand, rigConfig.RightHand);
+        userConnectionVis = new UserConnectionVisualization();
+        userConnectionVis.Init(rigConfig.LeftHand, rigConfig.RightHand);
         OnFinished?.Invoke();
       
     }
@@ -276,6 +281,19 @@ public class RPMUserAvatar : RPMAvatarManager
     }
 
 
+    [Command]
+    public void CmdSetObserver(bool newValue)
+    {
+        Debug.Log("CmdSetObserver");
+        isObserver = newValue;
+        SetObserverOnClient(newValue);
+    }
+
+    [ClientRpc]
+    void SetObserverOnClient(bool newValue)
+    {
+        if(!IsOwner) isObserver = newValue;
+    }
 
 
 }
