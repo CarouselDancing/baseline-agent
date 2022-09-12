@@ -10,14 +10,7 @@ using System.Linq;
 
 
 
-[Serializable]
-public class ServerRegistryConfig{
-    public string protocol = "https";
-    public int port = 8888;
-    public string url = "motion.dfki.de";
-    public bool usePort = true;
-    public bool usePortWorkAround = true;
-}
+
 
 public struct ServerEntry{
     public string name;
