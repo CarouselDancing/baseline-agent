@@ -11,8 +11,8 @@ using System.Linq;
 
 
 
-
-public struct ServerEntry{
+[Serializable]
+public class ServerEntry{
     public string name;
     public string address;
     public int port;
@@ -24,7 +24,7 @@ public class ServerRegistry : MonoBehaviour{
 
     public RESTInterface serverInterface;
     public ClientConfig _config;
-
+    public ServerEntry  defaultServerEntry;
 
     void Start(){
        InitInterface();
@@ -43,6 +43,10 @@ public class ServerRegistry : MonoBehaviour{
         serverInterface.port = _config.serverRegistryConfig.port;
         serverInterface.usePort= _config.serverRegistryConfig.usePort;
         serverInterface.usePortWorkAround= _config.serverRegistryConfig.usePortWorkAround;
+        if (_config.serverRegistryConfig.defaultServer!= ""){
+            var address = _config.serverRegistryConfig.defaultServer;
+            defaultServerEntry = new ServerEntry(){name = address, address = address, port=_config.port, protocol=_config.protocol };
+        }
     }
 
     public void RegisterServer(){
