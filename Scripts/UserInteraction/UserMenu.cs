@@ -132,12 +132,12 @@ public class UserMenu : MonoBehaviour
    }
 
    public void ConnectToOtherPlayer(){
-       _userAvatar?.ConnectToOtherPlayer();
+       _userCommands?.ConnectToOtherPlayer();
 
    }
 
    public void DisconnectFromOtherPlayer(){
-       _userAvatar?.DisconnectFromOtherPlayer();
+       _userCommands?.DisconnectFromOtherPlayer();
 
    }
 

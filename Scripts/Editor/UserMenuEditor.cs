@@ -41,6 +41,14 @@ public class UserMenuEditor : Editor
         {
             controller.ExitToLobby();
         }
+        if (GUILayout.Button("ConnectToOtherPlayer"))
+        {
+            controller.ConnectToOtherPlayer();
+        }   
+        if (GUILayout.Button("DisconnectFromOtherPlayer"))
+        {
+            controller.DisconnectFromOtherPlayer();
+        }   
 
     }
 

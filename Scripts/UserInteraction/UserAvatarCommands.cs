@@ -164,10 +164,14 @@ public class UserAvatarCommands : NetworkBehaviour
         userAvatar.SetHeight();
     }
 
+    public void ConnectToOtherPlayer(){
+        CmdConnectToOtherPlayer();
+    }
     //tell server to tell client to connect to the other player
     [Command]
     public void CmdConnectToOtherPlayer(){
-       ConnectToOtherPlayerOnClients();
+        userAvatar.ConnectToOtherPlayer();
+        ConnectToOtherPlayerOnClients();
         
     }
 
@@ -179,10 +183,14 @@ public class UserAvatarCommands : NetworkBehaviour
     }
 
 
+    public void DisconnectFromOtherPlayer(){
+        CmdDisconnectFromOtherPlayer();
+    }
     //tell server to tell client to disconnect from the other player
     [Command]
     public void CmdDisconnectFromOtherPlayer(){
-       DisconnectFromOtherPlayerOnClients();
+        userAvatar.DisconnectFromOtherPlayer();
+        DisconnectFromOtherPlayerOnClients();
         
     }
 

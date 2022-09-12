@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserConnectionVisualization
+
+public class UserConnectionVisualization : MonoBehaviour
 {
     public LineRendererController _leftHand;
     public LineRendererController _rightHand;
@@ -28,6 +30,8 @@ public class UserConnectionVisualization
 
     public void Activate(Transform leftTarget, Transform rightTarget){
         active = true;
+        _leftTarget = leftTarget;
+        _rightTarget = rightTarget;
         _leftHand.Activate();
         _rightHand.Activate();
     }
