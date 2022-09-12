@@ -27,12 +27,12 @@ public class PlayerInteractionZone : ObjectCollectionZone
             a.SetHighlightMode(true);
             collection.Add(a);
         }
-        /*var pi = other.GetComponent<PlayerInteractionZone>();
+        var ut = other.GetComponent<UserTrigger>();
         //only one player should be in the interaction zone
-        if( pi != null && otherPlayer == null && pi != this) {
-            otherPlayer = pi.player;
+        if( ut != null && ut.playerInteraction != null && otherPlayer == null && ut.playerInteraction != this) {
+            otherPlayer = ut.playerInteraction.player;
             MirrorGameManager.Instance.userMenu.SetOtherPlayerInteractability(true);
-        }*/
+        }
         if(prevCount == 0 && collection.Count > 0){
             MirrorGameManager.Instance.userMenu.SetAgentInteractability(true);
         } 
@@ -44,21 +44,16 @@ public class PlayerInteractionZone : ObjectCollectionZone
             a.SetHighlightMode(false);
             collection.Remove(a);
         }
-        /*var pi = other.GetComponent<PlayerInteractionZone>();
-        if( pi != null && pi.player == otherPlayer) {
+        var ut = other.GetComponent<UserTrigger>();
+        if( ut != null && ut.playerInteraction != null &&ut.playerInteraction.player == otherPlayer) {
             otherPlayer = null;
             MirrorGameManager.Instance.userMenu.SetOtherPlayerInteractability(false);
-        }*/
+        }
         if(collection.Count == 0) {
             MirrorGameManager.Instance.userMenu.SetAgentInteractability(false);
         }
     }
 
-    // public List<ABGrabber> grabbers;
-    /*public void SetCurrentAgentZone(AgentInteractionZone az){
-        if(agentZone != az)DeactivateAgent(agentZone);
-        agentZone = az;
-    }*/
     public void RemoveAgentZone(){
         this.agent = null;
     }

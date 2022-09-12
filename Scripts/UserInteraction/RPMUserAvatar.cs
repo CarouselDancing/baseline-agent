@@ -22,6 +22,7 @@ public class RPMUserAvatar : RPMAvatarManager
     public int figureVersion;
     public GameObject PlayerInteractionZonePrefab;
     public GameObject PartnerTargetPrefab;
+    public GameObject UserTriggerPrefab;
     public RoomConfig roomConfig;
     public ClientConfig clientConfig;
     public GameObject generator;
@@ -35,7 +36,7 @@ public class RPMUserAvatar : RPMAvatarManager
     public bool activateIK = true;
     public UserAvatarCommands commands;
     public HandAnimationController handAnimationController;
-    //public UserConnectionVisualization userConnectionVis;
+    public UserConnectionVisualization userConnectionVis;
     public bool isObserver = false;
 
     override public void Start()
@@ -73,6 +74,7 @@ public class RPMUserAvatar : RPMAvatarManager
         }
 
     }
+
    
     override public void OnRPMAvatarLoaded(GameObject avatar, AvatarMetaData metaData=null)
     {
@@ -99,6 +101,11 @@ public class RPMUserAvatar : RPMAvatarManager
         interactionZone.player = controller;
         interactionZone.partnerTarget = pto.transform;
 
+
+        var userTrigger = Instantiate(UserTriggerPrefab);
+        userTrigger.transform.parent = root;
+        userTrigger.transform.localPosition = Vector3.zero;
+        userTrigger.GetComponent<UserTrigger>().playerInteraction = interactionZone;
 
         //store mirrored targets for hand holding
         interactionZone.ikTargets = new Dictionary<int, Transform>();
@@ -257,7 +264,7 @@ public class RPMUserAvatar : RPMAvatarManager
     }
 
     public void ConnectToOtherPlayer(){
-        /*
+    
         if(interactionZone.otherPlayer == null)return;
         RPMUserAvatar otherPlayerAvatar = interactionZone.otherPlayer.transform.parent.GetComponent<RPMUserAvatar>();
         if(otherPlayerAvatar == null)return;
@@ -266,18 +273,18 @@ public class RPMUserAvatar : RPMAvatarManager
         userConnectionVis.Activate(leftTarget, rightTarget);
 
         //tell server to tell all clients to let this player connect to me
-        if(IsOwner)otherPlayerAvatar.commands.CmdConnectToOtherPlayer();*/
+        if(IsOwner)otherPlayerAvatar.commands.CmdConnectToOtherPlayer();
 
     }
 
     public void DisconnectFromOtherPlayer(){ 
-        /*
+      
         if(interactionZone.otherPlayer == null)return;
         RPMUserAvatar otherPlayerAvatar = interactionZone.otherPlayer.transform.parent.GetComponent<RPMUserAvatar>();
         if(otherPlayerAvatar == null)return;
         //tell server to tell all clients to let this player diconnect from me
         if(IsOwner)otherPlayerAvatar.commands.CmdDisconnectFromOtherPlayer();
-        userConnectionVis.Deactivate();*/
+        userConnectionVis.Deactivate();
     }
 
 

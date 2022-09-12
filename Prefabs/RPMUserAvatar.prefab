@@ -80,6 +80,8 @@ MonoBehaviour:
     type: 3}
   PartnerTargetPrefab: {fileID: 6091544525865840373, guid: 639b1bd5c4933804299aa657dd9558dd,
     type: 3}
+  UserTriggerPrefab: {fileID: 7516485150346812101, guid: dcb4b1ce6f5a2b1468a3f1b371dc7f89,
+    type: 3}
   roomConfig: {fileID: 0}
   clientConfig:
     url: localhost
@@ -106,6 +108,17 @@ MonoBehaviour:
     rightControllerTracker:
       posOffset: []
       rotOffset: []
+    registerServerOnline: 1
+    serverRegistryConfig:
+      protocol: https
+      port: 8888
+      url: motion.dfki.de
+      usePort: 1
+      usePortWorkAround: 1
+      defaultServer: 
+      publicIP: 
+      useLocalIP: 1
+    isObserver: 0
   generator: {fileID: 3141507884253300468, guid: db7974e48edccd94b81a308beffc11ea,
     type: 3}
   interactionZoneOffset: {x: 0, y: -2, z: 0.8}
@@ -120,6 +133,7 @@ MonoBehaviour:
   activateIK: 1
   commands: {fileID: 0}
   handAnimationController: {fileID: 0}
+  isObserver: 0
 --- !u!114 &6134176247903083179
 MonoBehaviour:
   m_ObjectHideFlags: 0
