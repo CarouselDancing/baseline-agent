@@ -165,4 +165,32 @@ public class RESTInterface
         }
         return urlString;
     }
+
+
+    
+    /// <summary>
+    /// Asynchronous HTTP GET request.
+    /// src: http://stackoverflow.com/questions/27310201/async-requests-in-unity
+    /// https://docs.unity3d.com/Manual/UnityWebRequest-CreatingDownloadHandlers.html
+    /// </summary>
+    /// <param name="url">url.</param>
+    /// <param name="callback">Callback handler that process the response string. </param>
+    /// <returns></returns>
+    public IEnumerator sendGETRequestFullURLCoroutine(string url, System.Action<string> callback)
+    {
+        Debug.Log("url"+url);
+        UnityWebRequest webRequest = UnityWebRequest.Get(url);
+        // Request and wait for the desired page.
+        yield return webRequest.SendWebRequest();
+        if (webRequest.isNetworkError)
+        {
+            Debug.Log("Error: " + webRequest.error);
+        }
+        else
+        {
+            callback(webRequest.downloadHandler.text);
+        }
+
+    }
+
 }
