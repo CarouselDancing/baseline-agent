@@ -9,7 +9,8 @@ public delegate void PostRequestCallback(string response);
 
 public delegate void BytePostRequestCallback(byte[] response);
 
-public class RESTInterface : MonoBehaviour
+[Serializable]
+public class RESTInterface
 {
 
     public string protocol = "https";
@@ -77,7 +78,7 @@ public class RESTInterface : MonoBehaviour
         yield return webRequest.SendWebRequest();
         if (webRequest.isNetworkError)
         {
-            print("Error: " + webRequest.error);
+            Debug.Log("Error: " + webRequest.error);
         }
         else
         {
@@ -112,7 +113,7 @@ public class RESTInterface : MonoBehaviour
         yield return webRequest.SendWebRequest();
         if (webRequest.isNetworkError)
         {
-            print("Error: " + webRequest.error);
+            Debug.Log("Error: " + webRequest.error);
         }
         else
         {
@@ -138,7 +139,7 @@ public class RESTInterface : MonoBehaviour
         yield return webRequest.SendWebRequest();
         if (webRequest.isNetworkError)
         {
-            print("Error: " + webRequest.error);
+            Debug.Log("Error: " + webRequest.error);
         }
         else
         {

@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
 using UnityEngine;
 using System.Linq;
 using Carousel.BaselineAgent;
@@ -22,16 +20,8 @@ public struct NetworkManagerPrefabs{
 
 }
 
-public struct ServerEntry{
-    public string name;
-    public string address;
-    public int port;
-    public string protocol;
 
-}
-
-
-public class MirrorGameManager : RESTInterface
+public class MirrorGameManager : MonoBehaviour
 {
     public static MirrorGameManager Instance;
     public DebugMessage debugMessage;
@@ -52,6 +42,7 @@ public class MirrorGameManager : RESTInterface
     public LoadingScreen loadingScreen;
     public SceneLoader sceneLoader;
     public bool loadConfigFromStreamAssets = false;
+    public ServerRegistry serverRegistry;
 
     void Awake(){
         
@@ -67,6 +58,7 @@ public class MirrorGameManager : RESTInterface
     void Start()
     {
 
+        serverRegistry =gameObject.AddComponent<ServerRegistry>();
         sceneLoader = gameObject.AddComponent<SceneLoader>();
         var assetDatabaseText = Resources.Load<TextAsset>("assetDatabase").text;
         if (assetDatabaseText != null){
@@ -173,6 +165,8 @@ public class MirrorGameManager : RESTInterface
                 configText = Resources.Load<TextAsset>("config").text;
             }
             config = ClientConfig.InitInstance(configText);
+            serverRegistry.SetConfig(config);
+            registerServerOnline = config.registerServerOnline;
             ShowMessage("Mirror Game Manager: loaded config "+configText);
         }
         
@@ -208,37 +202,16 @@ public class MirrorGameManager : RESTInterface
         sceneLoader.LoadMainScene();
     }
 
-    public ServerEntry getServerEntry(){
-        var url = LocalIPAddress();
-        var serverEntry = new ServerEntry(){
-            name = url,
-            address = url,
-            port = config.port,
-            protocol = config.protocol
-        };
-        return serverEntry;
-    }
+
 
     public void RegisterServer(){
-        Debug.Log("register server");
-        var serverEntry = getServerEntry();
-        string data = "";
-        var setting = new JsonSerializerSettings();
-        data = JsonConvert.SerializeObject(serverEntry, setting);
-        StartCoroutine(sendRequestCoroutine("dance_servers/add", data, PrintResponse));
+        serverRegistry.RegisterServer();
     }
 
     public void UnregisterServer(){
-        var serverEntry = getServerEntry();
-        string data = "";
-        var setting = new JsonSerializerSettings();
-        data = JsonConvert.SerializeObject(serverEntry, setting);
-        StartCoroutine(sendRequestCoroutine("dance_servers/remove", data, PrintResponse));
+        serverRegistry.UnregisterServer();
     }
 
-    public void PrintResponse(string responseText){
-        Console.WriteLine(responseText);
-    }
             
     public void JoinServer(string url, string protocol="", int port=-1)
     {
@@ -277,16 +250,6 @@ public class MirrorGameManager : RESTInterface
     {
         Application.Quit();
     }
-
-    //https://answers.unity.com/questions/1731994/get-the-device-ip-address-from-unity.html
-    public static string LocalIPAddress()
-    {
-         return Dns.GetHostEntry(Dns.GetHostName())
-             .AddressList.First(
-                 f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-             .ToString();
-    }    
-
 
     void OnMainSceneLoaded()
     {
