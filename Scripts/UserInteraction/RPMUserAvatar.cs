@@ -102,11 +102,11 @@ public class RPMUserAvatar : RPMAvatarManager
         interactionZone.partnerTarget = pto.transform;
 
 
-        /*var userTrigger = Instantiate(UserTriggerPrefab);
+        var userTrigger = Instantiate(UserTriggerPrefab);
         userTrigger.transform.parent = root;
         userTrigger.transform.localPosition = Vector3.zero;
         userTrigger.GetComponent<UserTrigger>().playerInteraction = interactionZone;
-        */
+        
 
         //store mirrored targets for hand holding
         interactionZone.ikTargets = new Dictionary<int, Transform>();
