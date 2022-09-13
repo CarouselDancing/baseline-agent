@@ -102,10 +102,11 @@ public class RPMUserAvatar : RPMAvatarManager
         interactionZone.partnerTarget = pto.transform;
 
 
-        var userTrigger = Instantiate(UserTriggerPrefab);
+        /*var userTrigger = Instantiate(UserTriggerPrefab);
         userTrigger.transform.parent = root;
         userTrigger.transform.localPosition = Vector3.zero;
         userTrigger.GetComponent<UserTrigger>().playerInteraction = interactionZone;
+        */
 
         //store mirrored targets for hand holding
         interactionZone.ikTargets = new Dictionary<int, Transform>();
@@ -119,8 +120,8 @@ public class RPMUserAvatar : RPMAvatarManager
         handAnimationController = avatar.AddComponent<HandAnimationController>();
         if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
         MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
-        userConnectionVis = avatar.AddComponent<UserConnectionVisualization>();
-        userConnectionVis.Init(rigConfig.LeftHand, rigConfig.RightHand);
+        //userConnectionVis = avatar.AddComponent<UserConnectionVisualization>();
+        //userConnectionVis.Init(rigConfig.LeftHand, rigConfig.RightHand);
         OnFinished?.Invoke();
       
     }
@@ -265,6 +266,7 @@ public class RPMUserAvatar : RPMAvatarManager
 
     public void ConnectToOtherPlayer(){
     
+        return;
         if(interactionZone.otherPlayer == null)return;
         RPMUserAvatar otherPlayerAvatar = interactionZone.otherPlayer.transform.parent.GetComponent<RPMUserAvatar>();
         if(otherPlayerAvatar == null)return;
@@ -279,6 +281,7 @@ public class RPMUserAvatar : RPMAvatarManager
 
     public void DisconnectFromOtherPlayer(){ 
       
+        return;
         if(interactionZone.otherPlayer == null)return;
         RPMUserAvatar otherPlayerAvatar = interactionZone.otherPlayer.transform.parent.GetComponent<RPMUserAvatar>();
         if(otherPlayerAvatar == null)return;
