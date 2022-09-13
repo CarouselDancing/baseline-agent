@@ -266,7 +266,7 @@ public class RPMUserAvatar : RPMAvatarManager
 
     public void ConnectToOtherPlayer(){
     
-        return;
+        if(userConnectionVis == null)return;
         if(interactionZone.otherPlayer == null)return;
         RPMUserAvatar otherPlayerAvatar = interactionZone.otherPlayer.transform.parent.GetComponent<RPMUserAvatar>();
         if(otherPlayerAvatar == null)return;
@@ -281,7 +281,7 @@ public class RPMUserAvatar : RPMAvatarManager
 
     public void DisconnectFromOtherPlayer(){ 
       
-        return;
+        if(userConnectionVis == null)return;
         if(interactionZone.otherPlayer == null)return;
         RPMUserAvatar otherPlayerAvatar = interactionZone.otherPlayer.transform.parent.GetComponent<RPMUserAvatar>();
         if(otherPlayerAvatar == null)return;
