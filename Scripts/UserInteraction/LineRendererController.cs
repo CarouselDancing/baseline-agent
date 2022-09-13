@@ -10,7 +10,10 @@ public class LineRendererController : MonoBehaviour
 
     void Start()
     {
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer = gameObject.GetComponent<LineRenderer>();
+        if (lineRenderer == null){
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+        }
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
         lineRenderer.enabled = false;

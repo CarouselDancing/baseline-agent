@@ -120,8 +120,8 @@ public class RPMUserAvatar : RPMAvatarManager
         handAnimationController = avatar.AddComponent<HandAnimationController>();
         if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
         MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
-        //userConnectionVis = avatar.AddComponent<UserConnectionVisualization>();
-        //userConnectionVis.Init(rigConfig.LeftHand, rigConfig.RightHand);
+        userConnectionVis = avatar.AddComponent<UserConnectionVisualization>();
+        userConnectionVis.Init(leftGrabber.transform, rightGrabber.transform);
         OnFinished?.Invoke();
       
     }
