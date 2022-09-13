@@ -20,9 +20,7 @@ public class RBGrabber : MonoBehaviour
     public Rigidbody grabber;
     public GameObject grabbableObject;
     public ConfigurableJoint joint;
-    LineRenderer lineRenderer;
     public float width = 0.1f;
-    List<Vector3> positions;
     public float grabberRadius = 0.2f;
     public string layerName = "marathon";
     public int layer;
@@ -37,13 +35,6 @@ public class RBGrabber : MonoBehaviour
     {
         parent = transform.parent.gameObject;
         layer = LayerMask.NameToLayer(layerName);
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.startWidth = width;
-        lineRenderer.endWidth = width;
-        lineRenderer.enabled = false;
-        positions = new List<Vector3>();
-        positions.Add(Vector3.zero);
-        positions.Add(Vector3.zero);
         var s = gameObject.GetComponent<SphereCollider>();
         s.radius = grabberRadius;
         
