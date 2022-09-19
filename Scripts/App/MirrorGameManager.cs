@@ -45,6 +45,7 @@ public class MirrorGameManager : MonoBehaviour
     public bool loadConfigFromStreamAssets = false;
     public ServerRegistry serverRegistry;
     public SyncMusic SyncMusicCallback;
+    public Transform vrRigOrigin;
 
     void Awake(){
         
