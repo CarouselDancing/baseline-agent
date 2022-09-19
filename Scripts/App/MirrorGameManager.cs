@@ -20,6 +20,7 @@ public struct NetworkManagerPrefabs{
 
 }
 
+public delegate void SyncMusic();
 
 public class MirrorGameManager : MonoBehaviour
 {
@@ -43,6 +44,7 @@ public class MirrorGameManager : MonoBehaviour
     public SceneLoader sceneLoader;
     public bool loadConfigFromStreamAssets = false;
     public ServerRegistry serverRegistry;
+    public SyncMusic SyncMusicCallback;
 
     void Awake(){
         
@@ -294,6 +296,8 @@ public class MirrorGameManager : MonoBehaviour
     }
 
     public void SyncMusic(){
+
+        if(SyncMusicCallback!=null)SyncMusicCallback();
     }
     
 

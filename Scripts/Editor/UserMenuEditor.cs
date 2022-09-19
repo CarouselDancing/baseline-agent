@@ -49,6 +49,10 @@ public class UserMenuEditor : Editor
         {
             controller.DisconnectFromOtherPlayer();
         }   
+        if (GUILayout.Button("SyncMusic"))
+        {
+            controller.SyncMusic();
+        }   
 
     }
 
