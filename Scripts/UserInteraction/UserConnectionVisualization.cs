@@ -12,9 +12,11 @@ public class UserConnectionVisualization : MonoBehaviour
     public Transform _rightTarget;
     public bool active = false;
 
-    public void Init(Transform leftHand, Transform rightHand){
+    public void Init(Transform leftHand, Transform rightHand, Material material){
         _leftHand = leftHand.gameObject.AddComponent<LineRendererController>();
+        _leftHand.material = material;
         _rightHand = rightHand.gameObject.AddComponent<LineRendererController>();
+        _rightHand.material = material;
 
     }
 

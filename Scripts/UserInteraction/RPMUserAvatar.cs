@@ -37,6 +37,7 @@ public class RPMUserAvatar : RPMAvatarManager
     public UserAvatarCommands commands;
     public HandAnimationController handAnimationController;
     public UserConnectionVisualization userConnectionVis;
+    public Material lineMaterial;
     public bool isObserver = false;
 
     override public void Start()
@@ -121,7 +122,7 @@ public class RPMUserAvatar : RPMAvatarManager
         if(isLocalPlayer)MirrorGameManager.Instance.RegisterPlayer(this);
         MirrorGameManager.ShowMessage($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n");
         userConnectionVis = avatar.AddComponent<UserConnectionVisualization>();
-        userConnectionVis.Init(leftGrabber.transform, rightGrabber.transform);
+        userConnectionVis.Init(leftGrabber.transform, rightGrabber.transform, lineMaterial);
         OnFinished?.Invoke();
       
     }
@@ -272,7 +273,7 @@ public class RPMUserAvatar : RPMAvatarManager
         if(otherPlayerAvatar == null)return;
         var leftTarget = otherPlayerAvatar.leftGrabber.transform;
         var rightTarget = otherPlayerAvatar.rightGrabber.transform;
-        userConnectionVis.Activate(leftTarget, rightTarget);
+        userConnectionVis.Activate(rightTarget, leftTarget);
 
         //tell server to tell all clients to let this player connect to me
         //if(IsOwner)otherPlayerAvatar.commands.CmdConnectToOtherPlayer();

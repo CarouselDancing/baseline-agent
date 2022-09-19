@@ -5,6 +5,7 @@ using UnityEngine;
 public class LineRendererController : MonoBehaviour
 {
     private LineRenderer lineRenderer;
+    public Material material;
 
     public float width = 0.1f;
 
@@ -14,6 +15,7 @@ public class LineRendererController : MonoBehaviour
         if (lineRenderer == null){
             lineRenderer = gameObject.AddComponent<LineRenderer>();
         }
+        lineRenderer.material = material;
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
         lineRenderer.enabled = false;

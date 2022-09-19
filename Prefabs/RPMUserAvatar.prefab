@@ -133,6 +133,8 @@ MonoBehaviour:
   activateIK: 1
   commands: {fileID: 0}
   handAnimationController: {fileID: 0}
+  userConnectionVis: {fileID: 0}
+  lineMaterial: {fileID: 2100000, guid: ef71e199bb5b36c47b6e39eecb606b49, type: 2}
   isObserver: 0
 --- !u!114 &6134176247903083179
 MonoBehaviour:
