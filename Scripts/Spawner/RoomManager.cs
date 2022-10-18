@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.UI;
 
 namespace Carousel.BaselineAgent{
 
@@ -11,8 +12,12 @@ public class RoomManager : NetworkBehaviour
     public GameObject cube;
     public RoomConfig roomConfig;
     public static RoomManager Instance;
-
+    public GameObject teleportationArea;
+    public Canvas AgentState;
+    
     public int numAgents;
+    private int agentCount = 0;
+   
 
     public void Awake(){
         if(Instance != null) DestroyImmediate(this); // only allow one instance
@@ -41,6 +46,19 @@ public class RoomManager : NetworkBehaviour
         go.transform.position = position;
         go.transform.rotation = rotation;
         var gen = go.GetComponent<RPMAgentGenerator>();
+
+        /////// Teleportation Area ////////
+        Instantiate(teleportationArea, go.transform);
+        teleportationArea.transform.position= new Vector3(0,0,1);
+        
+        /////AGENT VISUAL CANVAS //////
+        Instantiate(AgentState, go.transform);
+        
+        ////AGENT COUNTER/NAME ////////
+        agentCount = roomConfig.rpmAvatars.Count + agentCount;
+        var text = go.GetComponentInChildren<stateVisual>().AgentName;
+        text.GetComponent<Text>().text = agentCount.ToString();
+       
         gen.AvatarURL = avatarURL;
         NetworkServer.Spawn(go);
     }
@@ -49,12 +67,11 @@ public class RoomManager : NetworkBehaviour
         var y =  UnityEngine.Random.Range(-180, 180);
         return Quaternion.Euler(0,y,0);
     } 
-    
+ 
     public void SpawnCube()
     {
         var go = GameObject.Instantiate(cube);
         NetworkServer.Spawn(go);
     }
-
-}
+  }
 }

@@ -4,13 +4,14 @@ using UnityEngine;
 using System.Linq;
 using Carousel.BaselineAgent;
 using Carousel.FigureGenerator;
+using UnityEngine.UI;
 
 namespace Carousel
 {
     
 
 public class PlayerInteractionZone : ObjectCollectionZone
-{ 
+{  
     public bool IsLeading;
     public bool IsPairDancing;
     public AgentInteraction agent;
@@ -18,7 +19,9 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public Transform partnerTarget;
     public Dictionary<int, Transform> ikTargets;
     public PlayerControllerBase otherPlayer;
-
+    public stateVisual AgentStateStatus;
+    
+   
     override public void  OnTriggerEnter (Collider other){
         int prevCount = collection.Count;
 
@@ -53,9 +56,18 @@ public class PlayerInteractionZone : ObjectCollectionZone
             MirrorGameManager.Instance.userMenu.SetAgentInteractability(false);
         }
     }
-
+    
+    public void Update(){
+        if(AgentStateStatus != null)return;
+        if(agent != null){   
+        AgentStateStatus= agent.agent.GetComponentInChildren<stateVisual>();
+        }
+        else{AgentStateStatus = null;}
+    }
+    
     public void RemoveAgentZone(){
         this.agent = null;
+        AgentStateStatus = null;
     }
 
     // called by button press
@@ -63,16 +75,19 @@ public class PlayerInteractionZone : ObjectCollectionZone
         
         agent = (AgentInteraction) collection.Where(c => c is AgentInteraction).FirstOrDefault();
         ResetGrabbers();
-       if(agent != null) {
+        if(agent != null) {
         agent.ActivateAgent(this);
+        AgentStateStatus.ActivateVisual();
+       
        }
     }
 
     public void DeactivateAgent(){
         ResetGrabbers();
         if(agent != null) {
-            agent.DeactivateAgent();
-            DeactivateFollower();
+        agent.DeactivateAgent();
+        DeactivateFollower();
+        AgentStateStatus.DeactivateVisual();
         }
         RemoveAgentZone();
     }
@@ -93,14 +108,16 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public void ActivateFollower(){
         if(agent == null)ActivateAgent();
         if(agent != null && !IsLeading) {
-            agent.ActivateFollower(partnerTarget);
-            IsLeading = true;
+        agent.ActivateFollower(partnerTarget);
+        IsLeading = true;
+        AgentStateStatus.FollowVisual();
         }
     }
 
     public void DeactivateFollower(){
         if(agent != null) {
             agent.DeactivateFollower();
+            AgentStateStatus.DeactivateVisual();
             IsLeading = false;
         }
     }
@@ -124,6 +141,7 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public void ToggleDancing(){
         if(agent != null) {
             agent.ToggleDancing();
+
         }
 
     }
@@ -131,6 +149,7 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public void ActivatePairDance(){
         if(agent != null) {
             agent.ActivatePairDance();
+            AgentStateStatus.MirroringVisual();
             IsPairDancing = true;
         }
     }
@@ -168,6 +187,7 @@ public class PlayerInteractionZone : ObjectCollectionZone
     public void ChangeDanceStyle(){
         if(agent != null)agent.ChangeDanceStyle();
     }
+
 
 }
 

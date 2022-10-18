@@ -327,6 +327,23 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1875281616008088758, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
+        type: 3}
+      propertyPath: numAgents
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875281616008088758, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
+        type: 3}
+      propertyPath: AgentState
+      value: 
+      objectReference: {fileID: 2802365316724687575, guid: 0686c0568601fd245a52376109e360be,
+        type: 3}
+    - target: {fileID: 1875281616008088758, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
+        type: 3}
+      propertyPath: teleportationArea
+      value: 
+      objectReference: {fileID: 8856895928377872790, guid: 3a0905e0081b2974188a3e581eec3452,
+        type: 3}
     - target: {fileID: 1875281616008088904, guid: 63fe2c7df3cc2f5458a4b7ce25131ec4,
         type: 3}
       propertyPath: m_RootOrder
